@@ -21,7 +21,8 @@ class TasksLoaded extends TasksState {
   final List<Task> tasks;
   final String searchQuery;
 
-  TasksLoaded(this.tasks, this.searchQuery) : super(tasks: []);
+  TasksLoaded(this.tasks, this.searchQuery)
+    : super(tasks: tasks, searchQuery: searchQuery);
 
   List<Task> get filteredTasks {
     if (searchQuery.isEmpty) return tasks;
@@ -36,5 +37,7 @@ class TasksLoaded extends TasksState {
 
 class TasksError extends TasksState {
   final String message;
-  TasksError(this.message) : super(tasks: []);
+
+  TasksError({required List<Task> tasks, this.message = "Bir hata oluştu"})
+    : super(tasks: tasks);
 }

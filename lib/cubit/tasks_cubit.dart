@@ -4,13 +4,14 @@ import 'package:to_do_uygulamsi/cubit/tasks_state.dart';
 import 'package:to_do_uygulamsi/models/task.dart';
 
 class TasksCubit extends Cubit<TasksState> {
-  TasksCubit() : super(TasksInitial());
+  final String uid;
+
+  TasksCubit(this.uid) : super(TasksInitial());
 
   List<Task> _tasks = [];
-  //final String searchQuery;
 
   Future<void> addTask(String title) async {
-    emit(TasksLoading(tasks: []));
+    emit(TasksLoading(tasks: _tasks));
 
     try {
       await Future.delayed(Duration(milliseconds: 800));
@@ -20,12 +21,14 @@ class TasksCubit extends Cubit<TasksState> {
 
       emit(TasksLoaded(List.from(_tasks), ""));
     } catch (e) {
-      emit(TasksError("Görev silinirken bir hata oluştu."));
+      emit(
+        TasksError(tasks: _tasks, message: "Görev silinirken bir hata oluştu."),
+      );
     }
   }
 
   Future<void> toggleTask(String id) async {
-    emit(TasksLoading(tasks: []));
+    emit(TasksLoading(tasks: _tasks));
 
     try {
       await Future.delayed(Duration(milliseconds: 600));
@@ -36,11 +39,56 @@ class TasksCubit extends Cubit<TasksState> {
 
       emit(TasksLoaded(List.from(_tasks), ""));
     } catch (e) {
-      emit(TasksError("Görev durumu değiştirilirken hata oluştu."));
+      emit(
+        TasksError(tasks: _tasks, message: "Görev silinirken bir hata oluştu."),
+      );
     }
   }
 
+  Future<void> deleteTask(String id) async {
+    emit(TasksLoading(tasks: _tasks));
+
+    try {
+      await Future.delayed(Duration(milliseconds: 600));
+
+      _tasks.removeWhere((task) => task.id == id);
+
+      emit(TasksLoaded(List.from(_tasks), ""));
+    } catch (e) {
+      emit(
+        TasksError(tasks: _tasks, message: "Görev silinirken bir hata oluştu."),
+      );
+    }
+  }
+
+  void filterTasks(String query) {
+    emit(TasksLoaded(List.from(_tasks), query));
+  }
+
   void loadInitialTasks() {
-    emit(TasksLoaded(_tasks, ""));
+    emit(TasksLoaded(List.from(_tasks), ""));
+  }
+
+  Future<void> editTask(String id, String newTitle) async {
+    emit(TasksLoading(tasks: _tasks));
+
+    try {
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      _tasks = _tasks.map((task) {
+        return task.id == id
+            ? Task(id: task.id, title: newTitle, isCompleted: task.isCompleted)
+            : task;
+      }).toList();
+
+      emit(TasksLoaded(List.from(_tasks), ""));
+    } catch (e) {
+      emit(
+        TasksError(
+          tasks: _tasks,
+          message: "Görev düzenlenirken bir hata oluştu.",
+        ),
+      );
+    }
   }
 }

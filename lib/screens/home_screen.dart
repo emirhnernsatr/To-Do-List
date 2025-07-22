@@ -1,31 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:to_do_uygulamsi/cubit/tasks_cubit.dart';
-
-class Task {
-  String title;
-  bool isDone;
-
-  Task({required this.title, this.isDone = false});
-}
+import '../cubit/tasks_cubit.dart';
+import '../cubit/tasks_state.dart';
+import '../models/task.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _taskController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
 
-  List<Task> _tasks = [];
-  List<Task> _filteredTasks = [];
-
   @override
   void initState() {
     super.initState();
-    _searchController.addListener(_filterTasks);
-    _filteredTasks = _tasks;
+    _searchController.addListener(() {
+      context.read<TasksCubit>().filterTasks(_searchController.text);
+    });
   }
 
   @override
@@ -35,142 +30,113 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  void _filterTasks() {
-    final query = _searchController.text.toLowerCase();
-    setState(() {
-      if (query.isEmpty) {
-        _filteredTasks = _tasks;
-      } else {
-        _filteredTasks = _tasks
-            .where((task) => task.title.toLowerCase().contains(query))
-            .toList();
-      }
-    });
-  }
-
   void _addTask() {
     final text = _taskController.text.trim();
     if (text.isNotEmpty) {
-      setState(() {
-        _tasks.add(Task(title: text));
-        _taskController.clear();
-        _filterTasks();
-      });
+      context.read<TasksCubit>().addTask(text);
+      _taskController.clear();
     }
-  }
-
-  void _toggleTaskDone(Task task) {
-    setState(() {
-      task.isDone = !task.isDone;
-      _filterTasks();
-    });
-  }
-
-  void _deleteTask(Task task) {
-    setState(() {
-      _tasks.remove(task);
-      _filterTasks();
-    });
-  }
-
-  void _editTask(Task task) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        final editController = TextEditingController(text: task.title);
-        return AlertDialog(
-          title: Text('Görevi Düzenle'),
-          content: TextField(
-           // onChanged: (value) => context.read()<TasksCubit>().,
-            controller: editController,
-            autofocus: true,
-            decoration: InputDecoration(labelText: 'Yeni Başlık'),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('İptal'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                final newTitle = editController.text.trim();
-                if (newTitle.isNotEmpty) {
-                  setState(() {
-                    task.title = newTitle;
-                    _filterTasks();
-                  });
-                  Navigator.of(context).pop();
-                }
-              },
-              child: Text('Kaydet'),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Görev Listesi'), centerTitle: true),
+      appBar: AppBar(title: const Text('Görev Listesi'), centerTitle: true),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Görev ekleme satırı
             Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: _taskController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Yeni görev',
                       border: OutlineInputBorder(),
                     ),
                     onSubmitted: (_) => _addTask(),
                   ),
                 ),
-                SizedBox(width: 8),
-                ElevatedButton(onPressed: _addTask, child: Text('Ekle')),
+                const SizedBox(width: 8),
+                ElevatedButton(onPressed: _addTask, child: const Text('Ekle')),
               ],
             ),
-
-            SizedBox(height: 16),
-
-            // Arama çubuğu
+            const SizedBox(height: 16),
             TextField(
               controller: _searchController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Ara',
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(),
               ),
             ),
-
-            SizedBox(height: 16),
-
-            // Görev listesi
+            const SizedBox(height: 16),
             Expanded(
-              child: _filteredTasks.isEmpty
-                  ? Center(child: Text('Görev bulunamadı'))
-                  : ListView.builder(
-                      itemCount: _filteredTasks.length,
+              child: BlocBuilder<TasksCubit, TasksState>(
+                builder: (context, state) {
+                  if (state is TasksLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is TasksLoaded) {
+                    final tasks = state.filteredTasks;
+                    if (tasks.isEmpty) {
+                      return const Center(child: Text('Görev bulunamadı'));
+                    }
+                    return ListView.builder(
+                      itemCount: tasks.length,
                       itemBuilder: (context, index) {
-                        final task = _filteredTasks[index];
+                        final task = tasks[index];
                         return TaskItem(
                           task: task,
-                          onToggleDone: () => _toggleTaskDone(task),
-                          onDelete: () => _deleteTask(task),
+                          onToggleDone: () =>
+                              context.read<TasksCubit>().toggleTask(task.id),
+                          onDelete: () =>
+                              context.read<TasksCubit>().deleteTask(task.id),
                           onEdit: () => _editTask(task),
                         );
                       },
-                    ),
+                    );
+                  } else if (state is TasksError) {
+                    return Center(child: Text(state.message));
+                  } else {
+                    return const SizedBox();
+                  }
+                },
+              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _editTask(Task task) {
+    final editController = TextEditingController(text: task.title);
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Görevi Düzenle'),
+        content: TextField(
+          controller: editController,
+          autofocus: true,
+          decoration: const InputDecoration(labelText: 'Yeni Başlık'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('İptal'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final newTitle = editController.text.trim();
+              if (newTitle.isNotEmpty) {
+                context.read<TasksCubit>().editTask(task.id, newTitle);
+                Navigator.of(context).pop();
+              }
+            },
+            child: const Text('Kaydet'),
+          ),
+        ],
       ),
     );
   }
@@ -183,32 +149,35 @@ class TaskItem extends StatelessWidget {
   final VoidCallback onDelete;
 
   const TaskItem({
-    Key? key,
+    super.key,
     required this.task,
     required this.onToggleDone,
     required this.onEdit,
     required this.onDelete,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Checkbox(value: task.isDone, onChanged: (_) => onToggleDone()),
+      leading: Checkbox(
+        value: task.isCompleted,
+        onChanged: (_) => onToggleDone(),
+      ),
       title: Text(
         task.title,
         style: TextStyle(
-          decoration: task.isDone ? TextDecoration.lineThrough : null,
+          decoration: task.isCompleted ? TextDecoration.lineThrough : null,
         ),
       ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            icon: Icon(Icons.edit, color: Colors.blue),
+            icon: const Icon(Icons.edit, color: Colors.blue),
             onPressed: onEdit,
           ),
           IconButton(
-            icon: Icon(Icons.delete, color: Colors.grey),
+            icon: const Icon(Icons.delete, color: Colors.grey),
             onPressed: onDelete,
           ),
         ],
