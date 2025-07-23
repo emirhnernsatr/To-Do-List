@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:to_do_uygulamsi/screens/login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -62,7 +63,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               Center(
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => const LoginScreen()),
+                    );
+                  },
                   child: Text(
                     'Hesabın Var Mı ?',
                     style: TextStyle(color: Colors.black),
