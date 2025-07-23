@@ -42,7 +42,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Görev Listesi'), centerTitle: true),
+      appBar: AppBar(
+        title: const Text('Görev Listesi'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

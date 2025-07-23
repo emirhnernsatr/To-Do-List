@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => const HomeScreen()),
                     );
@@ -61,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     margin: EdgeInsets.symmetric(horizontal: 60),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
-                      color: Colors.grey,
+                      color: Colors.green,
                     ),
                     child: Center(
                       child: Text(
