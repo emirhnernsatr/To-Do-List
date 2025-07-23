@@ -94,7 +94,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: BlocBuilder<TasksCubit, TasksState>(
+              child: BlocConsumer<TasksCubit, TasksState>(
+                listener: (context, state) {
+                  if (state is TasksError) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(state.message)));
+                  }
+                },
                 builder: (context, state) {
                   if (state is TasksLoading) {
                     return const Center(child: CircularProgressIndicator());
@@ -117,8 +124,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                     );
-                  } else if (state is TasksError) {
-                    return Center(child: Text(state.message));
                   } else {
                     return const SizedBox();
                   }

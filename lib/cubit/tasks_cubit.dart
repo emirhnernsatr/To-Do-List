@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/cubit/tasks_state.dart';
 import 'package:to_do_uygulamsi/models/task.dart';
@@ -71,7 +69,7 @@ class TasksCubit extends Cubit<TasksState> {
       await newDoc.set(newTask.toMap());
 
       // _tasks.add(newTask);
-      // emit(TasksLoaded(List.from(_tasks), ""));
+      emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
       emit(
         TasksError(tasks: _tasks, message: "Görev silinirken bir hata oluştu."),
@@ -104,7 +102,7 @@ class TasksCubit extends Cubit<TasksState> {
           .doc(id)
           .update(updatedTask.toMap());
 
-      emit(TasksLoaded(List.from(_tasks), ""));
+      emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
       emit(
         TasksError(tasks: _tasks, message: "Görev silinirken bir hata oluştu."),
@@ -127,7 +125,7 @@ class TasksCubit extends Cubit<TasksState> {
 
       // _tasks.removeWhere((task) => task.id == id);
 
-      emit(TasksLoaded(List.from(_tasks), ""));
+      emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
       emit(
         TasksError(tasks: _tasks, message: "Görev silinirken bir hata oluştu."),
@@ -161,7 +159,7 @@ class TasksCubit extends Cubit<TasksState> {
 
       // _tasks = snapshot.docs.map((doc) => Task.fromMap(doc.data())).toList();
 
-      emit(TasksLoaded(List.from(_tasks), ''));
+      emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
       emit(
         TasksError(tasks: _tasks, message: "Görevler yüklenirken hata oluştu."),
@@ -190,7 +188,7 @@ class TasksCubit extends Cubit<TasksState> {
       }).toList();
       */
 
-      emit(TasksLoaded((_tasks), ''));
+      emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
       emit(
         TasksError(
