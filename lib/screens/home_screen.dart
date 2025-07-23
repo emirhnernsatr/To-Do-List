@@ -18,6 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<TasksCubit>().listenToTasks();
     _searchController.addListener(() {
       context.read<TasksCubit>().filterTasks(_searchController.text);
     });
@@ -59,7 +60,27 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                ElevatedButton(onPressed: _addTask, child: const Text('Ekle')),
+                BlocBuilder<TasksCubit, TasksState>(
+                  builder: (context, state) {
+                    final isLoading = state is TasksLoading;
+
+                    return ElevatedButton(
+                      onPressed: isLoading ? null : _addTask,
+                      child: isLoading
+                          ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation(
+                                  Colors.white,
+                                ),
+                              ),
+                            )
+                          : const Text('Ekle'),
+                    );
+                  },
+                ),
               ],
             ),
             const SizedBox(height: 16),

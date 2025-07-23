@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +10,50 @@ import 'package:to_do_uygulamsi/models/task.dart';
 class TasksCubit extends Cubit<TasksState> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final String uid;
+  StreamSubscription? _tasksSubscription;
 
   TasksCubit(this.uid) : super(TasksInitial());
 
+  String _searchQuery = '';
+
   List<Task> _tasks = [];
+
+  void listenToTasks() {
+    if (uid.isEmpty) {
+      emit(
+        TasksError(
+          tasks: _tasks,
+          message: "UID bos . Oturum acılmamıs olabılır.",
+        ),
+      );
+      return;
+    }
+
+    emit(TasksLoading(tasks: _tasks));
+
+    _tasksSubscription = _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('tasks')
+        .snapshots()
+        .listen(
+          (snaphot) {
+            _tasks = snaphot.docs.map((doc) {
+              final data = doc.data();
+              return Task(
+                id: doc.id,
+                title: data['title'] ?? '',
+                isCompleted: data['isCompleted'] ?? false,
+              );
+            }).toList();
+
+            emit(TasksLoaded(_tasks, _searchQuery));
+          },
+          onError: (error) {
+            emit(TasksError(tasks: _tasks, message: "bir hata oluştu"));
+          },
+        );
+  }
 
   Future<void> addTask(String title) async {
     emit(TasksLoading(tasks: _tasks));
@@ -19,26 +61,28 @@ class TasksCubit extends Cubit<TasksState> {
     try {
       await Future.delayed(Duration(milliseconds: 800));
 
-      final newTask = Task(
-        id: FirebaseFirestore.instance.collection('tmp').doc().id,
-        title: title,
-      );
-
-      await FirebaseFirestore.instance
+      final newDoc = _firestore
           .collection('users')
           .doc(uid)
           .collection('tasks')
-          .doc('newTask.id')
-          .set(newTask.toMap());
+          .doc();
+      final newTask = Task(id: newDoc.id, title: title);
 
-      _tasks.add(newTask);
+      await newDoc.set(newTask.toMap());
 
-      emit(TasksLoaded(List.from(_tasks), ""));
+      // _tasks.add(newTask);
+      // emit(TasksLoaded(List.from(_tasks), ""));
     } catch (e) {
       emit(
         TasksError(tasks: _tasks, message: "Görev silinirken bir hata oluştu."),
       );
     }
+  }
+
+  @override
+  Future<void> close() {
+    _tasksSubscription?.cancel();
+    return super.close();
   }
 
   Future<void> toggleTask(String id) async {
@@ -51,7 +95,7 @@ class TasksCubit extends Cubit<TasksState> {
       if (index == -1) return;
 
       final updatedTask = _tasks[index].toggle();
-      _tasks[index] = updatedTask;
+      // _tasks[index] = updatedTask;
 
       await FirebaseFirestore.instance
           .collection('users')
@@ -59,10 +103,6 @@ class TasksCubit extends Cubit<TasksState> {
           .collection('tasks')
           .doc(id)
           .update(updatedTask.toMap());
-
-      _tasks = _tasks.map((task) {
-        return task.id == id ? task.toggle() : task;
-      }).toList();
 
       emit(TasksLoaded(List.from(_tasks), ""));
     } catch (e) {
@@ -78,7 +118,14 @@ class TasksCubit extends Cubit<TasksState> {
     try {
       await Future.delayed(Duration(milliseconds: 600));
 
-      _tasks.removeWhere((task) => task.id == id);
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('tasks')
+          .doc(id)
+          .delete();
+
+      // _tasks.removeWhere((task) => task.id == id);
 
       emit(TasksLoaded(List.from(_tasks), ""));
     } catch (e) {
@@ -89,6 +136,7 @@ class TasksCubit extends Cubit<TasksState> {
   }
 
   void filterTasks(String query) {
+    _searchQuery = query;
     emit(TasksLoaded(List.from(_tasks), query));
   }
 
@@ -102,7 +150,16 @@ class TasksCubit extends Cubit<TasksState> {
           .collection('tasks')
           .get();
 
-      _tasks = snapshot.docs.map((doc) => Task.fromMap(doc.data())).toList();
+      _tasks = snapshot.docs.map((doc) {
+        final data = doc.data();
+        return Task(
+          id: doc.id,
+          title: data['title'] ?? '',
+          isCompleted: data['isCompleted'] ?? false,
+        );
+      }).toList();
+
+      // _tasks = snapshot.docs.map((doc) => Task.fromMap(doc.data())).toList();
 
       emit(TasksLoaded(List.from(_tasks), ''));
     } catch (e) {
@@ -118,13 +175,22 @@ class TasksCubit extends Cubit<TasksState> {
     try {
       await Future.delayed(const Duration(milliseconds: 500));
 
+      await _firestore
+          .collection('users')
+          .doc(uid)
+          .collection('tasks')
+          .doc(id)
+          .update({'title': newTitle});
+
+      /*
       _tasks = _tasks.map((task) {
         return task.id == id
-            ? Task(id: task.id, title: newTitle, isCompleted: task.isCompleted)
+       /     ? Task(id: task.id, title: newTitle, isCompleted: task.isCompleted)
             : task;
       }).toList();
+      */
 
-      emit(TasksLoaded(List.from(_tasks), ""));
+      emit(TasksLoaded((_tasks), ''));
     } catch (e) {
       emit(
         TasksError(
