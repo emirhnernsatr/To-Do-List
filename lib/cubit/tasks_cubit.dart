@@ -63,7 +63,7 @@ class TasksCubit extends Cubit<TasksState> {
         id: newDoc.id,
         title: title,
         userId: uid,
-        timeTamp: DateTime.now(),
+        timetamp: DateTime.now(),
       );
 
       await newDoc.set(newTask.toMap());
