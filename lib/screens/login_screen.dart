@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_uygulamsi/screens/home_screen.dart';
 import 'package:to_do_uygulamsi/screens/register_screen.dart';
+import 'package:to_do_uygulamsi/service/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -10,6 +11,31 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final AuthService _authService = AuthService();
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  String message = '';
+
+  void _login() async {
+    final user = await _authService.signInWithEmailAndPassword(
+      _emailController.text.trim(),
+      _passwordController.text.trim(),
+    );
+    setState(() {
+      if (user != null) {
+        message = 'Giriş başarılı! Hoşgeldin: ${user.email}';
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => HomeScreen()),
+        );
+      } else {
+        message = 'Giriş başarısız!';
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,11 +55,18 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 70),
               Column(
                 children: [
-                  TextField(decoration: customInputDecoration('Kullanıcı Adı')),
+                  TextField(
+                    controller: _emailController,
+                    decoration: customInputDecoration('Email'),
+                  ),
                 ],
               ),
               SizedBox(height: 30),
-              TextField(decoration: customInputDecoration('Sifre')),
+              TextField(
+                controller: _passwordController,
+                decoration: customInputDecoration('Sifre'),
+                obscureText: true,
+              ),
               SizedBox(height: 20),
 
               Center(
@@ -49,18 +82,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
               Center(
                 child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const HomeScreen()),
-                    );
-                  },
+                  onPressed: _login,
                   child: Container(
                     height: 50,
                     width: 150,
-                    margin: EdgeInsets.symmetric(horizontal: 60),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
+                      borderRadius: BorderRadius.circular(60),
                       color: Colors.green,
                     ),
                     child: Center(
@@ -77,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => const RegisterScreen()),
                     );
@@ -88,6 +115,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
+              SizedBox(height: 20),
+              Text(message),
             ],
           ),
         ),

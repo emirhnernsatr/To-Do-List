@@ -71,9 +71,8 @@ class TasksCubit extends Cubit<TasksState> {
       //_tasks.add(newTask);
       emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
-      emit(
-        TasksError(tasks: _tasks, message: "Görev silinirken bir hata oluştu."),
-      );
+      print("Firestore Hatası: $e");
+      emit(TasksError(tasks: _tasks, message: "Hata: ${e.toString()}"));
     }
   }
 
@@ -104,7 +103,7 @@ class TasksCubit extends Cubit<TasksState> {
 
       emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
-      emit(TasksError(tasks: _tasks, message: "Görev  bir hata oluştu."));
+      emit(TasksError(tasks: _tasks, message: "bir hata oluştu."));
     }
   }
 
@@ -125,7 +124,9 @@ class TasksCubit extends Cubit<TasksState> {
 
       emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
-      emit(TasksError(tasks: _tasks, message: " silinirken bir hata oluştu."));
+      emit(
+        TasksError(tasks: _tasks, message: "Görev silinirken bir hata oluştu."),
+      );
     }
   }
 

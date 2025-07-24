@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:to_do_uygulamsi/screens/login_screen.dart';
 import '../cubit/tasks_cubit.dart';
 import '../cubit/tasks_state.dart';
 import '../models/task.dart';
@@ -48,7 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const LoginScreen()),
+            );
           },
         ),
       ),
