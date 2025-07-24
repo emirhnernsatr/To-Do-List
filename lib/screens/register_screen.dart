@@ -25,7 +25,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() {
       if (user != null) {
         message = 'Kayıt başarılı! Hoşgeldin: ${user.email}';
-        // Örneğin kayıt sonrası giriş sayfasına dönmek için:
         Navigator.pop(context);
       } else {
         message = 'Kayıt başarısız!';
@@ -52,10 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               SizedBox(height: 70),
               Column(
                 children: [
-                  TextField(
-                    //controller: _emailController,
-                    decoration: customInputDecoration('Kullanıcı Adı'),
-                  ),
+                  TextField(decoration: customInputDecoration('Kullanıcı Adı')),
                   SizedBox(height: 20),
                   TextField(
                     controller: _emailController,

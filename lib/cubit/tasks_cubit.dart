@@ -68,7 +68,6 @@ class TasksCubit extends Cubit<TasksState> {
 
       await newDoc.set(newTask.toMap());
 
-      //_tasks.add(newTask);
       emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
       print("Firestore Hatası: $e");
@@ -92,7 +91,6 @@ class TasksCubit extends Cubit<TasksState> {
       if (index == -1) return;
 
       final updatedTask = _tasks[index].toggle();
-      // _tasks[index] = updatedTask;
 
       await FirebaseFirestore.instance
           .collection('users')
@@ -119,8 +117,6 @@ class TasksCubit extends Cubit<TasksState> {
           .collection('tasks')
           .doc(id)
           .delete();
-
-      // _tasks.removeWhere((task) => task.id == id);
 
       emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
@@ -154,8 +150,6 @@ class TasksCubit extends Cubit<TasksState> {
         );
       }).toList();
 
-      // _tasks = snapshot.docs.map((doc) => Task.fromMap(doc.data())).toList();
-
       emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
       emit(
@@ -176,14 +170,6 @@ class TasksCubit extends Cubit<TasksState> {
           .collection('tasks')
           .doc(id)
           .update({'title': newTitle});
-
-      /*
-      _tasks = _tasks.map((task) {
-        return task.id == id
-       /     ? Task(id: task.id, title: newTitle, isCompleted: task.isCompleted)
-            : task;
-      }).toList();
-      */
 
       emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
