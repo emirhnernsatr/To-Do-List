@@ -64,7 +64,12 @@ class TasksCubit extends Cubit<TasksState> {
           .doc(uid)
           .collection('tasks')
           .doc();
-      final newTask = Task(id: newDoc.id, title: title);
+      final newTask = Task(
+        id: newDoc.id,
+        title: title,
+        userId: uid,
+        timeTamp: DateTime.now(),
+      );
 
       await newDoc.set(newTask.toMap());
 
