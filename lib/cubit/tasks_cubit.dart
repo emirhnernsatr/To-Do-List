@@ -26,7 +26,6 @@ class TasksCubit extends Cubit<TasksState> {
       );
       return;
     }
-
     emit(TasksLoading(tasks: _tasks));
 
     _tasksSubscription = _firestore
@@ -37,12 +36,7 @@ class TasksCubit extends Cubit<TasksState> {
         .listen(
           (snaphot) {
             _tasks = snaphot.docs.map((doc) {
-              final data = doc.data();
-              return Task(
-                id: doc.id,
-                title: data['title'] ?? '',
-                isCompleted: data['isCompleted'] ?? false,
-              );
+              return Task.fromMap(doc.data(), doc.id);
             }).toList();
 
             emit(TasksLoaded(_tasks, _searchQuery));
@@ -64,6 +58,7 @@ class TasksCubit extends Cubit<TasksState> {
           .doc(uid)
           .collection('tasks')
           .doc();
+
       final newTask = Task(
         id: newDoc.id,
         title: title,
@@ -148,11 +143,7 @@ class TasksCubit extends Cubit<TasksState> {
 
       _tasks = snapshot.docs.map((doc) {
         final data = doc.data();
-        return Task(
-          id: doc.id,
-          title: data['title'] ?? '',
-          isCompleted: data['isCompleted'] ?? false,
-        );
+        return Task.fromMap(doc.data(), doc.id);
       }).toList();
 
       emit(TasksLoaded(List.from(_tasks), _searchQuery));
