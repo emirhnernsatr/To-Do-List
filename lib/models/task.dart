@@ -41,7 +41,9 @@ class Task {
       title: map['title'] ?? '',
       isCompleted: map['isCompleted'] ?? false,
       userId: map['userId'],
-      timeTamp: map['timesTamp']?.toDate(),
+      timeTamp: map['timesTamp'] != null
+          ? (map['timesTamp'] as Timestamp).toDate()
+          : null,
     );
   }
 }
