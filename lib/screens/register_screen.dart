@@ -14,13 +14,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordConfirmController =
+      TextEditingController();
 
   String message = '';
 
   void _register() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    final passwordConfrim = _passwordConfirmController.text.trim();
+
+    if (password != passwordConfrim) {
+      setState(() {
+        message = 'Şifreler eşleşmiyor';
+      });
+      return;
+    }
+
     final user = await _authService.registerWithEmailAndPassword(
-      _emailController.text.trim(),
-      _passwordController.text.trim(),
+      email,
+      password,
     );
     setState(() {
       if (user != null) {
@@ -51,8 +64,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               SizedBox(height: 70),
               Column(
                 children: [
-                  TextField(decoration: customInputDecoration('Kullanıcı Adı')),
-                  SizedBox(height: 20),
                   TextField(
                     controller: _emailController,
                     decoration: customInputDecoration('Email'),
@@ -63,7 +74,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     decoration: customInputDecoration('Sifre'),
                   ),
                   SizedBox(height: 20),
-                  TextField(decoration: customInputDecoration('Sifre Onay')),
+                  TextField(
+                    controller: _passwordConfirmController,
+                    decoration: customInputDecoration('Sifre Onay'),
+                  ),
                 ],
               ),
               SizedBox(height: 30),
@@ -89,9 +103,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
               SizedBox(height: 20),
-              Text(message),
-
-              SizedBox(height: 20),
 
               Center(
                 child: TextButton(
@@ -107,6 +118,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
+              SizedBox(height: 20),
+              Text(message),
             ],
           ),
         ),
