@@ -72,11 +72,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   TextField(
                     controller: _passwordController,
                     decoration: customInputDecoration('Sifre'),
+                    obscureText: true,
                   ),
                   SizedBox(height: 20),
                   TextField(
                     controller: _passwordConfirmController,
                     decoration: customInputDecoration('Sifre Onay'),
+                    obscureText: true,
                   ),
                 ],
               ),
