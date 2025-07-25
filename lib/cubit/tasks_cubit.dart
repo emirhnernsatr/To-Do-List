@@ -48,6 +48,16 @@ class TasksCubit extends Cubit<TasksState> {
   }
 
   Future<void> addTask(String title) async {
+    if (uid.isEmpty) {
+      emit(
+        TasksError(
+          tasks: _tasks,
+          message: "UID boş. Oturum açılmamış olabilir.",
+        ),
+      );
+      return;
+    }
+
     emit(TasksLoading(tasks: _tasks));
 
     try {
@@ -66,12 +76,13 @@ class TasksCubit extends Cubit<TasksState> {
         timestamp: DateTime.now(),
       );
 
+      await newDoc.set(newTask.toMap());
+
       _tasks.add(newTask);
-      // await newDoc.set(newTask.toMap());
 
       emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
-      print("Firestore Hatası: $e");
+      //print("Firestore Hatası: $e");
       emit(TasksError(tasks: _tasks, message: "Hata: ${e.toString()}"));
     }
   }
@@ -165,24 +176,26 @@ class TasksCubit extends Cubit<TasksState> {
     try {
       await Future.delayed(const Duration(milliseconds: 500));
 
+      final index = _tasks.indexWhere((task) => task.id == id);
+      if (index == -1) return;
+
+      final oldTask = _tasks[index];
+      final updatedTask = Task(
+        id: oldTask.id,
+        title: newTitle,
+        isCompleted: oldTask.isCompleted,
+        userId: oldTask.userId,
+        timestamp: oldTask.timestamp,
+      );
+
       await _firestore
           .collection('users')
           .doc(uid)
           .collection('tasks')
           .doc(id)
-          .update({'title': newTitle});
+          .update(updatedTask.toMap());
 
-      final index = _tasks.indexWhere((task) => task.id == id);
-      if (index != -1) {
-        final oldTask = _tasks[index];
-        _tasks[index] = Task(
-          id: oldTask.id,
-          title: newTitle,
-          isCompleted: oldTask.isCompleted,
-          userId: oldTask.userId,
-          timestamp: oldTask.timestamp,
-        );
-      }
+      _tasks[index] = updatedTask;
 
       emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
