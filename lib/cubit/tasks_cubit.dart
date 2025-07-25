@@ -78,11 +78,8 @@ class TasksCubit extends Cubit<TasksState> {
 
       await newDoc.set(newTask.toMap());
 
-      _tasks.add(newTask);
-
       emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
-      //print("Firestore Hatası: $e");
       emit(TasksError(tasks: _tasks, message: "Hata: ${e.toString()}"));
     }
   }
@@ -158,7 +155,7 @@ class TasksCubit extends Cubit<TasksState> {
           .get();
 
       _tasks = snapshot.docs.map((doc) {
-        final data = doc.data();
+        // final data = doc.data();
         return Task.fromMap(doc.data(), doc.id);
       }).toList();
 
