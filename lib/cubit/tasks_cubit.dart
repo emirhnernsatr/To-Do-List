@@ -58,23 +58,16 @@ class TasksCubit extends Cubit<TasksState> {
           .doc(uid)
           .collection('tasks')
           .doc();
-      /*
-      await newDoc.set({
-        'title': title,
-        'isCompleted': false,
-        'userId': uid,
-        'timestamp': FieldValue.serverTimestamp(),
-      });
-*/
 
       final newTask = Task(
         id: newDoc.id,
         title: title,
         userId: uid,
-        timetamp: DateTime.now(),
+        timestamp: DateTime.now(),
       );
 
-      await newDoc.set(newTask.toMap());
+      _tasks.add(newTask);
+      // await newDoc.set(newTask.toMap());
 
       emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
@@ -100,12 +93,14 @@ class TasksCubit extends Cubit<TasksState> {
 
       final updatedTask = _tasks[index].toggle();
 
-      await FirebaseFirestore.instance
+      await _firestore
           .collection('users')
           .doc(uid)
           .collection('tasks')
           .doc(id)
           .update(updatedTask.toMap());
+
+      _tasks[index] = updatedTask;
 
       emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
@@ -119,12 +114,14 @@ class TasksCubit extends Cubit<TasksState> {
     try {
       await Future.delayed(Duration(milliseconds: 600));
 
-      await FirebaseFirestore.instance
+      await _firestore
           .collection('users')
           .doc(uid)
           .collection('tasks')
           .doc(id)
           .delete();
+
+      _tasks.removeWhere((task) => task.id == id);
 
       emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
@@ -174,6 +171,18 @@ class TasksCubit extends Cubit<TasksState> {
           .collection('tasks')
           .doc(id)
           .update({'title': newTitle});
+
+      final index = _tasks.indexWhere((task) => task.id == id);
+      if (index != -1) {
+        final oldTask = _tasks[index];
+        _tasks[index] = Task(
+          id: oldTask.id,
+          title: newTitle,
+          isCompleted: oldTask.isCompleted,
+          userId: oldTask.userId,
+          timestamp: oldTask.timestamp,
+        );
+      }
 
       emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {

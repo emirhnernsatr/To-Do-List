@@ -63,6 +63,18 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
+            BlocBuilder<TasksCubit, TasksState>(
+              builder: (context, state) {
+                if (state is TasksError) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(state.message)));
+                  });
+                }
+                return const SizedBox.shrink();
+              },
+            ),
             Row(
               children: [
                 Expanded(
@@ -80,9 +92,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   builder: (context, state) {
                     final isLoading = state is TasksLoading;
 
-                    return ElevatedButton(
+                    return ElevatedButton.icon(
                       onPressed: isLoading ? null : _addTask,
-                      child: isLoading
+                      label: isLoading
                           ? const SizedBox(
                               width: 16,
                               height: 16,
