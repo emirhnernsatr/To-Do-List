@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/screens/login_screen.dart';
+import 'package:to_do_uygulamsi/service/auth_service.dart';
 import 'package:to_do_uygulamsi/wigets/task_list_view.dart';
 import '../cubit/tasks_cubit.dart';
 import '../cubit/tasks_state.dart';
@@ -17,6 +18,16 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _taskController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
   final uid = FirebaseAuth.instance.currentUser?.uid ?? "";
+  final AuthService _authService = AuthService();
+
+  void _logout() async {
+    await _authService.signOut();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      (route) => false,
+    );
+  }
 
   @override
   void initState() {
@@ -49,6 +60,12 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('Görev Listesi'),
         centerTitle: true,
         leading: IconButton(
+          onPressed: _logout,
+          icon: Icon(Icons.logout),
+          tooltip: 'Çıkış Yap',
+        ),
+
+        /*IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () {
             Navigator.pushReplacement(
@@ -56,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
               MaterialPageRoute(builder: (_) => const LoginScreen()),
             );
           },
-        ),
+        ),*/
       ),
 
       body: Padding(
