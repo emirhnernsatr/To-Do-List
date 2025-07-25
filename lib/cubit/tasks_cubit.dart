@@ -58,6 +58,14 @@ class TasksCubit extends Cubit<TasksState> {
           .doc(uid)
           .collection('tasks')
           .doc();
+      /*
+      await newDoc.set({
+        'title': title,
+        'isCompleted': false,
+        'userId': uid,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+*/
 
       final newTask = Task(
         id: newDoc.id,
