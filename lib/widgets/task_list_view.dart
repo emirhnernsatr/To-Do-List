@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/cubit/tasks_cubit.dart';
 import 'package:to_do_uygulamsi/cubit/tasks_state.dart';
+import 'package:to_do_uygulamsi/theme/app_theme.dart';
 import '../models/task.dart';
 
 class TaskListView extends StatelessWidget {
@@ -115,11 +116,11 @@ class TaskItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            icon: const Icon(Icons.edit, color: Colors.blue),
+            icon: Icon(Icons.edit, color: AppColors.blue),
             onPressed: onEdit,
           ),
           IconButton(
-            icon: const Icon(Icons.delete, color: Colors.grey),
+            icon: Icon(Icons.delete, color: AppColors.grey),
             onPressed: onDelete,
           ),
         ],

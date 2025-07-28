@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:to_do_uygulamsi/theme/app_theme.dart';
 
 Widget sizedBoxH(double height) => SizedBox(height: height);
+
 //Widget sizedBoxW(double width) => SizedBox(width: width);
-
-class AppColors {
-  static const Color black = Colors.black;
-  static const Color white = Colors.white;
-  static const Color white70 = Colors.white70;
-  static final Color blueAccent = Colors.blueAccent;
-  static final Color green = Colors.green;
-}
-
 class Paddings {
   static const EdgeInsets all50 = EdgeInsets.all(50);
   static const EdgeInsets all40 = EdgeInsets.all(40);
@@ -18,7 +11,7 @@ class Paddings {
 }
 
 class AppText {
-  static final TextTitle = Text(
+  static final TitleText = Text(
     'To - Do',
     style: TextStyle(
       fontSize: 50,
@@ -27,9 +20,9 @@ class AppText {
     ),
   );
 
-  static final TextTitleHome = const Text('Görev Listesi');
+  static final TitleHomeText = const Text('Görev Listesi');
 
-  static final TextPasswordReset = Text(
+  static final PasswordResetText = Text(
     'Şifre Sıfırlama',
     style: TextStyle(
       fontSize: 32,
@@ -38,13 +31,13 @@ class AppText {
     ),
   );
 
-  static final TextForgotMessage = Text(
+  static final ForgotMessageText = Text(
     '',
     style: TextStyle(color: Colors.white),
     textAlign: TextAlign.center,
   );
 
-  static final TextRegister = Text(
+  static final RegisterText = Text(
     "Kayıt ol",
     style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
   );
@@ -54,7 +47,7 @@ class AppText {
     style: TextStyle(color: AppColors.black),
   );
 
-  static final TextRegisterButton = Text(
+  static final RegisterButtonText = Text(
     'kayıt Ol',
     style: TextStyle(color: AppColors.white),
   );

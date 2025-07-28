@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/screens/login_screen.dart';
 import 'package:to_do_uygulamsi/service/auth_service.dart';
+import 'package:to_do_uygulamsi/theme/app_theme.dart';
 import 'package:to_do_uygulamsi/widgets/task_item.dart';
 import 'package:to_do_uygulamsi/widgets/task_list_view.dart';
 import '../cubit/tasks_cubit.dart';
@@ -58,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: AppText.TextTitleHome,
+        title: AppText.TitleHomeText,
         centerTitle: true,
         leading: _ExitIcon(),
       ),
@@ -88,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   builder: (context, state) {
                     final isLoading = state is TasksLoading;
 
-                    return _AddButton(isLoading);
+                    return Align(child: _AddButton(isLoading));
                   },
                 ),
               ],

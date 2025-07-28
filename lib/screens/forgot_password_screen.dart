@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_uygulamsi/service/auth_service.dart';
+import 'package:to_do_uygulamsi/theme/app_theme.dart';
 import 'package:to_do_uygulamsi/widgets/task_item.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -40,7 +41,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AppText.TextPasswordReset,
+              AppText.ForgotMessageText,
               sizedBoxH(40),
               _TextFieldForgotEmail(),
 
@@ -48,7 +49,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               _ResetPasswordButton(),
 
               sizedBoxH(20),
-              AppText.TextForgotMessage,
+              AppText.ForgotMessageText,
 
               sizedBoxH(20),
               _ReturnHomeButton(context),

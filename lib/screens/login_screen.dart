@@ -5,6 +5,7 @@ import 'package:to_do_uygulamsi/screens/forgot_password_screen.dart';
 import 'package:to_do_uygulamsi/screens/home_screen.dart';
 import 'package:to_do_uygulamsi/screens/register_screen.dart';
 import 'package:to_do_uygulamsi/service/auth_service.dart';
+import 'package:to_do_uygulamsi/theme/app_theme.dart';
 import 'package:to_do_uygulamsi/widgets/task_item.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -56,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
                 sizedBoxH(50),
-                Container(child: AppText.TextTitle),
+                Container(child: AppText.TitleText),
                 sizedBoxH(70),
                 _TextFieldEmail(),
                 sizedBoxH(30),

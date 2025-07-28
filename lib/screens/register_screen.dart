@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_uygulamsi/screens/login_screen.dart';
 import 'package:to_do_uygulamsi/service/auth_service.dart';
+import 'package:to_do_uygulamsi/theme/app_theme.dart';
 import 'package:to_do_uygulamsi/widgets/task_item.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -56,7 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             children: [
               sizedBoxH(50),
-              Container(child: AppText.TextRegister),
+              Container(child: AppText.RegisterText),
 
               sizedBoxH(70),
               Column(
@@ -108,7 +109,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           borderRadius: BorderRadius.circular(50),
           color: AppColors.green,
         ),
-        child: Center(child: AppText.TextRegisterButton),
+        child: Center(child: AppText.RegisterButtonText),
       ),
     );
   }

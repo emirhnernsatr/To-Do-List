@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_uygulamsi/widgets/task_item.dart';
 
 class AppTheme {
   late final ThemeData theme;
@@ -34,4 +33,14 @@ class AppTheme {
       ),
     );
   }
+}
+
+class AppColors {
+  static const Color black = Colors.black;
+  static const Color white = Colors.white;
+  static const Color white70 = Colors.white70;
+  static final Color blueAccent = Colors.blueAccent;
+  static final Color green = Colors.green;
+  static final Color blue = Colors.blue;
+  static final Color grey = Colors.grey;
 }
