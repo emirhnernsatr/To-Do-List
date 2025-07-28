@@ -31,7 +31,11 @@ class MyApp extends StatelessWidget {
         final user = FirebaseAuth.instance.currentUser;
 
         return BlocProvider(
-          create: (_) => TasksCubit(user?.uid ?? ""),
+          create: (context) {
+            final uid = FirebaseAuth.instance.currentUser?.uid ?? '';
+            return TasksCubit(uid)..listenToTasks();
+          },
+          //create: (_) => TasksCubit(user?.uid ?? ""),
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: LightTheme().theme,
