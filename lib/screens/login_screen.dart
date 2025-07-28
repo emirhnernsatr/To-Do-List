@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:to_do_uygulamsi/cubit/tasks_cubit.dart';
 import 'package:to_do_uygulamsi/screens/forgot_password_screen.dart';
 import 'package:to_do_uygulamsi/screens/home_screen.dart';
 import 'package:to_do_uygulamsi/screens/register_screen.dart';
@@ -29,7 +31,12 @@ class _LoginScreenState extends State<LoginScreen> {
         message = 'Giriş başarılı! Hoşgeldin: ${user.email}';
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => HomeScreen()),
+          MaterialPageRoute(
+            builder: (_) => BlocProvider(
+              create: (_) => TasksCubit(user.uid)..listenToTasks(),
+              child: const HomeScreen(),
+            ),
+          ),
         );
       } else {
         message = 'Giriş başarısız!';
