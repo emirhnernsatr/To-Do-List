@@ -5,6 +5,7 @@ import 'package:to_do_uygulamsi/screens/forgot_password_screen.dart';
 import 'package:to_do_uygulamsi/screens/home_screen.dart';
 import 'package:to_do_uygulamsi/screens/register_screen.dart';
 import 'package:to_do_uygulamsi/service/auth_service.dart';
+import 'package:to_do_uygulamsi/widgets/task_item.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -47,96 +48,29 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueAccent,
+      backgroundColor: AppColors.blueAccent,
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(50.0),
+            padding: Paddings.all50,
             child: Column(
               children: [
-                SizedBox(height: 50),
-                Container(
-                  child: Text(
-                    "To - Do ",
-                    style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                SizedBox(height: 70),
-                Column(
-                  children: [
-                    TextField(
-                      controller: _emailController,
-                      decoration: customInputDecoration('Email'),
-                      style: TextStyle(color: Colors.white),
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                  ],
-                ),
-                SizedBox(height: 30),
-                TextField(
-                  controller: _passwordController,
-                  decoration: customInputDecoration('Sifre'),
-                  obscureText: true,
-                  style: TextStyle(color: Colors.white),
-                ),
-                SizedBox(height: 20),
+                sizedBoxH(50),
+                Container(child: AppText.TextTitle),
+                sizedBoxH(70),
+                _TextFieldEmail(),
+                sizedBoxH(30),
+                _TextFieldSifre(),
+                sizedBoxH(20),
 
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const ForgotPasswordScreen(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'sifremi Unuttum',
-                      style: TextStyle(color: Colors.white70),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
+                Center(child: _ForgotPasswordButton(context)),
+                sizedBoxH(20),
 
-                Center(
-                  child: TextButton(
-                    onPressed: _login,
-                    child: Container(
-                      height: 50,
-                      width: 150,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(60),
-                        color: Colors.green,
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Giris Yap',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
+                Center(child: _HomeButton()),
+                sizedBoxH(20),
 
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const RegisterScreen(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Hesap Olustur',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
+                Center(child: _RegisterButton(context)),
+                sizedBoxH(20),
                 Text(message),
               ],
             ),
@@ -146,15 +80,77 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  TextField _TextFieldSifre() {
+    return TextField(
+      controller: _passwordController,
+      decoration: customInputDecoration('Sifre'),
+      obscureText: true,
+      style: TextStyle(color: AppColors.white),
+    );
+  }
+
+  TextField _TextFieldEmail() {
+    return TextField(
+      controller: _emailController,
+      decoration: customInputDecoration('Email'),
+      style: TextStyle(color: AppColors.white),
+      keyboardType: TextInputType.emailAddress,
+    );
+  }
+
+  TextButton _ForgotPasswordButton(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const ForgotPasswordScreen()),
+        );
+      },
+      child: Text(
+        'sifremi Unuttum',
+        style: TextStyle(color: AppColors.white70),
+      ),
+    );
+  }
+
+  TextButton _RegisterButton(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const RegisterScreen()),
+        );
+      },
+      child: Text('Hesap Olustur', style: TextStyle(color: AppColors.black)),
+    );
+  }
+
+  TextButton _HomeButton() {
+    return TextButton(
+      onPressed: _login,
+      child: Container(
+        height: 50,
+        width: 150,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(60),
+          color: AppColors.green,
+        ),
+        child: Center(
+          child: Text('Giris Yap', style: TextStyle(color: AppColors.white)),
+        ),
+      ),
+    );
+  }
+
   InputDecoration customInputDecoration(String hintText) {
     return InputDecoration(
       hintText: hintText,
-      hintStyle: TextStyle(color: Colors.white),
+      hintStyle: TextStyle(color: AppColors.white),
       enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.white),
+        borderSide: BorderSide(color: AppColors.white),
       ),
       focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.white),
+        borderSide: BorderSide(color: AppColors.white),
       ),
     );
   }

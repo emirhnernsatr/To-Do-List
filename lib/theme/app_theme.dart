@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:to_do_uygulamsi/widgets/task_item.dart';
 
-class LightTheme {
-  final _lightColor = _LightColor();
-
+class AppTheme {
   late final ThemeData theme;
 
-  LightTheme() {
+  AppTheme() {
     theme = ThemeData(
       appBarTheme: AppBarTheme(
-        color: _LightColor().blueAccent,
+        color: AppColors.blueAccent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
         ),
@@ -16,29 +15,23 @@ class LightTheme {
 
       scaffoldBackgroundColor: Colors.white.withOpacity(0.9),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: _LightColor().blueAccent,
+        backgroundColor: AppColors.blueAccent,
       ),
       buttonTheme: ButtonThemeData(
         colorScheme: ColorScheme.light(
           onPrimary: Colors.blue,
-          onSecondary: _LightColor().blueMenia,
+          onSecondary: AppColors.blueAccent,
         ),
       ),
       colorScheme: ColorScheme.light(),
       checkboxTheme: CheckboxThemeData(
-        fillColor: WidgetStateProperty.all(_LightColor().blueAccent),
-        side: BorderSide(color: _LightColor().blueAccent),
+        fillColor: WidgetStateProperty.all(AppColors.blueAccent),
+        side: BorderSide(color: AppColors.blueAccent),
       ),
 
       textTheme: ThemeData.light().textTheme.copyWith(
-        titleLarge: TextStyle(fontSize: 24, color: _lightColor._textColor),
+        titleLarge: TextStyle(fontSize: 24, color: AppColors.blueAccent),
       ),
     );
   }
-}
-
-class _LightColor {
-  final Color _textColor = Color.fromARGB(255, 27, 26, 26);
-  final Color blueMenia = Color.fromARGB(95, 188, 248, 1);
-  final Color blueAccent = Colors.blueAccent;
 }

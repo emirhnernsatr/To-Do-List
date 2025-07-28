@@ -32,12 +32,15 @@ class TaskListView extends StatelessWidget {
             itemBuilder: (context, index) {
               final task = tasks[index];
 
-              return TaskItem(
-                task: task,
-                onToggleDone: () =>
-                    context.read<TasksCubit>().toggleTask(task.id),
-                onEdit: () => _editTask(context, task),
-                onDelete: () => context.read<TasksCubit>().deleteTask(task.id),
+              return Card(
+                child: TaskItem(
+                  task: task,
+                  onToggleDone: () =>
+                      context.read<TasksCubit>().toggleTask(task.id),
+                  onEdit: () => _editTask(context, task),
+                  onDelete: () =>
+                      context.read<TasksCubit>().deleteTask(task.id),
+                ),
               );
             },
           );

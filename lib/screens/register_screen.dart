@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_uygulamsi/screens/login_screen.dart';
 import 'package:to_do_uygulamsi/service/auth_service.dart';
+import 'package:to_do_uygulamsi/widgets/task_item.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -48,79 +49,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueAccent,
+      backgroundColor: AppColors.blueAccent,
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(50.0),
+          padding: Paddings.all50,
           child: Column(
             children: [
-              SizedBox(height: 50),
-              Container(
-                child: Text(
-                  "Kayıt ol",
-                  style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(height: 70),
+              sizedBoxH(50),
+              Container(child: AppText.TextRegister),
+
+              sizedBoxH(70),
               Column(
                 children: [
-                  TextField(
-                    controller: _emailController,
-                    decoration: customInputDecoration('Email'),
-                  ),
-                  SizedBox(height: 20),
-                  TextField(
-                    controller: _passwordController,
-                    decoration: customInputDecoration('Sifre'),
-                    obscureText: true,
-                  ),
-                  SizedBox(height: 20),
-                  TextField(
-                    controller: _passwordConfirmController,
-                    decoration: customInputDecoration('Sifre Onay'),
-                    obscureText: true,
-                  ),
+                  _TextFieldRegisterEmail(),
+                  sizedBoxH(20),
+
+                  _TextFieldRegisterPassword(),
+                  sizedBoxH(20),
+
+                  _TextFieldRegisterConfirmPassword(),
                 ],
               ),
-              SizedBox(height: 30),
+              sizedBoxH(30),
+              Center(child: _RegisterButton()),
 
-              Center(
-                child: TextButton(
-                  onPressed: _register,
-                  child: Container(
-                    height: 50,
-                    width: 150,
-                    margin: EdgeInsets.symmetric(horizontal: 60),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Colors.green,
-                    ),
-                    child: Center(
-                      child: Text(
-                        'kayıt Ol',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
+              sizedBoxH(20),
+              Center(child: _AccountPromptButton(context)),
+              sizedBoxH(20),
 
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (_) => const LoginScreen()),
-                    );
-                  },
-                  child: Text(
-                    'Hesabın Var Mı ?',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
               Text(message),
             ],
           ),
@@ -129,15 +85,66 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+  TextButton _AccountPromptButton(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+        );
+      },
+      child: AppText.AccountPromptText,
+    );
+  }
+
+  TextButton _RegisterButton() {
+    return TextButton(
+      onPressed: _register,
+      child: Container(
+        height: 50,
+        width: 150,
+        margin: EdgeInsets.symmetric(horizontal: 60),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(50),
+          color: AppColors.green,
+        ),
+        child: Center(child: AppText.TextRegisterButton),
+      ),
+    );
+  }
+
+  TextField _TextFieldRegisterConfirmPassword() {
+    return TextField(
+      controller: _passwordConfirmController,
+      decoration: customInputDecoration('Sifre Onay'),
+      obscureText: true,
+    );
+  }
+
+  TextField _TextFieldRegisterPassword() {
+    return TextField(
+      controller: _passwordController,
+      decoration: customInputDecoration('Sifre'),
+      obscureText: true,
+    );
+  }
+
+  TextField _TextFieldRegisterEmail() {
+    return TextField(
+      controller: _emailController,
+      decoration: customInputDecoration('Email'),
+    );
+  }
+
   InputDecoration customInputDecoration(String hintText) {
     return InputDecoration(
       hintText: hintText,
-      hintStyle: TextStyle(color: Colors.white),
+      hintStyle: TextStyle(color: AppColors.white),
       enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.white),
+        borderSide: BorderSide(color: AppColors.white),
       ),
       focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.white),
+        borderSide: BorderSide(color: AppColors.white),
       ),
     );
   }

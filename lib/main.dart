@@ -6,7 +6,7 @@ import 'package:to_do_uygulamsi/cubit/tasks_cubit.dart';
 import 'package:to_do_uygulamsi/firebase_options.dart';
 import 'package:to_do_uygulamsi/screens/home_screen.dart';
 import 'package:to_do_uygulamsi/screens/login_screen.dart';
-import 'package:to_do_uygulamsi/theme/light_theme.dart';
+import 'package:to_do_uygulamsi/theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           //create: (_) => TasksCubit(user?.uid ?? ""),
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            theme: LightTheme().theme,
+            theme: AppTheme().theme,
             home: user == null ? const LoginScreen() : const HomeScreen(),
           ),
         );

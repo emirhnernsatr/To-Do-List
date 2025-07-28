@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_uygulamsi/service/auth_service.dart';
+import 'package:to_do_uygulamsi/widgets/task_item.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -32,51 +33,55 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueAccent,
+      backgroundColor: AppColors.blueAccent,
       body: Center(
         child: Padding(
-          padding: EdgeInsets.all(40),
+          padding: Paddings.all40,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'Şifre Sıfırlama',
-                style: TextStyle(
-                  fontSize: 32,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 40),
-              TextField(
-                controller: _emailController,
-                decoration: _customInputDecoration("Email"),
-                style: TextStyle(color: Colors.white),
-                keyboardType: TextInputType.emailAddress,
-              ),
-              SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: _resetPassword,
-                child: Text("Sıfırlama Linki Gönder"),
-              ),
-              SizedBox(height: 20),
-              Text(
-                message,
-                style: TextStyle(color: Colors.white),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 20),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(
-                  "Giriş Ekranına Dön",
-                  style: TextStyle(color: Colors.white70),
-                ),
-              ),
+              AppText.TextPasswordReset,
+              sizedBoxH(40),
+              _TextFieldForgotEmail(),
+
+              sizedBoxH(30),
+              _ResetPasswordButton(),
+
+              sizedBoxH(20),
+              AppText.TextForgotMessage,
+
+              sizedBoxH(20),
+              _ReturnHomeButton(context),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  TextButton _ReturnHomeButton(BuildContext context) {
+    return TextButton(
+      onPressed: () => Navigator.pop(context),
+      child: Text(
+        "Giriş Ekranına Dön",
+        style: TextStyle(color: AppColors.white70),
+      ),
+    );
+  }
+
+  ElevatedButton _ResetPasswordButton() {
+    return ElevatedButton(
+      onPressed: _resetPassword,
+      child: Text("Sıfırlama Linki Gönder"),
+    );
+  }
+
+  TextField _TextFieldForgotEmail() {
+    return TextField(
+      controller: _emailController,
+      decoration: _customInputDecoration("Email"),
+      style: TextStyle(color: AppColors.white),
+      keyboardType: TextInputType.emailAddress,
     );
   }
 }
@@ -84,12 +89,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 InputDecoration _customInputDecoration(String hint) {
   return InputDecoration(
     hintText: hint,
-    hintStyle: TextStyle(color: Colors.white54),
+    hintStyle: TextStyle(color: AppColors.white),
     enabledBorder: UnderlineInputBorder(
-      borderSide: BorderSide(color: Colors.white70),
+      borderSide: BorderSide(color: AppColors.white),
     ),
     focusedBorder: UnderlineInputBorder(
-      borderSide: BorderSide(color: Colors.white),
+      borderSide: BorderSide(color: AppColors.white),
     ),
   );
 }

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/screens/login_screen.dart';
 import 'package:to_do_uygulamsi/service/auth_service.dart';
-import 'package:to_do_uygulamsi/wigets/task_list_view.dart';
+import 'package:to_do_uygulamsi/widgets/task_item.dart';
+import 'package:to_do_uygulamsi/widgets/task_list_view.dart';
 import '../cubit/tasks_cubit.dart';
 import '../cubit/tasks_state.dart';
 
@@ -57,27 +58,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Görev Listesi'),
+        title: AppText.TextTitleHome,
         centerTitle: true,
-        leading: IconButton(
-          onPressed: _logout,
-          icon: Icon(Icons.logout),
-          tooltip: 'Çıkış Yap',
-        ),
-
-        /*IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => const LoginScreen()),
-            );
-          },
-        ),*/
+        leading: _ExitIcon(),
       ),
 
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: Paddings.all16,
         child: Column(
           children: [
             BlocBuilder<TasksCubit, TasksState>(
@@ -94,54 +81,72 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Row(
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: _taskController,
-                    decoration: const InputDecoration(
-                      labelText: 'Yeni görev',
-                      border: OutlineInputBorder(),
-                    ),
-                    onSubmitted: (_) => _addTask(),
-                  ),
-                ),
-                const SizedBox(width: 8),
+                Expanded(child: _TextFieldNewTask()),
+                sizedBoxH(8),
+
                 BlocBuilder<TasksCubit, TasksState>(
                   builder: (context, state) {
                     final isLoading = state is TasksLoading;
 
-                    return ElevatedButton.icon(
-                      onPressed: isLoading ? null : _addTask,
-                      label: isLoading
-                          ? const SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation(
-                                  Colors.white,
-                                ),
-                              ),
-                            )
-                          : const Text('Ekle'),
-                    );
+                    return _AddButton(isLoading);
                   },
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _searchController,
-              decoration: const InputDecoration(
-                labelText: 'Ara',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
+            sizedBoxH(16),
+            _TextFieldSearch(),
+
+            sizedBoxH(16),
             Expanded(child: TaskListView()),
           ],
         ),
       ),
+    );
+  }
+
+  TextField _TextFieldSearch() {
+    return TextField(
+      controller: _searchController,
+      decoration: const InputDecoration(
+        labelText: 'Ara',
+        prefixIcon: Icon(Icons.search),
+        border: OutlineInputBorder(),
+      ),
+    );
+  }
+
+  ElevatedButton _AddButton(bool isLoading) {
+    return ElevatedButton.icon(
+      onPressed: isLoading ? null : _addTask,
+      label: isLoading
+          ? const SizedBox(
+              width: 16,
+              height: 16,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation(AppColors.white),
+              ),
+            )
+          : const Text('Ekle'),
+    );
+  }
+
+  IconButton _ExitIcon() {
+    return IconButton(
+      onPressed: _logout,
+      icon: Icon(Icons.logout),
+      tooltip: 'Çıkış Yap',
+    );
+  }
+
+  TextField _TextFieldNewTask() {
+    return TextField(
+      controller: _taskController,
+      decoration: const InputDecoration(
+        labelText: 'Yeni görev',
+        border: OutlineInputBorder(),
+      ),
+      onSubmitted: (_) => _addTask(),
     );
   }
 }
