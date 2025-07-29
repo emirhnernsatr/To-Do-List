@@ -39,6 +39,13 @@ class TasksCubit extends Cubit<TasksState> {
               return Task.fromMap(doc.data(), doc.id);
             }).toList();
 
+            _tasks.sort((a, b) {
+              if (a.isCompleted != b.isCompleted) {
+                return a.isCompleted ? 1 : -1;
+              }
+              return a.title.toLowerCase().compareTo(b.title.toLowerCase());
+            });
+
             emit(TasksLoaded(_tasks, _searchQuery));
           },
           onError: (error) {
@@ -110,7 +117,12 @@ class TasksCubit extends Cubit<TasksState> {
 
       _tasks[index] = updatedTask;
 
-      emit(TasksLoaded(List.from(_tasks), _searchQuery));
+      _tasks.sort((a, b) {
+        if (a.isCompleted != b.isCompleted) {
+          return a.isCompleted ? 1 : -1;
+        }
+        return a.title.toLowerCase().compareTo(b.title.toLowerCase());
+      });
     } catch (e) {
       emit(TasksError(tasks: _tasks, message: "bir hata oluştu."));
     }

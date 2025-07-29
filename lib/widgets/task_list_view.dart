@@ -33,15 +33,12 @@ class TaskListView extends StatelessWidget {
             itemBuilder: (context, index) {
               final task = tasks[index];
 
-              return Card(
-                child: TaskItem(
-                  task: task,
-                  onToggleDone: () =>
-                      context.read<TasksCubit>().toggleTask(task.id),
-                  onEdit: () => _editTask(context, task),
-                  onDelete: () =>
-                      context.read<TasksCubit>().deleteTask(task.id),
-                ),
+              return TaskItem(
+                task: task,
+                onToggleDone: () =>
+                    context.read<TasksCubit>().toggleTask(task.id),
+                onEdit: () => _editTask(context, task),
+                onDelete: () => context.read<TasksCubit>().deleteTask(task.id),
               );
             },
           );
@@ -101,29 +98,41 @@ class TaskItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Checkbox(
-        value: task.isCompleted,
-        onChanged: (_) => onToggleDone(),
-      ),
-      title: Text(
-        task.title,
-        style: TextStyle(
-          decoration: task.isCompleted ? TextDecoration.lineThrough : null,
+    final isDone = task.isCompleted;
+
+    return Card(
+      color: isDone ? AppColors.white70 : null,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      elevation: 2,
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: ListTile(
+        leading: Checkbox(
+          value: isDone,
+          onChanged: (_) => onToggleDone(),
+          activeColor: Theme.of(context).colorScheme.secondary,
         ),
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            icon: Icon(Icons.edit, color: AppColors.primaryColor),
-            onPressed: onEdit,
+        title: Text(
+          task.title,
+          style: TextStyle(
+            color: isDone ? Colors.black : null,
+            decoration: isDone ? TextDecoration.lineThrough : null,
+            decorationColor: Colors.black,
+            decorationThickness: isDone ? 2.0 : 1.0,
           ),
-          IconButton(
-            icon: Icon(Icons.delete, color: AppColors.grey),
-            onPressed: onDelete,
-          ),
-        ],
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(Icons.edit, color: AppColors.primaryColor),
+              onPressed: onEdit,
+            ),
+            IconButton(
+              icon: Icon(Icons.delete, color: AppColors.grey),
+              onPressed: onDelete,
+            ),
+          ],
+        ),
       ),
     );
   }
