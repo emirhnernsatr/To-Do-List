@@ -33,14 +33,14 @@ class AppText {
       fontWeight: FontWeight.bold,
     ),
   );
-
-  static Widget ForgotMessageText(String message) {
+  /*
+  Widget ForgotMessageText(String message) {
     return Text(
-      message = message,
+      message,
       style: TextStyle(color: Colors.white),
       textAlign: TextAlign.center,
     );
-  }
+  }*/
 
   static Widget RegisterText = Text(
     "Kayıt ol",
@@ -49,7 +49,7 @@ class AppText {
 
   static Widget AccountPromptText = Text(
     'Hesabın Var Mı ?',
-    style: TextStyle(color: AppColors.black),
+    style: TextStyle(color: AppColors.white),
   );
 
   static Widget RegisterButtonText = Text(

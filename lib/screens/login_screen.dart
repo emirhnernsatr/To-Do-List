@@ -89,6 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return TextField(
       controller: _passwordController,
       decoration: customInputDecoration('Sifre'),
+      cursorColor: AppColors.whitecolor,
       obscureText: true,
       style: TextStyle(color: AppColors.whitecolor),
     );
@@ -98,6 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return TextField(
       controller: _emailController,
       decoration: customInputDecoration('Email'),
+      cursorColor: AppColors.whitecolor,
       style: TextStyle(color: AppColors.whitecolor),
       keyboardType: TextInputType.emailAddress,
     );

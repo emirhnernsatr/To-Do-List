@@ -41,7 +41,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AppText.ForgotMessageText(message),
+              Text(
+                message,
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
               sizedBoxH(40),
               _TextFieldForgotEmail(),
 
@@ -49,7 +53,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               _ResetPasswordButton(),
 
               sizedBoxH(20),
-              AppText.ForgotMessageText(message),
 
               sizedBoxH(20),
               _ReturnHomeButton(context),
@@ -81,6 +84,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return TextField(
       controller: _emailController,
       decoration: _customInputDecoration("Email"),
+      cursorColor: AppColors.white,
       style: TextStyle(color: AppColors.white),
       keyboardType: TextInputType.emailAddress,
     );
