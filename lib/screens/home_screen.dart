@@ -75,7 +75,6 @@ class _HomeScreenState extends State<HomeScreen> {
             _TextFieldSearch(),
             sizedBoxH(16),
 
-            // sizedBoxH(16),
             Expanded(child: TaskListView()),
           ],
         ),
@@ -92,9 +91,24 @@ class _HomeScreenState extends State<HomeScreen> {
     return TextField(
       controller: _searchController,
       decoration: InputDecoration(
+        prefixIcon: Icon(Icons.search, color: AppColors.primaryColor, size: 30),
         hintText: 'Ara',
-        prefixIcon: Icon(Icons.search),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        hintStyle: TextStyle(
+          color: AppColors.primaryColor,
+          fontWeight: FontWeight.bold,
+        ),
+        labelStyle: TextStyle(
+          color: AppColors.primaryColor,
+          fontWeight: FontWeight.bold,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
+        ),
       ),
     );
   }

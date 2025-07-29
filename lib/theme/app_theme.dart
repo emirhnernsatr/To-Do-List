@@ -12,7 +12,7 @@ class AppTheme {
         ),
       ),
 
-      scaffoldBackgroundColor: AppColors.whitecolor,
+      scaffoldBackgroundColor: AppColors.white.withOpacity(0.92),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: AppColors.whitecolor,
       ),
