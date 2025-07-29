@@ -49,9 +49,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = context.watch<ThemeCubit>().state;
+
     return Scaffold(
       appBar: AppBar(
         title: AppText.TitleHomeText,
+        actions: [
+          IconButton(
+            icon: Icon(
+              isDarkMode ? Icons.dark_mode : Icons.light_mode,
+              color: AppColors.whitecolor,
+            ),
+            onPressed: () {
+              context.read<ThemeCubit>().toggleTheme();
+            },
+          ),
+        ],
         centerTitle: true,
         leading: _ExitIcon(),
       ),
@@ -79,11 +92,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primaryColor,
-        onPressed: () => _showAddTaskDialog(context),
-        child: const Icon(Icons.add, color: AppColors.white, size: 30),
-      ),
+      floatingActionButton: _AddTaskDialogButton(context),
+    );
+  }
+
+  FloatingActionButton _AddTaskDialogButton(BuildContext context) {
+    return FloatingActionButton(
+      backgroundColor: AppColors.primaryColor,
+      onPressed: () => _showAddTaskDialog(context),
+      child: const Icon(Icons.add, color: AppColors.white, size: 30),
     );
   }
 

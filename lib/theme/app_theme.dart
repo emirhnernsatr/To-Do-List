@@ -1,38 +1,64 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  late final ThemeData theme;
+  // açık tema
+  static final ThemeData lightTheme = ThemeData(
+    appBarTheme: AppBarTheme(
+      color: AppColors.primaryColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+      ),
+    ),
+    scaffoldBackgroundColor: AppColors.white.withOpacity(0.80),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: AppColors.whitecolor,
+    ),
+    checkboxTheme: CheckboxThemeData(
+      fillColor: WidgetStateProperty.all(AppColors.primaryColor),
+      side: BorderSide(color: AppColors.primaryColor),
+    ),
+    colorScheme: ColorScheme.light(
+      primary: AppColors.primaryColor,
+      onPrimary: Colors.white,
+    ),
+    textTheme: ThemeData.light().textTheme.copyWith(
+      titleLarge: TextStyle(fontSize: 24, color: AppColors.primaryColor),
+    ),
+  );
 
-  AppTheme() {
-    theme = ThemeData(
-      appBarTheme: AppBarTheme(
-        color: AppColors.primaryColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
-        ),
+  //koyu tema
+  static final ThemeData darkTheme = ThemeData.dark().copyWith(
+    scaffoldBackgroundColor: Color(0xFF121212),
+    appBarTheme: AppBarTheme(
+      color: Color(0xFF5C6EF8),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
       ),
-
-      scaffoldBackgroundColor: AppColors.white.withOpacity(0.92),
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: AppColors.whitecolor,
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: Color(0xFF5C6EF8),
+    ),
+    checkboxTheme: CheckboxThemeData(
+      fillColor: WidgetStateProperty.all(AppColors.white),
+      side: const BorderSide(color: AppColors.white70),
+    ),
+    colorScheme: ColorScheme.dark(
+      primary: Color(0xFF5C6EF8),
+      onPrimary: Colors.white,
+      background: Color(0xFF121212),
+      surface: Color(0xFF1E1E1E),
+    ),
+    textTheme: ThemeData.dark().textTheme.copyWith(
+      titleLarge: const TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
       ),
-      buttonTheme: ButtonThemeData(
-        colorScheme: ColorScheme.light(
-          onPrimary: AppColors.primaryColor,
-          onSecondary: AppColors.primaryColor,
-        ),
-      ),
-      colorScheme: ColorScheme.light(),
-      checkboxTheme: CheckboxThemeData(
-        fillColor: WidgetStateProperty.all(AppColors.primaryColor),
-        side: BorderSide(color: AppColors.primaryColor),
-      ),
-
-      textTheme: ThemeData.light().textTheme.copyWith(
-        titleLarge: TextStyle(fontSize: 24, color: AppColors.primaryColor),
-      ),
-    );
-  }
+      bodyMedium: const TextStyle(color: Colors.white70),
+    ),
+    cardColor: const Color(0xFF1E1E1E),
+  );
 }
 
 class AppColors {

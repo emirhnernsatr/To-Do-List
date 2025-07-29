@@ -29,17 +29,24 @@ class MyApp extends StatelessWidget {
         }
 
         final user = FirebaseAuth.instance.currentUser;
+        final uid = user?.uid ?? '';
 
-        return BlocProvider(
-          create: (context) {
-            final uid = FirebaseAuth.instance.currentUser?.uid ?? '';
-            return TasksCubit(uid)..listenToTasks();
-          },
-          //create: (_) => TasksCubit(user?.uid ?? ""),
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: AppTheme().theme,
-            home: user == null ? const LoginScreen() : const HomeScreen(),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => ThemeCubit()),
+            BlocProvider(create: (_) => TasksCubit(uid)..listenToTasks()),
+          ],
+          child: BlocBuilder<ThemeCubit, bool>(
+            builder: (context, isDarkMode) {
+              //final uid = FirebaseAuth.instance.currentUser?.uid ?? '';
+              return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
+                home: user == null ? const LoginScreen() : const HomeScreen(),
+              );
+            },
           ),
         );
       },

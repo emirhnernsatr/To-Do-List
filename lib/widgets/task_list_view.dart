@@ -99,9 +99,16 @@ class TaskItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDone = task.isCompleted;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    final Color backgroundColor = isDarkMode
+        ? (isDone ? const Color(0xFF2A2A2A) : const Color(0xFF383838))
+        : (isDone ? AppColors.white70 : Colors.white);
+
+    final Color textColor = isDarkMode ? Colors.white : Colors.black;
 
     return Card(
-      color: isDone ? AppColors.white70 : null,
+      color: backgroundColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       elevation: 2,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -114,9 +121,9 @@ class TaskItem extends StatelessWidget {
         title: Text(
           task.title,
           style: TextStyle(
-            color: isDone ? Colors.black : null,
+            color: textColor,
             decoration: isDone ? TextDecoration.lineThrough : null,
-            decorationColor: Colors.black,
+            decorationColor: textColor.withOpacity(0.7),
             decorationThickness: isDone ? 2.0 : 1.0,
           ),
         ),
@@ -128,7 +135,7 @@ class TaskItem extends StatelessWidget {
               onPressed: onEdit,
             ),
             IconButton(
-              icon: Icon(Icons.delete, color: AppColors.grey),
+              icon: Icon(Icons.delete, color: Colors.redAccent),
               onPressed: onDelete,
             ),
           ],

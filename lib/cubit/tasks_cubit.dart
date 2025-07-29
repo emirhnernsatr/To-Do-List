@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:to_do_uygulamsi/cubit/tasks_state.dart';
 import 'package:to_do_uygulamsi/models/task.dart';
 
@@ -215,5 +216,26 @@ class TasksCubit extends Cubit<TasksState> {
         ),
       );
     }
+  }
+}
+
+class ThemeCubit extends Cubit<bool> {
+  static const String prefsKey = 'isDarkMode';
+
+  ThemeCubit() : super(false) {
+    _loadTheme();
+  }
+
+  void _loadTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isDark = prefs.getBool(prefsKey) ?? false;
+    emit(isDark);
+  }
+
+  void toggleTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    final newTheme = !state;
+    await prefs.setBool(prefsKey, newTheme);
+    emit(newTheme);
   }
 }
