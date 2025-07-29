@@ -47,14 +47,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  void _addTask() {
-    final text = _taskController.text.trim();
-    if (text.isNotEmpty) {
-      context.read<TasksCubit>().addTask(text);
-      _taskController.clear();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,38 +99,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  ElevatedButton _AddButton(bool isLoading) {
-    return ElevatedButton.icon(
-      onPressed: isLoading ? null : _addTask,
-      label: isLoading
-          ? const SizedBox(
-              width: 16,
-              height: 16,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation(AppColors.white),
-              ),
-            )
-          : const Text('Ekle'),
-    );
-  }
-
   IconButton _ExitIcon() {
     return IconButton(
       onPressed: _logout,
       icon: Icon(Icons.logout),
+      color: AppColors.whitecolor,
       tooltip: 'Çıkış Yap',
-    );
-  }
-
-  TextField _TextFieldNewTask() {
-    return TextField(
-      controller: _taskController,
-      decoration: const InputDecoration(
-        labelText: 'Yeni görev',
-        border: OutlineInputBorder(),
-      ),
-      onSubmitted: (_) => _addTask(),
     );
   }
 }

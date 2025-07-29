@@ -20,7 +20,10 @@ class AppText {
     ),
   );
 
-  static Widget TitleHomeText = const Text('Görev Listesi');
+  static Widget TitleHomeText = Text(
+    'Görev Listesi',
+    style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.whitecolor),
+  );
 
   static Widget PasswordResetText = Text(
     'Şifre Sıfırlama',
