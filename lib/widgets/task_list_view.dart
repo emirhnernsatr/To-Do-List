@@ -116,7 +116,7 @@ class TaskItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            icon: Icon(Icons.edit, color: AppColors.blue),
+            icon: Icon(Icons.edit, color: AppColors.primaryColor),
             onPressed: onEdit,
           ),
           IconButton(

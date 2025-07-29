@@ -34,14 +34,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.blueAccent,
+      backgroundColor: AppColors.primaryColor,
       body: Center(
         child: Padding(
           padding: Paddings.all40,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AppText.ForgotMessageText,
+              AppText.ForgotMessageText(message),
               sizedBoxH(40),
               _TextFieldForgotEmail(),
 
@@ -49,7 +49,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               _ResetPasswordButton(),
 
               sizedBoxH(20),
-              AppText.ForgotMessageText,
+              AppText.ForgotMessageText(message),
 
               sizedBoxH(20),
               _ReturnHomeButton(context),

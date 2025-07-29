@@ -28,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _emailController.text.trim(),
       _passwordController.text.trim(),
     );
+
     setState(() {
       if (user != null) {
         message = 'Giriş başarılı! Hoşgeldin: ${user.email}';
@@ -49,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.blueAccent,
+      backgroundColor: AppColors.primaryColor,
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
@@ -57,10 +58,13 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
                 sizedBoxH(50),
+
                 Container(child: AppText.TitleText),
                 sizedBoxH(70),
+
                 _TextFieldEmail(),
                 sizedBoxH(30),
+
                 _TextFieldSifre(),
                 sizedBoxH(20),
 
@@ -86,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
       controller: _passwordController,
       decoration: customInputDecoration('Sifre'),
       obscureText: true,
-      style: TextStyle(color: AppColors.white),
+      style: TextStyle(color: AppColors.whitecolor),
     );
   }
 
@@ -94,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return TextField(
       controller: _emailController,
       decoration: customInputDecoration('Email'),
-      style: TextStyle(color: AppColors.white),
+      style: TextStyle(color: AppColors.whitecolor),
       keyboardType: TextInputType.emailAddress,
     );
   }
@@ -107,10 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
           MaterialPageRoute(builder: (_) => const ForgotPasswordScreen()),
         );
       },
-      child: Text(
-        'sifremi Unuttum',
-        style: TextStyle(color: AppColors.white70),
-      ),
+      child: AppText.ForgotPasswordText,
     );
   }
 
@@ -122,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
           MaterialPageRoute(builder: (_) => const RegisterScreen()),
         );
       },
-      child: Text('Hesap Olustur', style: TextStyle(color: AppColors.black)),
+      child: AppText.RegisterLinkText,
     );
   }
 
@@ -136,9 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
           borderRadius: BorderRadius.circular(60),
           color: AppColors.green,
         ),
-        child: Center(
-          child: Text('Giris Yap', style: TextStyle(color: AppColors.white)),
-        ),
+        child: Center(child: AppText.LoginText),
       ),
     );
   }
@@ -146,12 +145,12 @@ class _LoginScreenState extends State<LoginScreen> {
   InputDecoration customInputDecoration(String hintText) {
     return InputDecoration(
       hintText: hintText,
-      hintStyle: TextStyle(color: AppColors.white),
+      hintStyle: TextStyle(color: AppColors.whitecolor),
       enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: AppColors.white),
+        borderSide: BorderSide(color: AppColors.whitecolor),
       ),
       focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: AppColors.white),
+        borderSide: BorderSide(color: AppColors.whitecolor),
       ),
     );
   }

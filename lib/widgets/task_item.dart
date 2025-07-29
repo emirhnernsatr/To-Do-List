@@ -11,18 +11,18 @@ class Paddings {
 }
 
 class AppText {
-  static final TitleText = Text(
+  static Widget TitleText = Text(
     'To - Do',
     style: TextStyle(
       fontSize: 50,
-      color: Colors.black,
+      color: AppColors.whitecolor,
       fontWeight: FontWeight.bold,
     ),
   );
 
-  static final TitleHomeText = const Text('Görev Listesi');
+  static Widget TitleHomeText = const Text('Görev Listesi');
 
-  static final PasswordResetText = Text(
+  static Widget PasswordResetText = Text(
     'Şifre Sıfırlama',
     style: TextStyle(
       fontSize: 32,
@@ -31,24 +31,41 @@ class AppText {
     ),
   );
 
-  static final ForgotMessageText = Text(
-    '',
-    style: TextStyle(color: Colors.white),
-    textAlign: TextAlign.center,
-  );
+  static Widget ForgotMessageText(String message) {
+    return Text(
+      message = message,
+      style: TextStyle(color: Colors.white),
+      textAlign: TextAlign.center,
+    );
+  }
 
-  static final RegisterText = Text(
+  static Widget RegisterText = Text(
     "Kayıt ol",
     style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
   );
 
-  static final AccountPromptText = Text(
+  static Widget AccountPromptText = Text(
     'Hesabın Var Mı ?',
     style: TextStyle(color: AppColors.black),
   );
 
-  static final RegisterButtonText = Text(
+  static Widget RegisterButtonText = Text(
     'kayıt Ol',
+    style: TextStyle(color: AppColors.white),
+  );
+
+  static Widget ForgotPasswordText = Text(
+    'sifremi Unuttum',
+    style: TextStyle(color: AppColors.white70),
+  );
+
+  static Widget LoginText = Text(
+    'Giris Yap',
+    style: TextStyle(color: AppColors.whitecolor, fontWeight: FontWeight.bold),
+  );
+
+  static Widget RegisterLinkText = Text(
+    'Hesap Olustur',
     style: TextStyle(color: AppColors.white),
   );
 }

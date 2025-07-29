@@ -80,27 +80,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 return const SizedBox.shrink();
               },
             ),
-            Row(
-              children: [
-                Expanded(child: _TextFieldNewTask()),
-                sizedBoxH(8),
-
-                BlocBuilder<TasksCubit, TasksState>(
-                  builder: (context, state) {
-                    final isLoading = state is TasksLoading;
-
-                    return Align(child: _AddButton(isLoading));
-                  },
-                ),
-              ],
-            ),
-            sizedBoxH(16),
             _TextFieldSearch(),
-
             sizedBoxH(16),
+
+            // sizedBoxH(16),
             Expanded(child: TaskListView()),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primaryColor,
+        onPressed: () => _showAddTaskDialog(context),
+        child: const Icon(Icons.add, color: AppColors.white, size: 30),
       ),
     );
   }
@@ -108,10 +99,10 @@ class _HomeScreenState extends State<HomeScreen> {
   TextField _TextFieldSearch() {
     return TextField(
       controller: _searchController,
-      decoration: const InputDecoration(
-        labelText: 'Ara',
+      decoration: InputDecoration(
+        hintText: 'Ara',
         prefixIcon: Icon(Icons.search),
-        border: OutlineInputBorder(),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
   }
@@ -149,5 +140,42 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       onSubmitted: (_) => _addTask(),
     );
+  }
+}
+
+void _showAddTaskDialog(BuildContext dialogContext) {
+  final _newTaskController = TextEditingController();
+
+  showDialog(
+    context: dialogContext,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Yeni Görev Ekle'),
+        content: TextField(
+          controller: _newTaskController,
+          autofocus: true,
+          decoration: const InputDecoration(hintText: 'Görev adı'),
+          onSubmitted: (_) => _submitTask(context, _newTaskController),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('İptal'),
+          ),
+          ElevatedButton(
+            onPressed: () => _submitTask(context, _newTaskController),
+            child: const Text('Ekle'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void _submitTask(BuildContext context, TextEditingController controller) {
+  final text = controller.text.trim();
+  if (text.isNotEmpty) {
+    context.read<TasksCubit>().addTask(text);
+    Navigator.of(context).pop();
   }
 }
