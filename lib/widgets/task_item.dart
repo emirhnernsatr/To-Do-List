@@ -44,7 +44,11 @@ class AppText {
 
   static Widget RegisterText = Text(
     "Kayıt ol",
-    style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
+    style: TextStyle(
+      color: AppColors.whitecolor,
+      fontSize: 45,
+      fontWeight: FontWeight.bold,
+    ),
   );
 
   static Widget AccountPromptText = Text(
