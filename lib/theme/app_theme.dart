@@ -24,6 +24,11 @@ class AppTheme {
     textTheme: ThemeData.light().textTheme.copyWith(
       titleLarge: TextStyle(fontSize: 24, color: AppColors.primaryColor),
     ),
+    textSelectionTheme: TextSelectionThemeData(
+      selectionColor: AppColors.blue.withOpacity(0.4),
+      selectionHandleColor: AppColors.blue,
+      cursorColor: AppColors.primaryColor,
+    ),
   );
 
   //koyu tema
@@ -58,6 +63,12 @@ class AppTheme {
       bodyMedium: const TextStyle(color: Colors.white70),
     ),
     cardColor: const Color(0xFF1E1E1E),
+
+    textSelectionTheme: TextSelectionThemeData(
+      selectionColor: AppColors.blue.withOpacity(0.4),
+      selectionHandleColor: AppColors.blue,
+      cursorColor: AppColors.primaryColor,
+    ),
   );
 }
 
