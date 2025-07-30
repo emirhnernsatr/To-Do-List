@@ -82,6 +82,7 @@ class TasksCubit extends Cubit<TasksState> {
         title: title,
         userId: uid,
         timestamp: DateTime.now(),
+        description: null,
       );
 
       await newDoc.set(newTask.toMap());
@@ -196,6 +197,7 @@ class TasksCubit extends Cubit<TasksState> {
         isCompleted: oldTask.isCompleted,
         userId: oldTask.userId,
         timestamp: oldTask.timestamp,
+        description: oldTask.description,
       );
 
       await _firestore

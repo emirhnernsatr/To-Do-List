@@ -6,6 +6,7 @@ class Task {
   final bool isCompleted;
   final String userId;
   final DateTime timestamp;
+  final String? description;
 
   Task({
     required this.id,
@@ -13,6 +14,7 @@ class Task {
     this.isCompleted = false,
     required this.userId,
     required this.timestamp,
+    required this.description,
   });
 
   Task toggle() {
@@ -22,6 +24,7 @@ class Task {
       isCompleted: !isCompleted,
       userId: userId,
       timestamp: timestamp,
+      description: description ?? this.description,
     );
   }
 
@@ -33,6 +36,7 @@ class Task {
       'userId': userId,
       //'timestamp': timestamp ?? FieldValue.serverTimestamp(),
       'timestamp': Timestamp.fromDate(timestamp),
+      'description': description ?? '',
     };
   }
 
@@ -45,6 +49,7 @@ class Task {
       timestamp: map['timestamp'] != null
           ? (map['timestamp'] as Timestamp).toDate()
           : DateTime.now(),
+      description: map['description'],
     );
   }
 }
