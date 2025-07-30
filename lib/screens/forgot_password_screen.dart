@@ -23,6 +23,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       return;
     }
 
+    if (!email.contains('@')) {
+      setState(() => message = "Geçerli bir e-posta adresi girin.");
+      return;
+    }
+
     try {
       await _authService.sendPasswordResetEmail(email);
       setState(() => message = "Şifre sıfırlama bağlantısı gönderildi.");
@@ -36,27 +41,34 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       body: Center(
-        child: Padding(
-          padding: Paddings.all40,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                message,
-                style: TextStyle(color: Colors.white),
-                textAlign: TextAlign.center,
-              ),
-              sizedBoxH(40),
-              _TextFieldForgotEmail(),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: Paddings.all40,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Şifre Yenileme',
+                  style: TextStyle(
+                    fontSize: 32,
+                    color: AppColors.whitecolor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                if (message.isNotEmpty) AppText.ForgotMessageText(message),
 
-              sizedBoxH(30),
-              _ResetPasswordButton(),
+                sizedBoxH(40),
+                _TextFieldForgotEmail(),
 
-              sizedBoxH(20),
+                sizedBoxH(30),
+                _ResetPasswordButton(),
 
-              sizedBoxH(20),
-              _ReturnHomeButton(context),
-            ],
+                sizedBoxH(20),
+
+                sizedBoxH(20),
+                _ReturnHomeButton(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -75,6 +87,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   ElevatedButton _ResetPasswordButton() {
     return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.white,
+        foregroundColor: AppColors.primaryColor,
+      ),
       onPressed: _resetPassword,
       child: Text("Sıfırlama Linki Gönder"),
     );
@@ -87,6 +103,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       cursorColor: AppColors.white,
       style: TextStyle(color: AppColors.white),
       keyboardType: TextInputType.emailAddress,
+      textInputAction: TextInputAction.done,
+      onSubmitted: (_) => _resetPassword(),
     );
   }
 }

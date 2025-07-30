@@ -26,21 +26,21 @@ class AppText {
   );
 
   static Widget PasswordResetText = Text(
-    'Şifre Sıfırlama',
+    'Şifreni mi Unuttun?',
     style: TextStyle(
       fontSize: 32,
       color: Colors.white,
       fontWeight: FontWeight.bold,
     ),
   );
-  /*
-  Widget ForgotMessageText(String message) {
+
+  static Widget ForgotMessageText(String message) {
     return Text(
       message,
       style: TextStyle(color: Colors.white),
       textAlign: TextAlign.center,
     );
-  }*/
+  }
 
   static Widget RegisterText = Text(
     "Kayıt ol",
@@ -58,11 +58,11 @@ class AppText {
 
   static Widget RegisterButtonText = Text(
     'kayıt Ol',
-    style: TextStyle(color: AppColors.white),
+    style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
   );
 
   static Widget ForgotPasswordText = Text(
-    'sifremi Unuttum',
+    'Şifreni mi Unuttun?',
     style: TextStyle(color: AppColors.white70),
   );
 

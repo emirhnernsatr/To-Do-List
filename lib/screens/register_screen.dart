@@ -63,10 +63,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Column(
                 children: [
                   _TextFieldRegisterEmail(),
-                  sizedBoxH(20),
+                  sizedBoxH(30),
 
                   _TextFieldRegisterPassword(),
-                  sizedBoxH(20),
+                  sizedBoxH(30),
 
                   _TextFieldRegisterConfirmPassword(),
                 ],
