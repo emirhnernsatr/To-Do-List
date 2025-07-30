@@ -75,4 +75,13 @@ class AppText {
     'Hesap Olustur',
     style: TextStyle(color: AppColors.white),
   );
+
+  static Widget TitleForgotPasswordText = Text(
+    'Şifre Yenileme',
+    style: TextStyle(
+      fontSize: 32,
+      color: AppColors.whitecolor,
+      fontWeight: FontWeight.bold,
+    ),
+  );
 }

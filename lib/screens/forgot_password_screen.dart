@@ -47,14 +47,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  'Şifre Yenileme',
-                  style: TextStyle(
-                    fontSize: 32,
-                    color: AppColors.whitecolor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                AppText.TitleForgotPasswordText,
+
+                sizedBoxH(20),
                 if (message.isNotEmpty) AppText.ForgotMessageText(message),
 
                 sizedBoxH(40),
