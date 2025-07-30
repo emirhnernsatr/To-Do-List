@@ -25,15 +25,6 @@ class AppText {
     style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.whitecolor),
   );
 
-  static Widget PasswordResetText = Text(
-    'Şifreni mi Unuttun?',
-    style: TextStyle(
-      fontSize: 32,
-      color: Colors.white,
-      fontWeight: FontWeight.bold,
-    ),
-  );
-
   static Widget ForgotMessageText(String message) {
     return Text(
       message,
@@ -67,12 +58,12 @@ class AppText {
   );
 
   static Widget LoginText = Text(
-    'Giris Yap',
+    'Giriş Yap',
     style: TextStyle(color: AppColors.whitecolor, fontWeight: FontWeight.bold),
   );
 
   static Widget RegisterLinkText = Text(
-    'Hesap Olustur',
+    'Hesap Oluştur',
     style: TextStyle(color: AppColors.white),
   );
 
@@ -84,4 +75,24 @@ class AppText {
       fontWeight: FontWeight.bold,
     ),
   );
+
+  static Widget NoMissionsYetText = Text('Henüz Görev Yok');
+
+  static Widget TaskDetailsText = Text(
+    'Görev Detayı',
+    style: TextStyle(color: Colors.white),
+  );
+
+  static Widget AddText = Text('Ekle');
+
+  static Widget CancelText = Text('İptal');
+
+  static Widget AddNewTaskText = Text('Yeni Görev Ekle');
+
+  static Widget ReturnLoginScreenText = Text(
+    'Giriş Ekranına Dön',
+    style: TextStyle(color: AppColors.white70),
+  );
+
+  static Widget SendResetLinkText = Text('Sıfırlama Linki Gönder');
 }

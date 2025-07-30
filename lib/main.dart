@@ -38,7 +38,6 @@ class MyApp extends StatelessWidget {
           ],
           child: BlocBuilder<ThemeCubit, bool>(
             builder: (context, isDarkMode) {
-              //final uid = FirebaseAuth.instance.currentUser?.uid ?? '';
               return MaterialApp(
                 debugShowCheckedModeBanner: false,
                 theme: AppTheme.lightTheme,

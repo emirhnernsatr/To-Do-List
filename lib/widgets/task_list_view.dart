@@ -4,11 +4,11 @@ import 'package:to_do_uygulamsi/cubit/tasks_cubit.dart';
 import 'package:to_do_uygulamsi/cubit/tasks_state.dart';
 import 'package:to_do_uygulamsi/screens/task_detail_screen.dart';
 import 'package:to_do_uygulamsi/theme/app_theme.dart';
+import 'package:to_do_uygulamsi/widgets/task_item.dart';
 import '../models/task.dart';
 
 class TaskListView extends StatelessWidget {
   const TaskListView({super.key});
-  //final Task task;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class TaskListView extends StatelessWidget {
           final tasks = state.filteredTasks;
 
           if (tasks.isEmpty) {
-            return const Center(child: Text('Henüz görev yok'));
+            return Center(child: AppText.NoMissionsYetText);
           }
 
           return ListView.builder(
@@ -52,42 +52,10 @@ class TaskListView extends StatelessWidget {
   }
 
   void _editTask(BuildContext context, Task task) {
-    //final editController = TextEditingController(text: task.title);
-
     Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => TaskDetailScreen(task: task)),
     );
-    /*
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Görevi Düzenle'),
-        content: TextField(
-          controller: editController,
-          autofocus: true,
-          decoration: const InputDecoration(labelText: 'Yeni Başlık'),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('İptal'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final newTitle = editController.text.trim();
-              if (newTitle.isNotEmpty) {
-                context.read<TasksCubit>().editTask(task.id, newTitle);
-                Navigator.of(context).pop();
-              }
-            },
-            
-            child: const Text('Kaydet'),
-          ),
-        ],
-      ),
-    );*/
   }
 }
 
@@ -111,10 +79,10 @@ class TaskItem extends StatelessWidget {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     final Color backgroundColor = isDarkMode
-        ? (isDone ? const Color(0xFF2A2A2A) : const Color(0xFF383838))
-        : (isDone ? AppColors.white70 : Colors.white);
+        ? (isDone ? AppColors.charlestonGreen : AppColors.onyx)
+        : (isDone ? AppColors.white70 : AppColors.white);
 
-    final Color textColor = isDarkMode ? Colors.white : Colors.black;
+    final Color textColor = isDarkMode ? AppColors.white : AppColors.black;
 
     return Card(
       color: backgroundColor,
@@ -150,7 +118,7 @@ class TaskItem extends StatelessWidget {
               onPressed: onEdit,
             ),
             IconButton(
-              icon: Icon(Icons.delete, color: Colors.redAccent),
+              icon: Icon(Icons.delete, color: AppColors.redAccent),
               onPressed: onDelete,
             ),
           ],

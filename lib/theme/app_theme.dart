@@ -33,36 +33,36 @@ class AppTheme {
 
   //koyu tema
   static final ThemeData darkTheme = ThemeData.dark().copyWith(
-    scaffoldBackgroundColor: Color(0xFF121212),
+    scaffoldBackgroundColor: AppColors.chineseblack,
     appBarTheme: AppBarTheme(
-      color: Color(0xFF5C6EF8),
+      color: AppColors.primaryColor,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
       ),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: Color(0xFF5C6EF8),
+      backgroundColor: AppColors.primaryColor,
     ),
     checkboxTheme: CheckboxThemeData(
       fillColor: WidgetStateProperty.all(AppColors.white),
       side: const BorderSide(color: AppColors.white70),
     ),
     colorScheme: ColorScheme.dark(
-      primary: Color(0xFF5C6EF8),
-      onPrimary: Colors.white,
-      background: Color(0xFF121212),
-      surface: Color(0xFF1E1E1E),
+      primary: AppColors.primaryColor,
+      onPrimary: AppColors.white,
+      background: AppColors.chineseblack,
+      surface: AppColors.eerieblack,
     ),
     textTheme: ThemeData.dark().textTheme.copyWith(
       titleLarge: const TextStyle(
         fontSize: 24,
         fontWeight: FontWeight.bold,
-        color: Colors.white,
+        color: AppColors.white,
       ),
       bodyMedium: const TextStyle(color: Colors.white70),
     ),
-    cardColor: const Color(0xFF1E1E1E),
+    cardColor: AppColors.eerieblack,
 
     textSelectionTheme: TextSelectionThemeData(
       selectionColor: AppColors.blue.withOpacity(0.4),
@@ -82,4 +82,9 @@ class AppColors {
   static final Color grey = Colors.grey;
   static final Color primaryColor = Color(0xFF5C6EF8);
   static final Color whitecolor = Color(0xFFF3F4F6);
+  static final Color redAccent = Colors.redAccent;
+  static final Color onyx = Color(0xFF383838);
+  static final Color charlestonGreen = Color(0xFF383838);
+  static final Color eerieblack = Color(0xFF1E1E1E);
+  static final Color chineseblack = Color(0xFF121212);
 }

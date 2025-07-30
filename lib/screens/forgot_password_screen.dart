@@ -73,10 +73,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   TextButton _ReturnHomeButton(BuildContext context) {
     return TextButton(
       onPressed: () => Navigator.pop(context),
-      child: Text(
-        "Giriş Ekranına Dön",
-        style: TextStyle(color: AppColors.white70),
-      ),
+      child: AppText.ReturnLoginScreenText,
     );
   }
 
@@ -87,7 +84,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         foregroundColor: AppColors.primaryColor,
       ),
       onPressed: _resetPassword,
-      child: Text("Sıfırlama Linki Gönder"),
+      child: AppText.SendResetLinkText,
     );
   }
 

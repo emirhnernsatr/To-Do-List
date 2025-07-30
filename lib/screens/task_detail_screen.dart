@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/cubit/tasks_cubit.dart';
 import 'package:to_do_uygulamsi/models/task.dart';
+import 'package:to_do_uygulamsi/theme/app_theme.dart';
 import 'package:to_do_uygulamsi/widgets/task_item.dart';
 
 class TaskDetailScreen extends StatefulWidget {
@@ -39,34 +40,46 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Görev Detayı', style: TextStyle(color: Colors.white)),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.save, color: Colors.white),
-            onPressed: _saveChange,
-          ),
-        ],
+        title: AppText.TaskDetailsText,
+        leading: _arrowBackButton(context),
+        actions: [_saveButton()],
       ),
       body: Padding(
         padding: Paddings.all16,
-        child: TextField(
-          controller: _titleController,
-          style: TextStyle(
-            color: isDark ? Colors.white : Colors.black,
-            fontSize: 16,
-          ),
-          autofocus: true,
-          decoration: InputDecoration(
-            labelText: 'Görev Başlığı',
-            labelStyle: TextStyle(color: isDark ? Colors.white : Colors.black),
-            border: OutlineInputBorder(),
-          ),
-        ),
+        child: _taskTitleTextField(isDark),
       ),
+    );
+  }
+
+  TextField _taskTitleTextField(bool isDark) {
+    return TextField(
+      controller: _titleController,
+      style: TextStyle(
+        color: isDark ? AppColors.white : AppColors.black,
+        fontSize: 16,
+      ),
+      autofocus: true,
+      decoration: InputDecoration(
+        labelText: 'Görev Başlığı',
+        labelStyle: TextStyle(
+          color: isDark ? AppColors.white : AppColors.black,
+        ),
+        border: OutlineInputBorder(),
+      ),
+    );
+  }
+
+  IconButton _saveButton() {
+    return IconButton(
+      icon: Icon(Icons.save, color: AppColors.white),
+      onPressed: _saveChange,
+    );
+  }
+
+  IconButton _arrowBackButton(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back, color: AppColors.white),
+      onPressed: () => Navigator.pop(context),
     );
   }
 }

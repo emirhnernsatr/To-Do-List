@@ -148,7 +148,7 @@ void _showAddTaskDialog(BuildContext dialogContext) {
     context: dialogContext,
     builder: (context) {
       return AlertDialog(
-        title: const Text('Yeni Görev Ekle'),
+        title: AppText.AddNewTaskText,
         content: TextField(
           controller: _newTaskController,
           autofocus: true,
@@ -158,11 +158,11 @@ void _showAddTaskDialog(BuildContext dialogContext) {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('İptal'),
+            child: AppText.CancelText,
           ),
           ElevatedButton(
             onPressed: () => _submitTask(context, _newTaskController),
-            child: const Text('Ekle'),
+            child: AppText.AddText,
           ),
         ],
       );
