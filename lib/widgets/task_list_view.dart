@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/cubit/tasks_cubit.dart';
 import 'package:to_do_uygulamsi/cubit/tasks_state.dart';
+import 'package:to_do_uygulamsi/screens/task_detail_screen.dart';
 import 'package:to_do_uygulamsi/theme/app_theme.dart';
 import '../models/task.dart';
 
 class TaskListView extends StatelessWidget {
   const TaskListView({super.key});
+  //final Task task;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +52,13 @@ class TaskListView extends StatelessWidget {
   }
 
   void _editTask(BuildContext context, Task task) {
-    final editController = TextEditingController(text: task.title);
+    //final editController = TextEditingController(text: task.title);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => TaskDetailScreen(task: task)),
+    );
+    /*
 
     showDialog(
       context: context,
@@ -74,11 +82,12 @@ class TaskListView extends StatelessWidget {
                 Navigator.of(context).pop();
               }
             },
+            
             child: const Text('Kaydet'),
           ),
         ],
       ),
-    );
+    );*/
   }
 }
 
@@ -113,9 +122,15 @@ class TaskItem extends StatelessWidget {
       elevation: 2,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: ListTile(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => TaskDetailScreen(task: task)),
+          );
+        },
         leading: Checkbox(
           value: isDone,
-          onChanged: (_) => onToggleDone(),
+          onChanged: (_) => context.read<TasksCubit>().toggleTask(task.id),
           activeColor: Theme.of(context).colorScheme.secondary,
         ),
         title: Text(

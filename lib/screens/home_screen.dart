@@ -107,6 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
   TextField _TextFieldSearch() {
     return TextField(
       controller: _searchController,
+      style: TextStyle(fontSize: 16),
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.search, color: AppColors.primaryColor, size: 30),
         hintText: 'Ara',
