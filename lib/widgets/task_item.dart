@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:to_do_uygulamsi/theme/app_theme.dart';
 
 Widget sizedBoxH(double height) => SizedBox(height: height);
+Widget sizedBoxW(double width) => SizedBox(width: width);
 
-//Widget sizedBoxW(double width) => SizedBox(width: width);
 class Paddings {
   static const EdgeInsets all50 = EdgeInsets.all(50);
   static const EdgeInsets all40 = EdgeInsets.all(40);

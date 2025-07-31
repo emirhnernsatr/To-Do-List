@@ -7,7 +7,6 @@ class Task {
   final bool isCompleted;
   final String userId;
   final DateTime timestamp;
-  final String? description;
   final String? note;
   final DateTime? date;
   final TimeOfDay? time;
@@ -18,7 +17,6 @@ class Task {
     this.isCompleted = false,
     required this.userId,
     required this.timestamp,
-    this.description,
     this.note,
     this.date,
     this.time,
@@ -31,7 +29,6 @@ class Task {
       isCompleted: !isCompleted,
       userId: userId,
       timestamp: timestamp,
-      description: description ?? this.description,
       note: note,
       date: date,
       time: time,
@@ -45,7 +42,6 @@ class Task {
       'isCompleted': isCompleted,
       'userId': userId,
       'timestamp': Timestamp.fromDate(timestamp),
-      'description': description ?? '',
       'note': note ?? '',
       'date': date != null ? Timestamp.fromDate(date!) : null,
       'time': time != null
@@ -55,7 +51,6 @@ class Task {
   }
 
   factory Task.fromMap(Map<String, dynamic> map, String id) {
-    // Saat dönüşümünü kontrol et
     TimeOfDay? parsedTime;
     if (map['time'] != null &&
         map['time'] is Map &&
@@ -73,7 +68,7 @@ class Task {
       isCompleted: map['isCompleted'] ?? false,
       userId: map['userId'] ?? '',
       timestamp: (map['timestamp'] as Timestamp).toDate(),
-      description: map['description'],
+
       note: map['note'],
       date: map['date'] != null ? (map['date'] as Timestamp).toDate() : null,
       time: parsedTime,

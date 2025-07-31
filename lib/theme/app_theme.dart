@@ -84,7 +84,7 @@ class AppColors {
   static final Color whitecolor = Color(0xFFF3F4F6);
   static final Color redAccent = Colors.redAccent;
   static final Color onyx = Color(0xFF383838);
-  static final Color charlestonGreen = Color(0xFF383838);
+  static final Color charlestonGreen = Color(0xFF2A2A2A);
   static final Color eerieblack = Color(0xFF1E1E1E);
   static final Color chineseblack = Color(0xFF121212);
 }

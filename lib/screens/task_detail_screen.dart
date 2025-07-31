@@ -15,7 +15,6 @@ class TaskDetailScreen extends StatefulWidget {
 
 class _TaskDetailScreenState extends State<TaskDetailScreen> {
   late TextEditingController _titleController;
-  late TextEditingController _descriptionController;
   late TextEditingController _noteController;
 
   DateTime? _selectedDate;
@@ -25,15 +24,14 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: widget.task.title);
-    _descriptionController = TextEditingController(
-      text: widget.task.description ?? '',
-    );
     _noteController = TextEditingController(text: widget.task.note);
+
+    _selectedDate = widget.task.date;
+    _selectedTime = widget.task.time;
   }
 
   void dispose() {
     _titleController.dispose();
-    _descriptionController.dispose();
     _noteController.dispose();
     super.dispose();
   }
@@ -113,7 +111,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
             sizedBoxH(16),
             _statusCard(isDark),
 
-            sizedBoxH(16),
+            sizedBoxH(20),
 
             Row(
               children: [
@@ -129,7 +127,9 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                     decoration: InputDecoration(
                       labelText: 'Tarih',
                       labelStyle: TextStyle(
-                        color: AppColors.primaryColor,
+                        color: isDark
+                            ? AppColors.white
+                            : AppColors.primaryColor,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -139,19 +139,20 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: AppColors.primaryColor,
-                          width: 2,
-                        ),
+                        borderSide: BorderSide(color: AppColors.primaryColor),
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
+                      filled: true,
+                      fillColor: isDark
+                          ? AppColors.charlestonGreen
+                          : AppColors.white,
                     ),
                   ),
                 ),
                 sizedBoxH(16),
-
+                sizedBoxW(8),
                 Expanded(
                   child: TextFormField(
                     readOnly: true,
@@ -164,7 +165,9 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                     decoration: InputDecoration(
                       labelText: 'Saat',
                       labelStyle: TextStyle(
-                        color: AppColors.primaryColor,
+                        color: isDark
+                            ? AppColors.white
+                            : AppColors.primaryColor,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -174,20 +177,21 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: AppColors.primaryColor,
-                          width: 2,
-                        ),
+                        borderSide: BorderSide(color: AppColors.primaryColor),
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
+                      filled: true,
+                      fillColor: isDark
+                          ? AppColors.charlestonGreen
+                          : AppColors.white,
                     ),
                   ),
                 ),
               ],
             ),
-            sizedBoxH(20),
+            sizedBoxH(40),
 
             TextFormField(
               controller: _noteController,
@@ -195,22 +199,21 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
               decoration: InputDecoration(
                 labelText: 'Notlar',
                 labelStyle: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: 16,
+                  color: isDark ? AppColors.white : AppColors.primaryColor,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: AppColors.primaryColor,
-                    width: 2,
-                  ),
+                  borderSide: BorderSide(color: AppColors.primaryColor),
                 ),
                 alignLabelWithHint: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: AppColors.primaryColor),
                 ),
+                filled: true,
+                fillColor: isDark ? AppColors.charlestonGreen : AppColors.white,
               ),
             ),
 
@@ -230,7 +233,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 child: const Text(
                   'Kaydet',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
@@ -249,7 +252,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         ? '${time.day.toString().padLeft(2, '0')}/${time.month.toString().padLeft(2, '0')}/${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}'
         : 'Tarih Bilgisi Yok';
     return Card(
-      color: isDark ? Color(0xFF2A2A2A) : Colors.grey.shade100,
+      color: isDark ? AppColors.charlestonGreen : AppColors.white,
       elevation: 3,
       child: Padding(
         padding: Paddings.all16,
@@ -277,7 +280,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     final bool isCompleted = widget.task.isCompleted;
 
     return Card(
-      color: isDark ? Color(0xFF2A2A2A) : Colors.grey.shade100,
+      color: isDark ? AppColors.charlestonGreen : AppColors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       elevation: 3,
       child: Padding(
@@ -294,7 +297,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
               style: TextStyle(
                 fontSize: 16,
                 color: isCompleted
-                    ? Colors.green
+                    ? AppColors.green
                     : (isDark ? AppColors.redAccent : AppColors.redAccent),
                 fontWeight: FontWeight.w600,
               ),
@@ -316,7 +319,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
       decoration: InputDecoration(
         labelText: 'Görev Başlığı',
         labelStyle: TextStyle(
-          color: AppColors.primaryColor,
+          color: isDark ? AppColors.white : AppColors.primaryColor,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
@@ -329,7 +332,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
           borderRadius: BorderRadius.circular(8),
         ),
         filled: true,
-        fillColor: isDark ? Color(0xFF2A2A2A) : Colors.grey[100],
+        fillColor: isDark ? AppColors.charlestonGreen : AppColors.white,
       ),
     );
   }

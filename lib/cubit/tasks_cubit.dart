@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,11 +20,13 @@ class TasksCubit extends Cubit<TasksState> {
   List<Task> _tasks = [];
 
   void listenToTasks() {
-    if (uid.isEmpty) {
+    final String? uid = FirebaseAuth.instance.currentUser?.uid;
+
+    if (uid == null || uid.isEmpty) {
       emit(
         TasksError(
           tasks: _tasks,
-          message: "UID bos . Oturum acılmamıs olabılır.",
+          message: "UID boş. Oturum açılmamış olabilir.",
         ),
       );
       return;
@@ -57,7 +60,9 @@ class TasksCubit extends Cubit<TasksState> {
   }
 
   Future<void> addTask(String title) async {
-    if (uid.isEmpty) {
+    final String? uid = FirebaseAuth.instance.currentUser?.uid;
+
+    if (uid == null || uid.isEmpty) {
       emit(
         TasksError(
           tasks: _tasks,
@@ -83,7 +88,7 @@ class TasksCubit extends Cubit<TasksState> {
         title: title,
         userId: uid,
         timestamp: DateTime.now(),
-        description: null,
+
         note: '',
       );
 
@@ -171,7 +176,6 @@ class TasksCubit extends Cubit<TasksState> {
           .get();
 
       _tasks = snapshot.docs.map((doc) {
-        // final data = doc.data();
         return Task.fromMap(doc.data(), doc.id);
       }).toList();
 
@@ -205,7 +209,7 @@ class TasksCubit extends Cubit<TasksState> {
         isCompleted: oldTask.isCompleted,
         userId: oldTask.userId,
         timestamp: oldTask.timestamp,
-        description: oldTask.description,
+
         note: newNote ?? oldTask.note,
         date: newDate ?? oldTask.date,
         time: newTime ?? oldTask.time,
@@ -228,6 +232,25 @@ class TasksCubit extends Cubit<TasksState> {
           message: "Görev düzenlenirken bir hata oluştu.",
         ),
       );
+    }
+  }
+
+  Future<void> updateTask(Task updatedTask) async {
+    try {
+      emit(TasksLoading(tasks: state.tasks));
+
+      await FirebaseFirestore.instance
+          .collection('tasks')
+          .doc(updatedTask.id)
+          .update(updatedTask.toMap());
+
+      final updatedTasks = state.tasks.map((task) {
+        return task.id == updatedTask.id ? updatedTask : task;
+      }).toList();
+
+      emit(TasksLoaded(updatedTasks, state.searchQuery));
+    } catch (e) {
+      emit(TasksError(tasks: state.tasks, message: 'Görev güncellenemedi: $e'));
     }
   }
 }
