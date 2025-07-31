@@ -19,32 +19,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _passwordConfirmController =
       TextEditingController();
 
-  String message = '';
-
   void _register() async {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
-    final passwordConfrim = _passwordConfirmController.text.trim();
+    final passwordConfirm = _passwordConfirmController.text.trim();
 
-    if (password != passwordConfrim) {
-      setState(() {
-        message = 'Şifreler eşleşmiyor';
-      });
+    if (password != passwordConfirm) {
+      _showMessage('Şifreler eşleşmiyor.');
       return;
     }
 
-    final user = await _authService.registerWithEmailAndPassword(
-      email,
-      password,
-    );
-    setState(() {
+    try {
+      final user = await _authService.registerWithEmailAndPassword(
+        email,
+        password,
+      );
       if (user != null) {
-        message = 'Kayıt başarılı! Hoşgeldin: ${user.email}';
+        _showMessage('Kayıt başarılı. Giriş yapabilirsiniz.');
         Navigator.pop(context);
       } else {
-        message = 'Kayıt başarısız!';
+        _showMessage('Kayıt başarısız. Lütfen tekrar deneyin.');
       }
-    });
+    } catch (e) {
+      _showMessage(e.toString());
+    }
+  }
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -54,47 +58,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: Center(
         child: Padding(
           padding: Paddings.all50,
-          child: Column(
-            children: [
-              sizedBoxH(50),
-              Container(child: AppText.RegisterText),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                sizedBoxH(50),
+                AppText.RegisterText,
 
-              sizedBoxH(70),
-              Column(
-                children: [
-                  _TextFieldRegisterEmail(),
-                  sizedBoxH(30),
+                sizedBoxH(70),
+                _TextFieldRegisterEmail(),
 
-                  _TextFieldRegisterPassword(),
-                  sizedBoxH(30),
+                sizedBoxH(30),
+                _TextFieldRegisterPassword(),
 
-                  _TextFieldRegisterConfirmPassword(),
-                ],
-              ),
-              sizedBoxH(30),
-              Center(child: _RegisterButton()),
+                sizedBoxH(30),
+                _TextFieldRegisterConfirmPassword(),
 
-              sizedBoxH(20),
-              Center(child: _AccountPromptButton(context)),
-              sizedBoxH(20),
+                sizedBoxH(30),
+                _RegisterButton(),
 
-              Text(message),
-            ],
+                sizedBoxH(20),
+                _AccountPromptButton(context),
+
+                sizedBoxH(20),
+              ],
+            ),
           ),
         ),
       ),
-    );
-  }
-
-  TextButton _AccountPromptButton(BuildContext context) {
-    return TextButton(
-      onPressed: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const LoginScreen()),
-        );
-      },
-      child: AppText.AccountPromptText,
     );
   }
 
@@ -114,12 +104,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  TextField _TextFieldRegisterConfirmPassword() {
+  TextButton _AccountPromptButton(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+        );
+      },
+      child: AppText.AccountPromptText,
+    );
+  }
+
+  TextField _TextFieldRegisterEmail() {
     return TextField(
-      controller: _passwordConfirmController,
-      decoration: customInputDecoration('Sifre Onay'),
+      controller: _emailController,
+      decoration: customInputDecoration('Email'),
       cursorColor: AppColors.white,
-      obscureText: true,
     );
   }
 
@@ -132,11 +133,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  TextField _TextFieldRegisterEmail() {
+  TextField _TextFieldRegisterConfirmPassword() {
     return TextField(
-      controller: _emailController,
-      decoration: customInputDecoration('Email'),
+      controller: _passwordConfirmController,
+      decoration: customInputDecoration('Sifre Onay'),
       cursorColor: AppColors.white,
+      obscureText: true,
     );
   }
 
