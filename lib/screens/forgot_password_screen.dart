@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:to_do_uygulamsi/screens/login_screen.dart';
 import 'package:to_do_uygulamsi/service/auth_service.dart';
 import 'package:to_do_uygulamsi/theme/app_theme.dart';
 import 'package:to_do_uygulamsi/widgets/task_item.dart';
@@ -18,22 +19,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   void _resetPassword() async {
     final email = _emailController.text.trim();
-    if (email.isEmpty) {
-      setState(() => message = "Lütfen e-posta adresi girin.");
-      return;
-    }
 
-    if (!email.contains('@')) {
-      setState(() => message = "Geçerli bir e-posta adresi girin.");
+    if (email.isEmpty) {
+      _showMessage("Lütfen e-posta adresinizi giriniz.");
       return;
     }
 
     try {
       await _authService.sendPasswordResetEmail(email);
-      setState(() => message = "Şifre sıfırlama bağlantısı gönderildi.");
+      _showMessage("Şifre sıfırlama bağlantısı gönderildi.");
     } catch (e) {
-      setState(() => message = "Hata oluştu: ${e.toString()}");
+      _showMessage("Hata: ${e.toString()}");
     }
+  }
+
+  void _showMessage(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 
   @override
@@ -41,16 +42,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: Paddings.all40,
+        child: Padding(
+          padding: Paddings.all40,
+          child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 AppText.TitleForgotPasswordText,
-
-                sizedBoxH(20),
-                if (message.isNotEmpty) AppText.ForgotMessageText(message),
 
                 sizedBoxH(40),
                 _TextFieldForgotEmail(),
@@ -59,21 +57,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 _ResetPasswordButton(),
 
                 sizedBoxH(20),
-
-                sizedBoxH(20),
-                _ReturnHomeButton(context),
+                _ReturnLoginButton(context),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  TextButton _ReturnHomeButton(BuildContext context) {
-    return TextButton(
-      onPressed: () => Navigator.pop(context),
-      child: AppText.ReturnLoginScreenText,
     );
   }
 
@@ -85,6 +74,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       ),
       onPressed: _resetPassword,
       child: AppText.SendResetLinkText,
+    );
+  }
+
+  TextButton _ReturnLoginButton(BuildContext context) {
+    return TextButton(
+      onPressed: () => Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+      ),
+      child: AppText.ReturnLoginScreenText,
     );
   }
 
