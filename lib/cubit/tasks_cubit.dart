@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:to_do_uygulamsi/cubit/tasks_state.dart';
@@ -83,6 +84,7 @@ class TasksCubit extends Cubit<TasksState> {
         userId: uid,
         timestamp: DateTime.now(),
         description: null,
+        note: '',
       );
 
       await newDoc.set(newTask.toMap());
@@ -181,7 +183,13 @@ class TasksCubit extends Cubit<TasksState> {
     }
   }
 
-  Future<void> editTask(String id, String newTitle) async {
+  Future<void> editTask({
+    required String id,
+    required String newTitle,
+    String? newNote,
+    DateTime? newDate,
+    TimeOfDay? newTime,
+  }) async {
     emit(TasksLoading(tasks: _tasks));
 
     try {
@@ -198,6 +206,9 @@ class TasksCubit extends Cubit<TasksState> {
         userId: oldTask.userId,
         timestamp: oldTask.timestamp,
         description: oldTask.description,
+        note: newNote ?? oldTask.note,
+        date: newDate ?? oldTask.date,
+        time: newTime ?? oldTask.time,
       );
 
       await _firestore

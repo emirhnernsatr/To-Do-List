@@ -16,7 +16,10 @@ class TaskDetailScreen extends StatefulWidget {
 class _TaskDetailScreenState extends State<TaskDetailScreen> {
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
-  bool _isExpanded = false;
+  late TextEditingController _noteController;
+
+  DateTime? _selectedDate;
+  TimeOfDay? _selectedTime;
 
   @override
   void initState() {
@@ -25,20 +28,66 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     _descriptionController = TextEditingController(
       text: widget.task.description ?? '',
     );
+    _noteController = TextEditingController(text: widget.task.note);
   }
 
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
+    _noteController.dispose();
     super.dispose();
   }
 
   void _saveChange() {
     final newTitle = _titleController.text.trim();
-    if (newTitle.isNotEmpty && newTitle != widget.task.title) {
-      context.read<TasksCubit>().editTask(widget.task.id, newTitle);
+    final newNote = _noteController.text.trim();
+
+    final newDate = _selectedDate ?? DateTime.now();
+    final newTime = _selectedTime ?? TimeOfDay.now();
+
+    bool hasChanged = false;
+
+    if (newTitle != widget.task.title) hasChanged = true;
+    if (newNote != widget.task.note) hasChanged = true;
+    if (newDate != widget.task.date) hasChanged = true;
+    if (newTime != widget.task.time) hasChanged = true;
+
+    if (hasChanged) {
+      context.read<TasksCubit>().editTask(
+        id: widget.task.id,
+        newTitle: newTitle,
+        newNote: newNote,
+        newDate: newDate,
+        newTime: newTime,
+      );
     }
     Navigator.pop(context);
+  }
+
+  void _selectDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
+  void _selectTime() async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        _selectedTime = picked;
+      });
+    }
   }
 
   @override
@@ -48,24 +97,146 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         title: AppText.TaskDetailsText,
+        centerTitle: true,
         leading: _arrowBackButton(context),
-        actions: [_saveButton()],
       ),
       body: Padding(
         padding: Paddings.all16,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _infoCard(isDark),
-            sizedBoxH(16),
-
             _taskTitleTextField(isDark),
+
+            sizedBoxH(16),
+            _infoCard(isDark),
 
             sizedBoxH(16),
             _statusCard(isDark),
 
             sizedBoxH(16),
-            _descriptionCard(isDark),
+
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    readOnly: true,
+                    onTap: _selectDate,
+                    controller: TextEditingController(
+                      text: _selectedDate != null
+                          ? '${_selectedDate!.day.toString().padLeft(2, '0')}/${_selectedDate!.month.toString().padLeft(2, '0')}/${_selectedDate!.year}'
+                          : '',
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Tarih',
+                      labelStyle: TextStyle(
+                        color: AppColors.primaryColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      prefixIcon: Icon(
+                        Icons.calendar_today,
+                        color: AppColors.primaryColor,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: AppColors.primaryColor,
+                          width: 2,
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
+                sizedBoxH(16),
+
+                Expanded(
+                  child: TextFormField(
+                    readOnly: true,
+                    onTap: _selectTime,
+                    controller: TextEditingController(
+                      text: _selectedTime != null
+                          ? _selectedTime!.format(context)
+                          : '',
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Saat',
+                      labelStyle: TextStyle(
+                        color: AppColors.primaryColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      prefixIcon: Icon(
+                        Icons.access_time,
+                        color: AppColors.primaryColor,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: AppColors.primaryColor,
+                          width: 2,
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            sizedBoxH(20),
+
+            TextFormField(
+              controller: _noteController,
+              maxLines: 10,
+              decoration: InputDecoration(
+                labelText: 'Notlar',
+                labelStyle: TextStyle(
+                  color: AppColors.primaryColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(
+                    color: AppColors.primaryColor,
+                    width: 2,
+                  ),
+                ),
+                alignLabelWithHint: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: AppColors.primaryColor),
+                ),
+              ),
+            ),
+
+            sizedBoxH(60),
+
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: _saveChange,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                ),
+                child: const Text(
+                  'Kaydet',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -134,70 +305,6 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     );
   }
 
-  Widget _descriptionCard(bool isDark) {
-    return Card(
-      color: isDark ? Color(0xFF2A2A2A) : Colors.grey.shade100,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      elevation: 3,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(8),
-        onTap: () {
-          setState(() {
-            _isExpanded = !_isExpanded;
-          });
-        },
-        child: Column(
-          children: [
-            ListTile(
-              title: Text(
-                'Görev Açıklaması',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: isDark ? AppColors.white : AppColors.black,
-                ),
-              ),
-              trailing: Icon(
-                _isExpanded ? Icons.expand_less : Icons.expand_more,
-                color: isDark ? AppColors.white : AppColors.black,
-              ),
-            ),
-            AnimatedCrossFade(
-              firstChild: const SizedBox.shrink(),
-              secondChild: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 8,
-                ),
-                child: TextField(
-                  controller: _descriptionController,
-                  maxLines: 6,
-                  style: TextStyle(
-                    color: isDark ? AppColors.white : AppColors.black,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: 'Görev açıklaması',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    filled: true,
-                    fillColor: isDark
-                        ? const Color(0xFF2A2A2A)
-                        : Colors.grey[200],
-                  ),
-                ),
-              ),
-              crossFadeState: _isExpanded
-                  ? CrossFadeState.showSecond
-                  : CrossFadeState.showFirst,
-              duration: const Duration(milliseconds: 300),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   TextField _taskTitleTextField(bool isDark) {
     return TextField(
       controller: _titleController,
@@ -209,28 +316,28 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
       decoration: InputDecoration(
         labelText: 'Görev Başlığı',
         labelStyle: TextStyle(
-          color: isDark ? AppColors.white : AppColors.black,
+          color: AppColors.primaryColor,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: AppColors.primaryColor),
+        ),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(color: AppColors.primaryColor),
+          borderRadius: BorderRadius.circular(8),
+        ),
         filled: true,
         fillColor: isDark ? Color(0xFF2A2A2A) : Colors.grey[100],
       ),
     );
   }
 
-  IconButton _saveButton() {
-    return IconButton(
-      icon: Icon(Icons.save, color: AppColors.white),
-      onPressed: _saveChange,
-    );
-  }
-
   IconButton _arrowBackButton(BuildContext context) {
     return IconButton(
       icon: Icon(Icons.arrow_back, color: AppColors.white),
-      onPressed: () => Navigator.pop(context),
+      onPressed: () => Navigator.pop(context, true),
     );
   }
 }

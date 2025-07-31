@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class Task {
   final String id;
@@ -7,6 +8,9 @@ class Task {
   final String userId;
   final DateTime timestamp;
   final String? description;
+  final String? note;
+  final DateTime? date;
+  final TimeOfDay? time;
 
   Task({
     required this.id,
@@ -14,7 +18,10 @@ class Task {
     this.isCompleted = false,
     required this.userId,
     required this.timestamp,
-    required this.description,
+    this.description,
+    this.note,
+    this.date,
+    this.time,
   });
 
   Task toggle() {
@@ -25,6 +32,9 @@ class Task {
       userId: userId,
       timestamp: timestamp,
       description: description ?? this.description,
+      note: note,
+      date: date,
+      time: time,
     );
   }
 
@@ -34,22 +44,39 @@ class Task {
       'title': title,
       'isCompleted': isCompleted,
       'userId': userId,
-      //'timestamp': timestamp ?? FieldValue.serverTimestamp(),
       'timestamp': Timestamp.fromDate(timestamp),
       'description': description ?? '',
+      'note': note ?? '',
+      'date': date != null ? Timestamp.fromDate(date!) : null,
+      'time': time != null
+          ? {'hour': time!.hour, 'minute': time!.minute}
+          : null,
     };
   }
 
   factory Task.fromMap(Map<String, dynamic> map, String id) {
+    // Saat dönüşümünü kontrol et
+    TimeOfDay? parsedTime;
+    if (map['time'] != null &&
+        map['time'] is Map &&
+        map['time']['hour'] != null &&
+        map['time']['minute'] != null) {
+      parsedTime = TimeOfDay(
+        hour: map['time']['hour'],
+        minute: map['time']['minute'],
+      );
+    }
+
     return Task(
       id: id,
       title: map['title'] ?? '',
       isCompleted: map['isCompleted'] ?? false,
       userId: map['userId'] ?? '',
-      timestamp: map['timestamp'] != null
-          ? (map['timestamp'] as Timestamp).toDate()
-          : DateTime.now(),
+      timestamp: (map['timestamp'] as Timestamp).toDate(),
       description: map['description'],
+      note: map['note'],
+      date: map['date'] != null ? (map['date'] as Timestamp).toDate() : null,
+      time: parsedTime,
     );
   }
 }

@@ -80,7 +80,7 @@ class AppColors {
   static final Color green = Colors.green;
   static final Color blue = Colors.blue;
   static final Color grey = Colors.grey;
-  static final Color primaryColor = Color(0xFF5C6EF8);
+  static final Color primaryColor = Color(0xFF6A4DFF);
   static final Color whitecolor = Color(0xFFF3F4F6);
   static final Color redAccent = Colors.redAccent;
   static final Color onyx = Color(0xFF383838);
