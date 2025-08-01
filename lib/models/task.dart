@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -68,10 +70,54 @@ class Task {
       isCompleted: map['isCompleted'] ?? false,
       userId: map['userId'] ?? '',
       timestamp: (map['timestamp'] as Timestamp).toDate(),
-
       note: map['note'],
       date: map['date'] != null ? (map['date'] as Timestamp).toDate() : null,
       time: parsedTime,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'isCompleted': isCompleted,
+      'userId': userId,
+      'timestamp': timestamp.toIso8601String(),
+      'note': note,
+      'date': date?.toIso8601String(),
+      'time': time != null
+          ? {'hour': time!.hour, 'minute': time!.minute}
+          : null,
+    };
+  }
+
+  factory Task.fromJson(Map<String, dynamic> json) {
+    TimeOfDay? parsedTime;
+    if (json['time'] != null) {
+      parsedTime = TimeOfDay(
+        hour: json['time']['hour'],
+        minute: json['time']['minute'],
+      );
+    }
+
+    return Task(
+      id: json['id'],
+      title: json['title'],
+      isCompleted: json['isCompleted'],
+      userId: json['userId'],
+      timestamp: DateTime.parse(json['timestamp']),
+      note: json['note'],
+      date: json['date'] != null ? DateTime.parse(json['date']) : null,
+      time: parsedTime,
+    );
+  }
+
+  static String encode(List<Task> tasks) => json.encode(
+    tasks.map<Map<String, dynamic>>((task) => task.toJson()).toList(),
+  );
+
+  static List<Task> decode(String tasksJson) =>
+      (json.decode(tasksJson) as List<dynamic>)
+          .map<Task>((item) => Task.fromJson(item))
+          .toList();
 }

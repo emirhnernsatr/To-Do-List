@@ -12,8 +12,14 @@ class TasksCubit extends Cubit<TasksState> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final String uid;
   StreamSubscription? _tasksSubscription;
+  late SharedPreferences _prefs;
 
-  TasksCubit(this.uid) : super(TasksInitial());
+  TasksCubit(this.uid) : super(TasksInitial()) {
+    initPrefs().then((_) => loadInitialTasks().then((_) => listenToTasks()));
+  }
+  Future<void> initPrefs() async {
+    _prefs = await SharedPreferences.getInstance();
+  }
 
   String _searchQuery = '';
 
@@ -39,7 +45,7 @@ class TasksCubit extends Cubit<TasksState> {
         .collection('tasks')
         .snapshots()
         .listen(
-          (snaphot) {
+          (snaphot) async {
             _tasks = snaphot.docs.map((doc) {
               return Task.fromMap(doc.data(), doc.id);
             }).toList();
@@ -50,6 +56,8 @@ class TasksCubit extends Cubit<TasksState> {
               }
               return a.title.toLowerCase().compareTo(b.title.toLowerCase());
             });
+
+            await _prefs.setString('tasks', Task.encode(_tasks));
 
             emit(TasksLoaded(_tasks, _searchQuery));
           },
@@ -94,15 +102,15 @@ class TasksCubit extends Cubit<TasksState> {
 
       await newDoc.set(newTask.toMap());
 
-      emit(TasksLoaded(List.from(_tasks), _searchQuery));
+      //emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
       emit(TasksError(tasks: _tasks, message: "Hata: ${e.toString()}"));
     }
   }
 
   @override
-  Future<void> close() {
-    _tasksSubscription?.cancel();
+  Future<void> close() async {
+    await _tasksSubscription?.cancel();
     return super.close();
   }
 
@@ -151,8 +159,6 @@ class TasksCubit extends Cubit<TasksState> {
           .delete();
 
       _tasks.removeWhere((task) => task.id == id);
-
-      emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
       emit(
         TasksError(tasks: _tasks, message: "Görev silinirken bir hata oluştu."),
@@ -169,6 +175,12 @@ class TasksCubit extends Cubit<TasksState> {
     emit(TasksLoading(tasks: _tasks));
 
     try {
+      final String? initialTasks = _prefs.getString('tasks');
+      if (initialTasks != null) {
+        _tasks = Task.decode(initialTasks);
+        emit(TasksLoaded(List.from(_tasks), _searchQuery));
+      }
+
       final snapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(uid)
@@ -179,6 +191,7 @@ class TasksCubit extends Cubit<TasksState> {
         return Task.fromMap(doc.data(), doc.id);
       }).toList();
 
+      await _prefs.setString('tasks', Task.encode(_tasks));
       emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
       emit(
@@ -223,8 +236,6 @@ class TasksCubit extends Cubit<TasksState> {
           .update(updatedTask.toMap());
 
       _tasks[index] = updatedTask;
-
-      emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
       emit(
         TasksError(
@@ -240,6 +251,8 @@ class TasksCubit extends Cubit<TasksState> {
       emit(TasksLoading(tasks: state.tasks));
 
       await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
           .collection('tasks')
           .doc(updatedTask.id)
           .update(updatedTask.toMap());
