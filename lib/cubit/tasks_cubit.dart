@@ -59,10 +59,14 @@ class TasksCubit extends Cubit<TasksState> {
 
             await _prefs.setString('tasks', Task.encode(_tasks));
 
-            emit(TasksLoaded(_tasks, _searchQuery));
+            if (!isClosed) {
+              emit(TasksLoaded(_tasks, _searchQuery));
+            }
           },
           onError: (error) {
-            emit(TasksError(tasks: _tasks, message: "bir hata oluştu"));
+            if (!isClosed) {
+              emit(TasksError(tasks: _tasks, message: "bir hata oluştu"));
+            }
           },
         );
   }
@@ -101,8 +105,6 @@ class TasksCubit extends Cubit<TasksState> {
       );
 
       await newDoc.set(newTask.toMap());
-
-      //emit(TasksLoaded(List.from(_tasks), _searchQuery));
     } catch (e) {
       emit(TasksError(tasks: _tasks, message: "Hata: ${e.toString()}"));
     }

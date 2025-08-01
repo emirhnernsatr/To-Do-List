@@ -80,12 +80,18 @@ class AppText {
 
   static Widget TaskDetailsText = Text(
     'Görev Detayı',
-    style: TextStyle(color: Colors.white),
+    style: TextStyle(color: AppColors.white),
   );
 
-  static Widget AddText = Text('Ekle');
+  static Widget AddText = Text(
+    'Ekle',
+    style: TextStyle(color: AppColors.primaryColor),
+  );
 
-  static Widget CancelText = Text('İptal');
+  static Widget CancelText = Text(
+    'İptal',
+    style: TextStyle(color: AppColors.primaryColor),
+  );
 
   static Widget AddNewTaskText = Text('Yeni Görev Ekle');
 

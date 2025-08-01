@@ -327,7 +327,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   IconButton _arrowBackButton(BuildContext context) {
     return IconButton(
       icon: Icon(Icons.arrow_back, color: AppColors.white),
-      onPressed: () => Navigator.pop(context, true),
+      onPressed: () => Navigator.pop(context),
     );
   }
 }

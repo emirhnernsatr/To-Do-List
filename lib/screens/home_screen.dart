@@ -152,7 +152,15 @@ void _showAddTaskDialog(BuildContext dialogContext) {
         content: TextField(
           controller: _newTaskController,
           autofocus: true,
-          decoration: const InputDecoration(hintText: 'Görev adı'),
+          decoration: InputDecoration(
+            hintText: 'Görev adı',
+            enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: AppColors.white),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
+            ),
+          ),
           onSubmitted: (_) => _submitTask(context, _newTaskController),
         ),
         actions: [

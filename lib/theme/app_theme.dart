@@ -1,73 +1,82 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  // açık tema
+  static final Color seedColor = AppColors.primaryColor;
+
   static final ThemeData lightTheme = ThemeData(
+    useMaterial3: true,
+    fontFamily: 'Roboto',
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: seedColor,
+      brightness: Brightness.light,
+    ),
     appBarTheme: AppBarTheme(
-      color: AppColors.primaryColor,
-      shape: RoundedRectangleBorder(
+      backgroundColor: seedColor,
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
       ),
+      foregroundColor: Colors.white,
     ),
-    scaffoldBackgroundColor: AppColors.white.withOpacity(0.80),
+    scaffoldBackgroundColor: Colors.white.withOpacity(0.90),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: AppColors.whitecolor,
+      backgroundColor: seedColor,
     ),
     checkboxTheme: CheckboxThemeData(
-      fillColor: WidgetStateProperty.all(AppColors.primaryColor),
-      side: BorderSide(color: AppColors.primaryColor),
+      fillColor: MaterialStateProperty.resolveWith<Color>((
+        Set<MaterialState> states,
+      ) {
+        if (states.contains(MaterialState.selected)) {
+          return AppColors.green;
+        }
+        return seedColor;
+      }),
+      checkColor: MaterialStateProperty.all<Color>(Colors.white),
+      side: BorderSide(color: seedColor),
     ),
-    colorScheme: ColorScheme.light(
-      primary: AppColors.primaryColor,
-      onPrimary: Colors.white,
-    ),
-    textTheme: ThemeData.light().textTheme.copyWith(
-      titleLarge: TextStyle(fontSize: 24, color: AppColors.primaryColor),
-    ),
+    textTheme: Typography.blackMountainView,
     textSelectionTheme: TextSelectionThemeData(
-      selectionColor: AppColors.blue.withOpacity(0.4),
-      selectionHandleColor: AppColors.blue,
-      cursorColor: AppColors.primaryColor,
+      selectionColor: seedColor.withOpacity(0.4),
+      selectionHandleColor: seedColor,
+      cursorColor: seedColor,
     ),
   );
 
-  //koyu tema
-  static final ThemeData darkTheme = ThemeData.dark().copyWith(
-    scaffoldBackgroundColor: AppColors.chineseblack,
+  static final ThemeData darkTheme = ThemeData(
+    useMaterial3: true,
+    fontFamily: 'Roboto',
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: seedColor,
+      brightness: Brightness.dark,
+    ),
     appBarTheme: AppBarTheme(
-      color: AppColors.primaryColor,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
+      backgroundColor: seedColor,
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
       ),
+      foregroundColor: Colors.white,
+      elevation: 0,
     ),
+    scaffoldBackgroundColor: const Color(0xFF121212),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor: seedColor,
     ),
     checkboxTheme: CheckboxThemeData(
-      fillColor: WidgetStateProperty.all(AppColors.white),
-      side: const BorderSide(color: AppColors.white70),
+      fillColor: MaterialStateProperty.resolveWith<Color>((
+        Set<MaterialState> states,
+      ) {
+        if (states.contains(MaterialState.selected)) {
+          return AppColors.green;
+        }
+        return seedColor;
+      }),
+      checkColor: MaterialStateProperty.all<Color>(Colors.white),
+      side: BorderSide(color: seedColor),
     ),
-    colorScheme: ColorScheme.dark(
-      primary: AppColors.primaryColor,
-      onPrimary: AppColors.white,
-      background: AppColors.chineseblack,
-      surface: AppColors.eerieblack,
-    ),
-    textTheme: ThemeData.dark().textTheme.copyWith(
-      titleLarge: const TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
-        color: AppColors.white,
-      ),
-      bodyMedium: const TextStyle(color: Colors.white70),
-    ),
-    cardColor: AppColors.eerieblack,
-
+    textTheme: Typography.whiteMountainView,
     textSelectionTheme: TextSelectionThemeData(
-      selectionColor: AppColors.blue.withOpacity(0.4),
-      selectionHandleColor: AppColors.blue,
-      cursorColor: AppColors.primaryColor,
+      selectionColor: seedColor.withOpacity(0.4),
+      selectionHandleColor: seedColor,
+      cursorColor: seedColor,
     ),
   );
 }

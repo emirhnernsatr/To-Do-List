@@ -1,3 +1,5 @@
 {
-    "cmake.sourceDirectory": "C:/Users/emirh/Desktop/Code/To-Do-List-main/To-Do-List-main/linux"
+    "cmake.sourceDirectory": "C:/Users/emirh/Desktop/Code/To-Do-List-main/To-Do-List-main/linux",
+    "java.jdt.ls.java.home": "C:\\Java\\jdk-24"
+
 }

@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/cubit/tasks_cubit.dart';
@@ -84,44 +85,43 @@ class TaskItem extends StatelessWidget {
 
     final Color textColor = isDarkMode ? AppColors.white : AppColors.black;
 
-    return Card(
-      color: backgroundColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      elevation: 2,
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: ListTile(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => TaskDetailScreen(task: task)),
-          );
-        },
-        leading: Checkbox(
-          value: isDone,
-          onChanged: (_) => context.read<TasksCubit>().toggleTask(task.id),
-          activeColor: Theme.of(context).colorScheme.secondary,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: OpenContainer(
+        transitionType: ContainerTransitionType.fadeThrough,
+        transitionDuration: const Duration(milliseconds: 500),
+        openColor: backgroundColor,
+        closedColor: backgroundColor,
+        closedElevation: 2,
+        closedShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
         ),
-        title: Text(
-          task.title,
-          style: TextStyle(
-            color: textColor,
-            decoration: isDone ? TextDecoration.lineThrough : null,
-            decorationColor: textColor.withOpacity(0.7),
-            decorationThickness: isDone ? 2.0 : 1.0,
+        openBuilder: (context, _) => TaskDetailScreen(task: task),
+        closedBuilder: (context, openContainer) => ListTile(
+          onTap: openContainer,
+          leading: Checkbox(value: isDone, onChanged: (_) => onToggleDone()),
+          title: Text(
+            task.title,
+            style: TextStyle(
+              color: textColor,
+              decoration: isDone ? TextDecoration.lineThrough : null,
+              decorationColor: textColor.withOpacity(0.7),
+              decorationThickness: isDone ? 2.0 : 1.0,
+            ),
           ),
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: Icon(Icons.edit, color: AppColors.primaryColor),
-              onPressed: onEdit,
-            ),
-            IconButton(
-              icon: Icon(Icons.delete, color: AppColors.redAccent),
-              onPressed: onDelete,
-            ),
-          ],
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: Icon(Icons.edit, color: AppColors.primaryColor),
+                onPressed: onEdit,
+              ),
+              IconButton(
+                icon: Icon(Icons.delete, color: AppColors.redAccent),
+                onPressed: onDelete,
+              ),
+            ],
+          ),
         ),
       ),
     );
