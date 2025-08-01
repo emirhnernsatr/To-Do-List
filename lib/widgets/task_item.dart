@@ -95,4 +95,18 @@ class AppText {
   );
 
   static Widget SendResetLinkText = Text('Sıfırlama Linki Gönder');
+
+  static Widget CreationDate = Text(
+    'Olusturulma Tarihi',
+    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+  );
+
+  static Widget SaveText = Text(
+    'Kaydet',
+    style: TextStyle(
+      color: AppColors.white,
+      fontWeight: FontWeight.bold,
+      fontSize: 16,
+    ),
+  );
 }

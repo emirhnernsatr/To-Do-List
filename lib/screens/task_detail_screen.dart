@@ -30,6 +30,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     _selectedTime = widget.task.time;
   }
 
+  @override
   void dispose() {
     _titleController.dispose();
     _noteController.dispose();
@@ -115,133 +116,116 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
 
             Row(
               children: [
-                Expanded(
-                  child: TextField(
-                    readOnly: true,
-                    onTap: _selectDate,
-                    controller: TextEditingController(
-                      text: _selectedDate != null
-                          ? '${_selectedDate!.day.toString().padLeft(2, '0')}/${_selectedDate!.month.toString().padLeft(2, '0')}/${_selectedDate!.year}'
-                          : '',
-                    ),
-                    decoration: InputDecoration(
-                      labelText: 'Tarih',
-                      labelStyle: TextStyle(
-                        color: isDark
-                            ? AppColors.white
-                            : AppColors.primaryColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      prefixIcon: Icon(
-                        Icons.calendar_today,
-                        color: AppColors.primaryColor,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: AppColors.primaryColor),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      filled: true,
-                      fillColor: isDark
-                          ? AppColors.charlestonGreen
-                          : AppColors.white,
-                    ),
-                  ),
-                ),
+                Expanded(child: _dateTextfield(isDark)),
                 sizedBoxH(16),
                 sizedBoxW(8),
-                Expanded(
-                  child: TextFormField(
-                    readOnly: true,
-                    onTap: _selectTime,
-                    controller: TextEditingController(
-                      text: _selectedTime != null
-                          ? _selectedTime!.format(context)
-                          : '',
-                    ),
-                    decoration: InputDecoration(
-                      labelText: 'Saat',
-                      labelStyle: TextStyle(
-                        color: isDark
-                            ? AppColors.white
-                            : AppColors.primaryColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      prefixIcon: Icon(
-                        Icons.access_time,
-                        color: AppColors.primaryColor,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: AppColors.primaryColor),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      filled: true,
-                      fillColor: isDark
-                          ? AppColors.charlestonGreen
-                          : AppColors.white,
-                    ),
-                  ),
-                ),
+                Expanded(child: _timeTextfield(context, isDark)),
               ],
             ),
             sizedBoxH(40),
 
-            TextFormField(
-              controller: _noteController,
-              maxLines: 10,
-              decoration: InputDecoration(
-                labelText: 'Notlar',
-                labelStyle: TextStyle(
-                  color: isDark ? AppColors.white : AppColors.primaryColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: AppColors.primaryColor),
-                ),
-                alignLabelWithHint: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: AppColors.primaryColor),
-                ),
-                filled: true,
-                fillColor: isDark ? AppColors.charlestonGreen : AppColors.white,
-              ),
-            ),
+            _noteTextfield(isDark),
 
             sizedBoxH(60),
 
             SizedBox(
               width: double.infinity,
               height: 50,
-              child: ElevatedButton(
-                onPressed: _saveChange,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                ),
-                child: const Text(
-                  'Kaydet',
-                  style: TextStyle(
-                    color: AppColors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
+              child: _saveElevatedButtton(),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  ElevatedButton _saveElevatedButtton() {
+    return ElevatedButton(
+      onPressed: _saveChange,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.primaryColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      ),
+      child: AppText.SaveText,
+    );
+  }
+
+  TextFormField _noteTextfield(bool isDark) {
+    return TextFormField(
+      controller: _noteController,
+      maxLines: 10,
+      decoration: InputDecoration(
+        labelText: 'Notlar',
+        labelStyle: TextStyle(
+          color: isDark ? AppColors.white : AppColors.primaryColor,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.primaryColor),
+        ),
+        alignLabelWithHint: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.primaryColor),
+        ),
+        filled: true,
+        fillColor: isDark ? AppColors.charlestonGreen : AppColors.white,
+      ),
+    );
+  }
+
+  TextFormField _timeTextfield(BuildContext context, bool isDark) {
+    return TextFormField(
+      readOnly: true,
+      onTap: _selectTime,
+      controller: TextEditingController(
+        text: _selectedTime != null ? _selectedTime!.format(context) : '',
+      ),
+      decoration: InputDecoration(
+        labelText: 'Saat',
+        labelStyle: TextStyle(
+          color: isDark ? AppColors.white : AppColors.primaryColor,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+        prefixIcon: Icon(Icons.access_time, color: AppColors.primaryColor),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.primaryColor),
+        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        filled: true,
+        fillColor: isDark ? AppColors.charlestonGreen : AppColors.white,
+      ),
+    );
+  }
+
+  TextField _dateTextfield(bool isDark) {
+    return TextField(
+      readOnly: true,
+      onTap: _selectDate,
+      controller: TextEditingController(
+        text: _selectedDate != null
+            ? '${_selectedDate!.day.toString().padLeft(2, '0')}/${_selectedDate!.month.toString().padLeft(2, '0')}/${_selectedDate!.year}'
+            : '',
+      ),
+      decoration: InputDecoration(
+        labelText: 'Tarih',
+        labelStyle: TextStyle(
+          color: isDark ? AppColors.white : AppColors.primaryColor,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+        prefixIcon: Icon(Icons.calendar_today, color: AppColors.primaryColor),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.primaryColor),
+        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        filled: true,
+        fillColor: isDark ? AppColors.charlestonGreen : AppColors.white,
       ),
     );
   }
@@ -252,6 +236,10 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         ? '${time.day.toString().padLeft(2, '0')}/${time.month.toString().padLeft(2, '0')}/${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}'
         : 'Tarih Bilgisi Yok';
     return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: AppColors.primaryColor),
+      ),
       color: isDark ? AppColors.charlestonGreen : AppColors.white,
       elevation: 3,
       child: Padding(
@@ -259,10 +247,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Olusturulma Tarihi',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
+            AppText.CreationDate,
             Text(
               formattedDate,
               style: TextStyle(
@@ -278,10 +263,12 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
 
   Widget _statusCard(bool isDark) {
     final bool isCompleted = widget.task.isCompleted;
-
     return Card(
       color: isDark ? AppColors.charlestonGreen : AppColors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: AppColors.primaryColor),
+      ),
       elevation: 3,
       child: Padding(
         padding: Paddings.all16,
