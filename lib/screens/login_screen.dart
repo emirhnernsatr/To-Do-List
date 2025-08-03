@@ -49,7 +49,8 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } catch (e) {
-      _showMessage(e.toString());
+      final errorMessage = e.toString().replaceFirst('Exception: ', '');
+      _showMessage(errorMessage);
     }
   }
 

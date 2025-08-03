@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -14,11 +15,8 @@ class AuthService {
       );
       return result.user;
     } on FirebaseAuthException catch (e) {
-      print('Register Error: ${e.code}');
-
-      String errorMessage = _handleAuthError(e.code);
-      _showError(errorMessage);
-      return null;
+      final errorMessage = _handleAuthError(e.code);
+      throw Exception(errorMessage);
     }
   }
 
@@ -33,20 +31,17 @@ class AuthService {
       );
       return result.user;
     } on FirebaseAuthException catch (e) {
-      print('Login Error: ${e.code}');
-
-      String errorMessage = _handleAuthError(e.code);
-      _showError(errorMessage);
-      return null;
+      final errorMessage = _handleAuthError(e.code);
+      throw Exception(errorMessage);
     }
   }
 
   Future<void> sendPasswordResetEmail(String email) async {
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      await _auth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
-      print('Reset Password Error: ${e.code}');
-      throw _handleAuthError(e.code);
+      final errorMessage = _handleAuthError(e.code);
+      throw Exception(errorMessage);
     }
   }
 
@@ -54,7 +49,7 @@ class AuthService {
     try {
       await _auth.signOut();
     } catch (e) {
-      print("SignOut Error: $e");
+      debugPrint("SignOut Error: $e");
     }
   }
 }
@@ -78,8 +73,4 @@ String _handleAuthError(String code) {
     default:
       return 'Bilinmeyen bir hata oluştu. Lütfen tekrar deneyin.';
   }
-}
-
-void _showError(String message) {
-  print('Hata: $message');
 }

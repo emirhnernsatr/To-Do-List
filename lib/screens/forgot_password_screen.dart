@@ -29,7 +29,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       await _authService.sendPasswordResetEmail(email);
       _showMessage("Şifre sıfırlama bağlantısı gönderildi.");
     } catch (e) {
-      _showMessage("Hata: ${e.toString()}");
+      final errorMessage = e.toString().replaceFirst('Exception: ', '');
+      _showMessage(errorMessage);
     }
   }
 

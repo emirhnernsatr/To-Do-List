@@ -41,7 +41,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _showMessage('Kayıt başarısız. Lütfen tekrar deneyin.');
       }
     } catch (e) {
-      _showMessage(e.toString());
+      final errorMessage = e.toString().replaceFirst('Exception: ', '');
+      _showMessage(errorMessage);
     }
   }
 
