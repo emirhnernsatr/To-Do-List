@@ -40,7 +40,6 @@ class TaskListView extends StatelessWidget {
                 task: task,
                 onToggleDone: () =>
                     context.read<TasksCubit>().toggleTask(task.id),
-                onEdit: () => _editTask(context, task),
                 onDelete: () => context.read<TasksCubit>().deleteTask(task.id),
               );
             },
@@ -51,26 +50,17 @@ class TaskListView extends StatelessWidget {
       },
     );
   }
-
-  void _editTask(BuildContext context, Task task) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => TaskDetailScreen(task: task)),
-    );
-  }
 }
 
 class TaskItem extends StatelessWidget {
   final Task task;
   final VoidCallback onToggleDone;
-  final VoidCallback onEdit;
   final VoidCallback onDelete;
 
   const TaskItem({
     super.key,
     required this.task,
     required this.onToggleDone,
-    required this.onEdit,
     required this.onDelete,
   });
 
@@ -114,7 +104,7 @@ class TaskItem extends StatelessWidget {
             children: [
               IconButton(
                 icon: Icon(Icons.edit, color: AppColors.primaryColor),
-                onPressed: onEdit,
+                onPressed: openContainer,
               ),
               IconButton(
                 icon: Icon(Icons.delete, color: AppColors.redAccent),
