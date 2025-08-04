@@ -35,9 +35,9 @@ class AppTheme {
     ),
     textTheme: Typography.blackMountainView,
     textSelectionTheme: TextSelectionThemeData(
-      selectionColor: seedColor.withOpacity(0.4),
-      selectionHandleColor: seedColor,
-      cursorColor: seedColor,
+      selectionColor: AppColors.blue.withOpacity(0.4),
+      selectionHandleColor: AppColors.blue,
+      cursorColor: AppColors.blue,
     ),
   );
 

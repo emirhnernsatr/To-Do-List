@@ -121,6 +121,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return TextField(
       controller: _emailController,
       decoration: customInputDecoration('Email'),
+      style: TextStyle(color: AppColors.white),
       cursorColor: AppColors.white,
     );
   }
@@ -129,6 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return TextField(
       controller: _passwordController,
       decoration: customInputDecoration('Sifre'),
+      style: TextStyle(color: AppColors.white),
       cursorColor: AppColors.white,
       obscureText: true,
     );
@@ -138,6 +140,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return TextField(
       controller: _passwordConfirmController,
       decoration: customInputDecoration('Sifre Onay'),
+      style: TextStyle(color: AppColors.white),
       cursorColor: AppColors.white,
       obscureText: true,
     );
