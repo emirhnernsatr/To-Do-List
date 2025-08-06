@@ -36,6 +36,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
       if (user != null) {
         _showMessage('Kayıt başarılı. Giriş yapabilirsiniz.');
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
       } else {
         _showMessage('Kayıt başarısız. Lütfen tekrar deneyin.');
@@ -63,22 +64,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               children: [
                 sizedBoxH(50),
-                AppText.RegisterText,
+                AppText.registerText,
 
                 sizedBoxH(70),
-                _TextFieldRegisterEmail(),
+                _textFieldRegisterEmail(),
 
                 sizedBoxH(30),
-                _TextFieldRegisterPassword(),
+                _textFieldRegisterPassword(),
 
                 sizedBoxH(30),
-                _TextFieldRegisterConfirmPassword(),
+                _textFieldRegisterConfirmPassword(),
 
                 sizedBoxH(30),
-                _RegisterButton(),
+                _registerButton(),
 
                 sizedBoxH(20),
-                _AccountPromptButton(context),
+                _accountPromptButton(context),
 
                 sizedBoxH(20),
               ],
@@ -89,23 +90,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  TextButton _RegisterButton() {
+  TextButton _registerButton() {
     return TextButton(
       onPressed: _register,
       child: Container(
         height: 50,
         width: 150,
-        margin: EdgeInsets.symmetric(horizontal: 60),
+        margin: const EdgeInsets.symmetric(horizontal: 60),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
           color: AppColors.green,
         ),
-        child: Center(child: AppText.RegisterButtonText),
+        child: Center(child: AppText.registerButtonText),
       ),
     );
   }
 
-  TextButton _AccountPromptButton(BuildContext context) {
+  TextButton _accountPromptButton(BuildContext context) {
     return TextButton(
       onPressed: () {
         Navigator.pushReplacement(
@@ -113,34 +114,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
           MaterialPageRoute(builder: (_) => const LoginScreen()),
         );
       },
-      child: AppText.AccountPromptText,
+      child: AppText.accountPromptText,
     );
   }
 
-  TextField _TextFieldRegisterEmail() {
+  TextField _textFieldRegisterEmail() {
     return TextField(
       controller: _emailController,
       decoration: customInputDecoration('Email'),
-      style: TextStyle(color: AppColors.white),
+      style: const TextStyle(color: AppColors.white),
       cursorColor: AppColors.white,
     );
   }
 
-  TextField _TextFieldRegisterPassword() {
+  TextField _textFieldRegisterPassword() {
     return TextField(
       controller: _passwordController,
       decoration: customInputDecoration('Sifre'),
-      style: TextStyle(color: AppColors.white),
+      style: const TextStyle(color: AppColors.white),
       cursorColor: AppColors.white,
       obscureText: true,
     );
   }
 
-  TextField _TextFieldRegisterConfirmPassword() {
+  TextField _textFieldRegisterConfirmPassword() {
     return TextField(
       controller: _passwordConfirmController,
       decoration: customInputDecoration('Sifre Onay'),
-      style: TextStyle(color: AppColors.white),
+      style: const TextStyle(color: AppColors.white),
       cursorColor: AppColors.white,
       obscureText: true,
     );
@@ -149,11 +150,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   InputDecoration customInputDecoration(String hintText) {
     return InputDecoration(
       hintText: hintText,
-      hintStyle: TextStyle(color: AppColors.white),
-      enabledBorder: UnderlineInputBorder(
+      hintStyle: const TextStyle(color: AppColors.white),
+      enabledBorder: const UnderlineInputBorder(
         borderSide: BorderSide(color: AppColors.white),
       ),
-      focusedBorder: UnderlineInputBorder(
+      focusedBorder: const UnderlineInputBorder(
         borderSide: BorderSide(color: AppColors.white),
       ),
     );

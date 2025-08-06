@@ -36,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (user != null) {
         _showMessage("Giriş başarılı! Hoşgeldin: ${user.email}");
         Navigator.pushReplacement(
+          // ignore: use_build_context_synchronously
           context,
           PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 500),
@@ -71,22 +72,22 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
                 sizedBoxH(50),
-                AppText.TitleText,
+                AppText.titleText,
 
                 sizedBoxH(70),
-                _TextFieldEmail(),
+                _textFieldEmail(),
 
                 sizedBoxH(30),
-                _TextFieldLoginPassword(),
+                _textFieldLoginPassword(),
 
                 sizedBoxH(30),
-                _HomeButton(),
+                _homeButton(),
 
                 sizedBoxH(20),
-                _RegisterButton(context),
+                _registerButton(context),
 
                 sizedBoxH(20),
-                _ForgotPasswordButton(context),
+                _forgotPasswordButton(context),
               ],
             ),
           ),
@@ -95,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  TextButton _HomeButton() {
+  TextButton _homeButton() {
     return TextButton(
       onPressed: _login,
       child: Container(
@@ -105,12 +106,12 @@ class _LoginScreenState extends State<LoginScreen> {
           borderRadius: BorderRadius.circular(60),
           color: AppColors.green,
         ),
-        child: Center(child: AppText.LoginText),
+        child: Center(child: AppText.loginText),
       ),
     );
   }
 
-  TextButton _RegisterButton(BuildContext context) {
+  TextButton _registerButton(BuildContext context) {
     return TextButton(
       onPressed: () {
         Navigator.push(
@@ -118,11 +119,11 @@ class _LoginScreenState extends State<LoginScreen> {
           MaterialPageRoute(builder: (_) => const RegisterScreen()),
         );
       },
-      child: AppText.RegisterLinkText,
+      child: AppText.registerLinkText,
     );
   }
 
-  TextButton _ForgotPasswordButton(BuildContext context) {
+  TextButton _forgotPasswordButton(BuildContext context) {
     return TextButton(
       onPressed: () {
         Navigator.push(
@@ -130,38 +131,38 @@ class _LoginScreenState extends State<LoginScreen> {
           MaterialPageRoute(builder: (_) => const ForgotPasswordScreen()),
         );
       },
-      child: AppText.ForgotPasswordText,
+      child: AppText.forgotPasswordText,
     );
   }
 
-  TextField _TextFieldEmail() {
+  TextField _textFieldEmail() {
     return TextField(
       controller: _emailController,
       decoration: customInputDecoration('Email'),
       cursorColor: AppColors.whitecolor,
-      style: TextStyle(color: AppColors.whitecolor),
+      style: const TextStyle(color: AppColors.whitecolor),
       keyboardType: TextInputType.emailAddress,
     );
   }
 
-  TextField _TextFieldLoginPassword() {
+  TextField _textFieldLoginPassword() {
     return TextField(
       controller: _passwordController,
       decoration: customInputDecoration('Sifre'),
       cursorColor: AppColors.whitecolor,
       obscureText: true,
-      style: TextStyle(color: AppColors.whitecolor),
+      style: const TextStyle(color: AppColors.whitecolor),
     );
   }
 
   InputDecoration customInputDecoration(String hintText) {
     return InputDecoration(
       hintText: hintText,
-      hintStyle: TextStyle(color: AppColors.whitecolor),
-      enabledBorder: UnderlineInputBorder(
+      hintStyle: const TextStyle(color: AppColors.whitecolor),
+      enabledBorder: const UnderlineInputBorder(
         borderSide: BorderSide(color: AppColors.whitecolor),
       ),
-      focusedBorder: UnderlineInputBorder(
+      focusedBorder: const UnderlineInputBorder(
         borderSide: BorderSide(color: AppColors.whitecolor),
       ),
     );

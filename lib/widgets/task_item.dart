@@ -11,7 +11,7 @@ class Paddings {
 }
 
 class AppText {
-  static Widget TitleText = Text(
+  static Widget titleText = const Text(
     'To - Do',
     style: TextStyle(
       fontSize: 50,
@@ -20,20 +20,20 @@ class AppText {
     ),
   );
 
-  static Widget TitleHomeText = Text(
+  static Widget titleHomeText = const Text(
     'Görev Listesi',
     style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.whitecolor),
   );
 
-  static Widget ForgotMessageText(String message) {
+  static Widget forgotMessageText(String message) {
     return Text(
       message,
-      style: TextStyle(color: Colors.white),
+      style: const TextStyle(color: Colors.white),
       textAlign: TextAlign.center,
     );
   }
 
-  static Widget RegisterText = Text(
+  static Widget registerText = const Text(
     "Kayıt ol",
     style: TextStyle(
       color: AppColors.whitecolor,
@@ -42,32 +42,32 @@ class AppText {
     ),
   );
 
-  static Widget AccountPromptText = Text(
+  static Widget accountPromptText = const Text(
     'Hesabın Var Mı ?',
     style: TextStyle(color: AppColors.white),
   );
 
-  static Widget RegisterButtonText = Text(
+  static Widget registerButtonText = const Text(
     'kayıt Ol',
     style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
   );
 
-  static Widget ForgotPasswordText = Text(
+  static Widget forgotPasswordText = const Text(
     'Şifreni mi Unuttun?',
     style: TextStyle(color: AppColors.white70),
   );
 
-  static Widget LoginText = Text(
+  static Widget loginText = const Text(
     'Giriş Yap',
     style: TextStyle(color: AppColors.whitecolor, fontWeight: FontWeight.bold),
   );
 
-  static Widget RegisterLinkText = Text(
+  static Widget registerLinkText = const Text(
     'Hesap Oluştur',
     style: TextStyle(color: AppColors.white),
   );
 
-  static Widget TitleForgotPasswordText = Text(
+  static Widget titleForgotPasswordText = const Text(
     'Şifre Yenileme',
     style: TextStyle(
       fontSize: 32,
@@ -76,38 +76,38 @@ class AppText {
     ),
   );
 
-  static Widget NoMissionsYetText = Text('Henüz Görev Yok');
+  static Widget noMissionsYetText = const Text('Henüz Görev Yok');
 
-  static Widget TaskDetailsText = Text(
+  static Widget taskDetailsText = const Text(
     'Görev Detayı',
     style: TextStyle(color: AppColors.white),
   );
 
-  static Widget AddText = Text(
+  static Widget addText = const Text(
     'Ekle',
     style: TextStyle(color: AppColors.primaryColor),
   );
 
-  static Widget CancelText = Text(
+  static Widget cancelText = const Text(
     'İptal',
     style: TextStyle(color: AppColors.primaryColor),
   );
 
-  static Widget AddNewTaskText = Text('Yeni Görev Ekle');
+  static Widget addNewTaskText = const Text('Yeni Görev Ekle');
 
-  static Widget ReturnLoginScreenText = Text(
+  static Widget returnLoginScreenText = const Text(
     'Giriş Ekranına Dön',
     style: TextStyle(color: AppColors.white70),
   );
 
-  static Widget SendResetLinkText = Text('Sıfırlama Linki Gönder');
+  static Widget sendResetLinkText = const Text('Sıfırlama Linki Gönder');
 
-  static Widget CreationDate = Text(
+  static Widget creationDate = const Text(
     'Olusturulma Tarihi',
     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
   );
 
-  static Widget SaveText = Text(
+  static Widget saveText = const Text(
     'Kaydet',
     style: TextStyle(
       color: AppColors.white,

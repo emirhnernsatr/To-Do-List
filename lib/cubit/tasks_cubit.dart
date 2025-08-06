@@ -87,7 +87,7 @@ class TasksCubit extends Cubit<TasksState> {
     emit(TasksLoading(tasks: _tasks));
 
     try {
-      await Future.delayed(Duration(milliseconds: 800));
+      await Future.delayed(const Duration(milliseconds: 800));
 
       final newDoc = _firestore
           .collection('users')
@@ -120,7 +120,7 @@ class TasksCubit extends Cubit<TasksState> {
     emit(TasksLoading(tasks: _tasks));
 
     try {
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       final index = _tasks.indexWhere((task) => task.id == id);
       if (index == -1) return;
@@ -151,7 +151,7 @@ class TasksCubit extends Cubit<TasksState> {
     emit(TasksLoading(tasks: _tasks));
 
     try {
-      await Future.delayed(Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 600));
 
       await _firestore
           .collection('users')

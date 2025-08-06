@@ -95,7 +95,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: AppText.TaskDetailsText,
+        title: AppText.taskDetailsText,
         centerTitle: true,
         leading: _arrowBackButton(context),
       ),
@@ -146,7 +146,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         backgroundColor: AppColors.primaryColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       ),
-      child: AppText.SaveText,
+      child: AppText.saveText,
     );
   }
 
@@ -163,12 +163,12 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColors.primaryColor),
+          borderSide: const BorderSide(color: AppColors.primaryColor),
         ),
         alignLabelWithHint: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColors.primaryColor),
+          borderSide: const BorderSide(color: AppColors.primaryColor),
         ),
         filled: true,
         fillColor: isDark ? AppColors.charlestonGreen : AppColors.white,
@@ -190,10 +190,13 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
-        prefixIcon: Icon(Icons.access_time, color: AppColors.primaryColor),
+        prefixIcon: const Icon(
+          Icons.access_time,
+          color: AppColors.primaryColor,
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColors.primaryColor),
+          borderSide: const BorderSide(color: AppColors.primaryColor),
         ),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
@@ -218,10 +221,13 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
-        prefixIcon: Icon(Icons.calendar_today, color: AppColors.primaryColor),
+        prefixIcon: const Icon(
+          Icons.calendar_today,
+          color: AppColors.primaryColor,
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColors.primaryColor),
+          borderSide: const BorderSide(color: AppColors.primaryColor),
         ),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
@@ -231,14 +237,15 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   }
 
   Widget _infoCard(bool isDark) {
-    final DateTime? time = widget.task.timestamp;
+    final DateTime time = widget.task.timestamp;
+    // ignore: unnecessary_null_comparison
     final String formattedDate = time != null
         ? '${time.day.toString().padLeft(2, '0')}/${time.month.toString().padLeft(2, '0')}/${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}'
         : 'Tarih Bilgisi Yok';
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: BorderSide(color: AppColors.primaryColor),
+        side: const BorderSide(color: AppColors.primaryColor),
       ),
       color: isDark ? AppColors.charlestonGreen : AppColors.white,
       elevation: 3,
@@ -247,7 +254,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            AppText.CreationDate,
+            AppText.creationDate,
             Text(
               formattedDate,
               style: TextStyle(
@@ -267,7 +274,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
       color: isDark ? AppColors.charlestonGreen : AppColors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: BorderSide(color: AppColors.primaryColor),
+        side: const BorderSide(color: AppColors.primaryColor),
       ),
       elevation: 3,
       child: Padding(
@@ -275,7 +282,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               'Görev Durumu',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
@@ -312,10 +319,10 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.primaryColor),
+          borderSide: const BorderSide(color: AppColors.primaryColor),
         ),
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primaryColor),
+          borderSide: const BorderSide(color: AppColors.primaryColor),
           borderRadius: BorderRadius.circular(8),
         ),
         filled: true,
@@ -326,7 +333,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
 
   IconButton _arrowBackButton(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back, color: AppColors.white),
+      icon: const Icon(Icons.arrow_back, color: AppColors.white),
       onPressed: () => Navigator.pop(context),
     );
   }

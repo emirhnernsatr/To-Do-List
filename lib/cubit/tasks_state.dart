@@ -18,7 +18,11 @@ class TasksLoading extends TasksState {
 }
 
 class TasksLoaded extends TasksState {
+  @override
+  // ignore: overridden_fields
   final List<Task> tasks;
+  @override
+  // ignore: overridden_fields
   final String searchQuery;
 
   TasksLoaded(this.tasks, this.searchQuery)
@@ -38,6 +42,5 @@ class TasksLoaded extends TasksState {
 class TasksError extends TasksState {
   final String message;
 
-  TasksError({required List<Task> tasks, this.message = "Bir hata oluştu"})
-    : super(tasks: tasks);
+  TasksError({required super.tasks, this.message = "Bir hata oluştu"});
 }

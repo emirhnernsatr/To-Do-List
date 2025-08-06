@@ -28,7 +28,7 @@ class TaskListView extends StatelessWidget {
           final tasks = state.filteredTasks;
 
           if (tasks.isEmpty) {
-            return Center(child: AppText.NoMissionsYetText);
+            return Center(child: AppText.noMissionsYetText);
           }
 
           return ListView.builder(
@@ -95,6 +95,7 @@ class TaskItem extends StatelessWidget {
             style: TextStyle(
               color: textColor,
               decoration: isDone ? TextDecoration.lineThrough : null,
+              // ignore: deprecated_member_use
               decorationColor: textColor.withOpacity(0.7),
               decorationThickness: isDone ? 2.0 : 1.0,
             ),
@@ -103,11 +104,11 @@ class TaskItem extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                icon: Icon(Icons.edit, color: AppColors.primaryColor),
+                icon: const Icon(Icons.edit, color: AppColors.primaryColor),
                 onPressed: openContainer,
               ),
               IconButton(
-                icon: Icon(Icons.delete, color: AppColors.redAccent),
+                icon: const Icon(Icons.delete, color: AppColors.redAccent),
                 onPressed: onDelete,
               ),
             ],

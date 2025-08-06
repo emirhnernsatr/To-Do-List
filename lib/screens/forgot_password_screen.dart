@@ -49,16 +49,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                AppText.TitleForgotPasswordText,
+                AppText.titleForgotPasswordText,
 
                 sizedBoxH(40),
-                _TextFieldForgotEmail(),
+                _textFieldForgotEmail(),
 
                 sizedBoxH(30),
-                _ResetPasswordButton(),
+                _resetPasswordButton(),
 
                 sizedBoxH(20),
-                _ReturnLoginButton(context),
+                _returnLoginButton(context),
               ],
             ),
           ),
@@ -67,33 +67,33 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 
-  ElevatedButton _ResetPasswordButton() {
+  ElevatedButton _resetPasswordButton() {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.white,
         foregroundColor: AppColors.primaryColor,
       ),
       onPressed: _resetPassword,
-      child: AppText.SendResetLinkText,
+      child: AppText.sendResetLinkText,
     );
   }
 
-  TextButton _ReturnLoginButton(BuildContext context) {
+  TextButton _returnLoginButton(BuildContext context) {
     return TextButton(
       onPressed: () => Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const LoginScreen()),
       ),
-      child: AppText.ReturnLoginScreenText,
+      child: AppText.returnLoginScreenText,
     );
   }
 
-  TextField _TextFieldForgotEmail() {
+  TextField _textFieldForgotEmail() {
     return TextField(
       controller: _emailController,
       decoration: _customInputDecoration("Email"),
       cursorColor: AppColors.white,
-      style: TextStyle(color: AppColors.white),
+      style: const TextStyle(color: AppColors.white),
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.done,
       onSubmitted: (_) => _resetPassword(),
@@ -104,11 +104,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 InputDecoration _customInputDecoration(String hint) {
   return InputDecoration(
     hintText: hint,
-    hintStyle: TextStyle(color: AppColors.white),
-    enabledBorder: UnderlineInputBorder(
+    hintStyle: const TextStyle(color: AppColors.white),
+    enabledBorder: const UnderlineInputBorder(
       borderSide: BorderSide(color: AppColors.white),
     ),
-    focusedBorder: UnderlineInputBorder(
+    focusedBorder: const UnderlineInputBorder(
       borderSide: BorderSide(color: AppColors.white),
     ),
   );

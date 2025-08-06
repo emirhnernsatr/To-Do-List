@@ -25,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _logout() async {
     await _authService.signOut();
     Navigator.pushAndRemoveUntil(
+      // ignore: use_build_context_synchronously
       context,
       MaterialPageRoute(builder: (_) => const LoginScreen()),
       (route) => false,
@@ -53,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: AppText.TitleHomeText,
+        title: AppText.titleHomeText,
         actions: [
           IconButton(
             icon: Icon(
@@ -66,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         centerTitle: true,
-        leading: _ExitIcon(),
+        leading: _exitIcon(),
       ),
 
       body: Padding(
@@ -85,18 +86,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 return const SizedBox.shrink();
               },
             ),
-            _TextFieldSearch(),
+            _textFieldSearch(),
             sizedBoxH(16),
 
-            Expanded(child: TaskListView()),
+            const Expanded(child: TaskListView()),
           ],
         ),
       ),
-      floatingActionButton: _AddTaskDialogButton(context),
+      floatingActionButton: _addTaskDialogButton(context),
     );
   }
 
-  FloatingActionButton _AddTaskDialogButton(BuildContext context) {
+  FloatingActionButton _addTaskDialogButton(BuildContext context) {
     return FloatingActionButton(
       backgroundColor: AppColors.primaryColor,
       onPressed: () => _showAddTaskDialog(context),
@@ -104,37 +105,41 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  TextField _TextFieldSearch() {
+  TextField _textFieldSearch() {
     return TextField(
       controller: _searchController,
-      style: TextStyle(fontSize: 16),
+      style: const TextStyle(fontSize: 16),
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.search, color: AppColors.primaryColor, size: 30),
+        prefixIcon: const Icon(
+          Icons.search,
+          color: AppColors.primaryColor,
+          size: 30,
+        ),
         hintText: 'Ara',
-        hintStyle: TextStyle(
+        hintStyle: const TextStyle(
           color: AppColors.primaryColor,
           fontWeight: FontWeight.bold,
         ),
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           color: AppColors.primaryColor,
           fontWeight: FontWeight.bold,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
+          borderSide: const BorderSide(color: AppColors.primaryColor, width: 2),
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
+          borderSide: const BorderSide(color: AppColors.primaryColor, width: 2),
         ),
       ),
     );
   }
 
-  IconButton _ExitIcon() {
+  IconButton _exitIcon() {
     return IconButton(
       onPressed: _logout,
-      icon: Icon(Icons.logout),
+      icon: const Icon(Icons.logout),
       color: AppColors.whitecolor,
       tooltip: 'Çıkış Yap',
     );
@@ -142,35 +147,35 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 void _showAddTaskDialog(BuildContext dialogContext) {
-  final _newTaskController = TextEditingController();
+  final newTaskController = TextEditingController();
 
   showDialog(
     context: dialogContext,
     builder: (context) {
       return AlertDialog(
-        title: AppText.AddNewTaskText,
+        title: AppText.addNewTaskText,
         content: TextField(
-          controller: _newTaskController,
+          controller: newTaskController,
           autofocus: true,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'Görev adı',
-            enabledBorder: const UnderlineInputBorder(
+            enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: AppColors.white),
             ),
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
             ),
           ),
-          onSubmitted: (_) => _submitTask(context, _newTaskController),
+          onSubmitted: (_) => _submitTask(context, newTaskController),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: AppText.CancelText,
+            child: AppText.cancelText,
           ),
           ElevatedButton(
-            onPressed: () => _submitTask(context, _newTaskController),
-            child: AppText.AddText,
+            onPressed: () => _submitTask(context, newTaskController),
+            child: AppText.addText,
           ),
         ],
       );
