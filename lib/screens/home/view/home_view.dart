@@ -1,22 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:to_do_uygulamsi/screens/login_screen.dart';
+import 'package:to_do_uygulamsi/screens/home/cubit/home_cubit.dart';
+import 'package:to_do_uygulamsi/screens/home/cubit/home_state.dart';
+import 'package:to_do_uygulamsi/screens/home/widget/task_item.dart';
+import 'package:to_do_uygulamsi/screens/login/view/login_view.dart';
 import 'package:to_do_uygulamsi/service/auth_service.dart';
 import 'package:to_do_uygulamsi/theme/app_theme.dart';
+import 'package:to_do_uygulamsi/theme/cubit/theme_cubit.dart';
 import 'package:to_do_uygulamsi/widgets/task_item.dart';
-import 'package:to_do_uygulamsi/widgets/task_list_view.dart';
-import '../cubit/tasks_cubit.dart';
-import '../cubit/tasks_state.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeViewState extends State<HomeView> {
   final TextEditingController _taskController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
   final uid = FirebaseAuth.instance.currentUser?.uid ?? "";
@@ -27,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.pushAndRemoveUntil(
       // ignore: use_build_context_synchronously
       context,
-      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      MaterialPageRoute(builder: (_) => const LoginView()),
       (route) => false,
     );
   }
@@ -35,9 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<TasksCubit>().listenToTasks();
+    context.read<HomeCubit>().listenToTasks();
     _searchController.addListener(() {
-      context.read<TasksCubit>().filterTasks(_searchController.text);
+      context.read<HomeCubit>().filterTasks(_searchController.text);
     });
   }
 
@@ -50,7 +51,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = context.watch<ThemeCubit>().state;
+    // ignore: unrelated_type_equality_checks
+    final isDarkMode = context.watch<ThemeCubit>().state == ThemeMode.dark;
 
     return Scaffold(
       appBar: AppBar(
@@ -74,9 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: Paddings.all16,
         child: Column(
           children: [
-            BlocBuilder<TasksCubit, TasksState>(
+            BlocBuilder<HomeCubit, HomeState>(
               builder: (context, state) {
-                if (state is TasksError) {
+                if (state is HomeError) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     ScaffoldMessenger.of(
                       context,
@@ -186,7 +188,7 @@ void _showAddTaskDialog(BuildContext dialogContext) {
 void _submitTask(BuildContext context, TextEditingController controller) {
   final text = controller.text.trim();
   if (text.isNotEmpty) {
-    context.read<TasksCubit>().addTask(text);
+    context.read<HomeCubit>().addTask(text);
     Navigator.of(context).pop();
   }
 }

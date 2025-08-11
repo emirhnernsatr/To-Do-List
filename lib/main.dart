@@ -2,11 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:to_do_uygulamsi/cubit/tasks_cubit.dart';
 import 'package:to_do_uygulamsi/firebase_options.dart';
-import 'package:to_do_uygulamsi/screens/home_screen.dart';
-import 'package:to_do_uygulamsi/screens/login_screen.dart';
+import 'package:to_do_uygulamsi/screens/home/cubit/home_cubit.dart';
+import 'package:to_do_uygulamsi/screens/home/view/home_view.dart';
+import 'package:to_do_uygulamsi/screens/login/cubit/login_cubit.dart';
+import 'package:to_do_uygulamsi/screens/login/view/login_view.dart';
+import 'package:to_do_uygulamsi/service/auth_service.dart';
 import 'package:to_do_uygulamsi/theme/app_theme.dart';
+import 'package:to_do_uygulamsi/theme/cubit/theme_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,21 +32,22 @@ class MyApp extends StatelessWidget {
         }
 
         final user = FirebaseAuth.instance.currentUser;
-        final uid = user?.uid ?? '';
+        // final uid = user?.uid ?? '';
 
         return MultiBlocProvider(
           providers: [
             BlocProvider(create: (_) => ThemeCubit()),
-            BlocProvider(create: (_) => TasksCubit(uid)..listenToTasks()),
+            BlocProvider(create: (context) => LoginCubit(AuthService())),
+            BlocProvider(create: (_) => HomeCubit()),
           ],
-          child: BlocBuilder<ThemeCubit, bool>(
-            builder: (context, isDarkMode) {
+          child: BlocBuilder<ThemeCubit, ThemeState>(
+            builder: (context, state) {
               return MaterialApp(
                 debugShowCheckedModeBanner: false,
                 theme: AppTheme.lightTheme,
                 darkTheme: AppTheme.darkTheme,
-                themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-                home: user == null ? const LoginScreen() : const HomeScreen(),
+                themeMode: state.themeMode,
+                home: user == null ? const LoginView() : const HomeView(),
               );
             },
           ),

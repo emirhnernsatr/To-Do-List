@@ -1,57 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_uygulamsi/screens/login_screen.dart';
-import 'package:to_do_uygulamsi/service/auth_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:to_do_uygulamsi/screens/register/model/register_model.dart';
 import 'package:to_do_uygulamsi/theme/app_theme.dart';
 import 'package:to_do_uygulamsi/widgets/task_item.dart';
+import '../cubit/register_cubit.dart';
+import '../../login/view/login_view.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class RegisterView extends StatefulWidget {
+  const RegisterView({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<RegisterView> createState() => _RegisterViewState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
-  final AuthService _authService = AuthService();
-
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordConfirmController =
+class _RegisterViewState extends State<RegisterView> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
       TextEditingController();
-
-  void _register() async {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text.trim();
-    final passwordConfirm = _passwordConfirmController.text.trim();
-
-    if (password != passwordConfirm) {
-      _showMessage('Şifreler eşleşmiyor.');
-      return;
-    }
-
-    try {
-      final user = await _authService.registerWithEmailAndPassword(
-        email,
-        password,
-      );
-      if (user != null) {
-        _showMessage('Kayıt başarılı. Giriş yapabilirsiniz.');
-        // ignore: use_build_context_synchronously
-        Navigator.pop(context);
-      } else {
-        _showMessage('Kayıt başarısız. Lütfen tekrar deneyin.');
-      }
-    } catch (e) {
-      final errorMessage = e.toString().replaceFirst('Exception: ', '');
-      _showMessage(errorMessage);
-    }
-  }
-
-  void _showMessage(String message) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message)));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +58,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   TextButton _registerButton() {
     return TextButton(
-      onPressed: _register,
+      onPressed: () {
+        final model = RegisterModel(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+          confirmPassword: confirmPasswordController.text.trim(),
+        );
+
+        context.read<RegisterCubit>().register(model, context);
+      },
       child: Container(
         height: 50,
         width: 150,
@@ -111,7 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       onPressed: () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const LoginScreen()),
+          MaterialPageRoute(builder: (_) => const LoginView()),
         );
       },
       child: AppText.accountPromptText,
@@ -120,7 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   TextField _textFieldRegisterEmail() {
     return TextField(
-      controller: _emailController,
+      controller: emailController,
       decoration: customInputDecoration('Email'),
       style: const TextStyle(color: AppColors.white),
       cursorColor: AppColors.white,
@@ -129,7 +103,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   TextField _textFieldRegisterPassword() {
     return TextField(
-      controller: _passwordController,
+      controller: passwordController,
       decoration: customInputDecoration('Sifre'),
       style: const TextStyle(color: AppColors.white),
       cursorColor: AppColors.white,
@@ -139,7 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   TextField _textFieldRegisterConfirmPassword() {
     return TextField(
-      controller: _passwordConfirmController,
+      controller: confirmPasswordController,
       decoration: customInputDecoration('Sifre Onay'),
       style: const TextStyle(color: AppColors.white),
       cursorColor: AppColors.white,

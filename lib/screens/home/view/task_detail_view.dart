@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:to_do_uygulamsi/cubit/tasks_cubit.dart';
-import 'package:to_do_uygulamsi/models/task.dart';
+import 'package:to_do_uygulamsi/screens/home/cubit/home_cubit.dart';
+import 'package:to_do_uygulamsi/screens/home/model/task_model.dart';
 import 'package:to_do_uygulamsi/theme/app_theme.dart';
 import 'package:to_do_uygulamsi/widgets/task_item.dart';
 
-class TaskDetailScreen extends StatefulWidget {
-  const TaskDetailScreen({super.key, required this.task});
-  final Task task;
+class TaskDetailView extends StatefulWidget {
+  final TaskModel task;
+
+  const TaskDetailView({super.key, required this.task});
 
   @override
-  State<TaskDetailScreen> createState() => _TaskDetailScreenState();
+  State<TaskDetailView> createState() => _TaskDetailView();
 }
 
-class _TaskDetailScreenState extends State<TaskDetailScreen> {
+class _TaskDetailView extends State<TaskDetailView> {
   late TextEditingController _titleController;
   late TextEditingController _noteController;
 
@@ -52,7 +53,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     if (newTime != widget.task.time) hasChanged = true;
 
     if (hasChanged) {
-      context.read<TasksCubit>().editTask(
+      context.read<HomeCubit>().editTask(
         id: widget.task.id,
         newTitle: newTitle,
         newNote: newNote,
