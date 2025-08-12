@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/screens/home/cubit/home_cubit.dart';
 import 'package:to_do_uygulamsi/screens/home/model/task_model.dart';
 import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
-import 'package:to_do_uygulamsi/widgets/task_item.dart';
+import 'package:to_do_uygulamsi/core/constants/app_strings.dart';
 
 class TaskDetailView extends StatefulWidget {
   final TaskModel task;
@@ -107,33 +107,33 @@ class _TaskDetailView extends State<TaskDetailView> {
         leading: _arrowBackButton(context),
       ),
       body: Padding(
-        padding: Paddings.all16,
+        padding: AppPadding.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _taskTitleTextField(isDark),
 
-            sizedBoxH(16),
+            AppSpacing.h(16),
             _infoCard(isDark),
 
-            sizedBoxH(16),
+            AppSpacing.h(16),
             _statusCard(isDark),
 
-            sizedBoxH(20),
+            AppSpacing.h(20),
 
             Row(
               children: [
                 Expanded(child: _dateTextfield(isDark)),
-                sizedBoxH(16),
-                sizedBoxW(8),
+                AppSpacing.h(16),
+                AppSpacing.w(8),
                 Expanded(child: _timeTextfield(context, isDark)),
               ],
             ),
-            sizedBoxH(40),
+            AppSpacing.h(40),
 
             _noteTextfield(isDark),
 
-            sizedBoxH(60),
+            AppSpacing.h(60),
 
             SizedBox(
               width: double.infinity,
@@ -257,7 +257,7 @@ class _TaskDetailView extends State<TaskDetailView> {
       color: isDark ? AppColors.charlestonGreen : AppColors.white,
       elevation: 3,
       child: Padding(
-        padding: Paddings.all16,
+        padding: AppPadding.all(16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -285,7 +285,7 @@ class _TaskDetailView extends State<TaskDetailView> {
       ),
       elevation: 3,
       child: Padding(
-        padding: Paddings.all16,
+        padding: AppPadding.all(16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

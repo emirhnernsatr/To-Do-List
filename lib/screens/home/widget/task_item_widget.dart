@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:to_do_uygulamsi/core/constants/app_strings.dart';
 import 'package:to_do_uygulamsi/screens/home/model/task_model.dart';
 import 'package:to_do_uygulamsi/screens/home/view/task_detail_view.dart';
 import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
@@ -28,7 +29,7 @@ class TaskItemWidget extends StatelessWidget {
     final Color textColor = isDarkMode ? AppColors.white : AppColors.black;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: AppPadding.symmetric(horizontal: 8, vertical: 4),
       child: OpenContainer(
         transitionType: ContainerTransitionType.fadeThrough,
         transitionDuration: const Duration(milliseconds: 500),

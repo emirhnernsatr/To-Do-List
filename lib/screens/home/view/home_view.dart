@@ -2,13 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/screens/home/cubit/home_cubit.dart';
-import 'package:to_do_uygulamsi/screens/home/cubit/home_state.dart';
 import 'package:to_do_uygulamsi/screens/home/widget/task_item.dart';
 import 'package:to_do_uygulamsi/screens/login/view/login_view.dart';
 import 'package:to_do_uygulamsi/core/service/auth_service.dart';
 import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
 import 'package:to_do_uygulamsi/core/theme/cubit/theme_cubit.dart';
-import 'package:to_do_uygulamsi/widgets/task_item.dart';
+import 'package:to_do_uygulamsi/core/constants/app_strings.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -74,23 +73,11 @@ class _HomeViewState extends State<HomeView> {
       ),
 
       body: Padding(
-        padding: Paddings.all16,
+        padding: AppPadding.all(16),
         child: Column(
           children: [
-            BlocBuilder<HomeCubit, HomeState>(
-              builder: (context, state) {
-                if (state is HomeError) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text(state.message)));
-                  });
-                }
-                return const SizedBox.shrink();
-              },
-            ),
             _textFieldSearch(),
-            sizedBoxH(16),
+            AppSpacing.h(16),
 
             const Expanded(child: TaskListView()),
           ],

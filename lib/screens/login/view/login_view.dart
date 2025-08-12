@@ -8,7 +8,7 @@ import 'package:to_do_uygulamsi/screens/login/model/login_model.dart';
 import 'package:to_do_uygulamsi/screens/register/cubit/register_cubit.dart';
 import 'package:to_do_uygulamsi/screens/register/view/register_view.dart';
 import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
-import 'package:to_do_uygulamsi/widgets/task_item.dart';
+import 'package:to_do_uygulamsi/core/constants/app_strings.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -26,19 +26,19 @@ class _LoginScreenState extends State<LoginView> {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       body: Padding(
-        padding: Paddings.all40,
+        padding: AppPadding.all(40),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
               children: [
                 AppText.titleText,
-                sizedBoxH(40),
+                AppSpacing.h(40),
                 _textFieldEmail(),
 
-                sizedBoxH(30),
+                AppSpacing.h(30),
                 _textFieldLoginPassword(),
 
-                sizedBoxH(20),
+                AppSpacing.h(20),
                 BlocBuilder<LoginCubit, LoginState>(
                   builder: (context, state) {
                     if (state is LoginError) {
@@ -61,10 +61,10 @@ class _LoginScreenState extends State<LoginView> {
                     return const SizedBox.shrink();
                   },
                 ),
-                sizedBoxH(20),
+                AppSpacing.h(20),
                 _homeButton(context),
 
-                sizedBoxH(20),
+                AppSpacing.h(20),
                 _forgotPasswordButton(context),
                 _registerButton(context),
               ],
@@ -152,7 +152,7 @@ class _LoginScreenState extends State<LoginView> {
       hintStyle: const TextStyle(color: AppColors.whitecolor),
       filled: true,
       fillColor: Colors.white24,
-      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      contentPadding: AppPadding.symmetric(vertical: 10, horizontal: 10),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
         borderSide: BorderSide.none,

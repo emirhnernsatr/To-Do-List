@@ -5,7 +5,7 @@ import 'package:to_do_uygulamsi/screens/forgot_password/cubit/forgot_password_st
 import 'package:to_do_uygulamsi/screens/forgot_password/model/forgot_password_model.dart';
 import 'package:to_do_uygulamsi/screens/login/view/login_view.dart';
 import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
-import 'package:to_do_uygulamsi/widgets/task_item.dart';
+import 'package:to_do_uygulamsi/core/constants/app_strings.dart';
 
 class ForgotPasswordView extends StatefulWidget {
   const ForgotPasswordView({super.key});
@@ -39,14 +39,14 @@ class _ForgotPasswordViewBodyState extends State<_ForgotPasswordViewBody> {
       backgroundColor: AppColors.primaryColor,
       body: Center(
         child: Padding(
-          padding: Paddings.all40,
+          padding: AppPadding.all(40),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 AppText.titleForgotPasswordText,
 
-                sizedBoxH(40),
+                AppSpacing.h(40),
                 BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
                   builder: (context, state) {
                     String? errorText;
@@ -62,11 +62,11 @@ class _ForgotPasswordViewBodyState extends State<_ForgotPasswordViewBody> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         _textFieldForgotEmail(),
-                        sizedBoxH(20),
+                        AppSpacing.h(20),
 
                         if (errorText != null)
                           Padding(
-                            padding: const EdgeInsets.only(top: 6),
+                            padding: AppPadding.only(top: 6),
                             child: Text(
                               errorText,
                               style: const TextStyle(
@@ -77,7 +77,7 @@ class _ForgotPasswordViewBodyState extends State<_ForgotPasswordViewBody> {
                           ),
                         if (infoText != null)
                           Padding(
-                            padding: const EdgeInsets.only(top: 6),
+                            padding: AppPadding.only(top: 6),
                             child: Text(
                               infoText,
                               style: const TextStyle(
@@ -91,10 +91,10 @@ class _ForgotPasswordViewBodyState extends State<_ForgotPasswordViewBody> {
                   },
                 ),
 
-                sizedBoxH(20),
+                AppSpacing.h(20),
                 _resetPasswordButton(),
 
-                sizedBoxH(20),
+                AppSpacing.h(20),
                 _returnLoginButton(context),
               ],
             ),
@@ -149,7 +149,7 @@ class _ForgotPasswordViewBodyState extends State<_ForgotPasswordViewBody> {
       hintStyle: const TextStyle(color: AppColors.whitecolor),
       filled: true,
       fillColor: Colors.white24,
-      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      contentPadding: AppPadding.symmetric(vertical: 10, horizontal: 10),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
         borderSide: BorderSide.none,

@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
 
-Widget sizedBoxH(double height) => SizedBox(height: height);
-Widget sizedBoxW(double width) => SizedBox(width: width);
+class AppSpacing {
+  const AppSpacing._();
 
-class Paddings {
-  static const EdgeInsets all50 = EdgeInsets.all(50);
-  static const EdgeInsets all40 = EdgeInsets.all(40);
-  static const EdgeInsets all16 = EdgeInsets.all(16);
+  static Widget h(double height) => SizedBox(height: height);
+
+  static Widget w(double width) => SizedBox(width: width);
+}
+
+class AppPadding {
+  const AppPadding._();
+
+  static EdgeInsets all(double value) => EdgeInsets.all(value);
+
+  static EdgeInsets symmetric({double vertical = 0, double horizontal = 0}) =>
+      EdgeInsets.symmetric(vertical: vertical, horizontal: horizontal);
+
+  static EdgeInsets only({
+    double left = 0,
+    double top = 0,
+    double right = 0,
+    double bottom = 0,
+  }) => EdgeInsets.only(left: left, top: top, right: right, bottom: bottom);
 }
 
 class AppText {

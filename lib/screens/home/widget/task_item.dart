@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/screens/home/cubit/home_cubit.dart';
 import 'package:to_do_uygulamsi/screens/home/cubit/home_state.dart';
 import 'package:to_do_uygulamsi/screens/home/widget/task_item_widget.dart';
-import 'package:to_do_uygulamsi/widgets/task_item.dart';
+import 'package:to_do_uygulamsi/core/constants/app_strings.dart';
 
 class TaskListView extends StatelessWidget {
   const TaskListView({super.key});

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/screens/register/cubit/register_state.dart';
 import 'package:to_do_uygulamsi/screens/register/model/register_model.dart';
 import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
-import 'package:to_do_uygulamsi/widgets/task_item.dart';
+import 'package:to_do_uygulamsi/core/constants/app_strings.dart';
 import '../cubit/register_cubit.dart';
 import '../../login/view/login_view.dart';
 
@@ -26,23 +26,23 @@ class _RegisterViewState extends State<RegisterView> {
       backgroundColor: AppColors.primaryColor,
       body: Center(
         child: Padding(
-          padding: Paddings.all50,
+          padding: AppPadding.all(50),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                sizedBoxH(50),
+                AppSpacing.h(50),
                 AppText.registerText,
 
-                sizedBoxH(70),
+                AppSpacing.h(70),
                 _textFieldRegisterEmail(),
 
-                sizedBoxH(30),
+                AppSpacing.h(30),
                 _textFieldRegisterPassword(),
 
-                sizedBoxH(30),
+                AppSpacing.h(30),
                 _textFieldRegisterConfirmPassword(),
 
-                sizedBoxH(20),
+                AppSpacing.h(20),
 
                 BlocBuilder<RegisterCubit, RegisterState>(
                   builder: (context, state) {
@@ -67,13 +67,11 @@ class _RegisterViewState extends State<RegisterView> {
                   },
                 ),
 
-                sizedBoxH(20),
+                AppSpacing.h(20),
                 _registerButton(),
 
-                sizedBoxH(20),
+                AppSpacing.h(20),
                 _accountPromptButton(context),
-
-                sizedBoxH(20),
               ],
             ),
           ),
@@ -153,7 +151,7 @@ class _RegisterViewState extends State<RegisterView> {
       hintStyle: const TextStyle(color: AppColors.whitecolor),
       filled: true,
       fillColor: Colors.white24,
-      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      contentPadding: AppPadding.symmetric(vertical: 10, horizontal: 10),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
         borderSide: BorderSide.none,
