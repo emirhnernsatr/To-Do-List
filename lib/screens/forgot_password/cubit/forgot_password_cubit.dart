@@ -14,32 +14,35 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
     BuildContext context,
   ) async {
     if (model.email.isEmpty) {
-      emit(const ForgotPasswordFailure("Lütfen e-posta adresinizi giriniz."));
+      _emitWithAutoClear(
+        const ForgotPasswordFailure("Lütfen e-posta adresinizi giriniz."),
+      );
       return;
     }
 
-    emit(const ForgotPasswordLoading());
+    _emitWithAutoClear(const ForgotPasswordLoading());
 
     try {
       await authService.sendPasswordResetEmail(model.email);
       if (!context.mounted) return;
 
-      emit(
+      _emitWithAutoClear(
         const ForgotPasswordSuccess("Şifre sıfırlama bağlantısı gönderildi."),
       );
     } catch (e) {
       if (!context.mounted) return;
 
       final errorMessage = e.toString().replaceFirst('Exception: ', '');
-      emit(ForgotPasswordFailure(errorMessage));
+      _emitWithAutoClear(ForgotPasswordFailure(errorMessage));
     }
   }
 
-  void setErrorMessage(String message) {
-    emit(ForgotPasswordFailure(message));
-
+  void _emitWithAutoClear(ForgotPasswordState state) {
+    emit(state);
     Future.delayed(const Duration(seconds: 3), () {
-      emit(const ForgotPasswordInitial());
+      if (!isClosed) {
+        emit(const ForgotPasswordInitial());
+      }
     });
   }
 

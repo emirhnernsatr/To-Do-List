@@ -50,7 +50,7 @@ class _RegisterViewState extends State<RegisterView> {
                       return Text(
                         state.error,
                         style: const TextStyle(
-                          color: Colors.red,
+                          color: AppColors.redAccent,
                           fontWeight: FontWeight.bold,
                         ),
                       );
@@ -58,7 +58,7 @@ class _RegisterViewState extends State<RegisterView> {
                       return Text(
                         state.message,
                         style: const TextStyle(
-                          color: Colors.green,
+                          color: AppColors.greenAccent,
                           fontWeight: FontWeight.bold,
                         ),
                       );

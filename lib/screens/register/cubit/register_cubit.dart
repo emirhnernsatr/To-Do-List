@@ -14,12 +14,12 @@ class RegisterCubit extends Cubit<RegisterState> {
     if (model.email.isEmpty ||
         model.password.isEmpty ||
         model.confirmPassword.isEmpty) {
-      emit(RegisterError("Lütfen tüm alanları doldurun."));
+      _emitWithAutoClear(RegisterError("Lütfen tüm alanları doldurun."));
       return;
     }
 
     if (model.password != model.confirmPassword) {
-      emit(RegisterError("Şifreler eşleşmiyor."));
+      _emitWithAutoClear(RegisterError("Şifreler eşleşmiyor."));
       return;
     }
     emit(RegisterLoading());
@@ -32,7 +32,9 @@ class RegisterCubit extends Cubit<RegisterState> {
       if (user != null) {
         await _authService.signOut();
 
-        emit(RegisterSuccess("Kayıt başarılı. Lütfen giriş yapınız."));
+        _emitWithAutoClear(
+          RegisterSuccess("Kayıt başarılı. Lütfen giriş yapınız."),
+        );
 
         await Future.delayed(const Duration(seconds: 1));
         if (!context.mounted) return;
@@ -42,17 +44,18 @@ class RegisterCubit extends Cubit<RegisterState> {
           MaterialPageRoute(builder: (_) => const LoginView()),
         );
       } else {
-        emit(RegisterError("Kayıt başarısız. Lütfen tekrar deneyin."));
+        _emitWithAutoClear(
+          RegisterError("Kayıt başarısız. Lütfen tekrar deneyin."),
+        );
       }
     } catch (e) {
       final errorMessage = e.toString().replaceFirst('Exception: ', '');
-      emit(RegisterError(errorMessage));
+      _emitWithAutoClear(RegisterError(errorMessage));
     }
   }
 
-  void setErrorMessage(String message) {
-    emit(RegisterError(message));
-
+  void _emitWithAutoClear(RegisterState state) {
+    emit(state);
     Future.delayed(const Duration(seconds: 3), () {
       emit(RegisterInitial());
     });

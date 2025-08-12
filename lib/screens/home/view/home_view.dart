@@ -21,12 +21,11 @@ class _HomeViewState extends State<HomeView> {
   final TextEditingController _taskController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
   final uid = FirebaseAuth.instance.currentUser?.uid ?? "";
-  final AuthService _authService = AuthService();
+  final AuthService authService = AuthService();
 
   void _logout() async {
-    await _authService.signOut();
+    await authService.signOut();
     Navigator.pushAndRemoveUntil(
-      // ignore: use_build_context_synchronously
       context,
       MaterialPageRoute(builder: (_) => const LoginView()),
       (route) => false,

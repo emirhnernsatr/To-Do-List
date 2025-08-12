@@ -62,6 +62,7 @@ class _ForgotPasswordViewBodyState extends State<_ForgotPasswordViewBody> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         _textFieldForgotEmail(),
+                        sizedBoxH(20),
 
                         if (errorText != null)
                           Padding(
@@ -90,7 +91,7 @@ class _ForgotPasswordViewBodyState extends State<_ForgotPasswordViewBody> {
                   },
                 ),
 
-                sizedBoxH(30),
+                sizedBoxH(20),
                 _resetPasswordButton(),
 
                 sizedBoxH(20),
