@@ -57,7 +57,10 @@ class _RegisterViewState extends State<RegisterView> {
                     } else if (state is RegisterSuccess) {
                       return Text(
                         state.message,
-                        style: const TextStyle(color: Colors.green),
+                        style: const TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
                       );
                     }
                     return const SizedBox.shrink();
