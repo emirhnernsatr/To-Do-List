@@ -41,7 +41,10 @@ class TaskItemWidget extends StatelessWidget {
         openBuilder: (context, _) => TaskDetailView(task: task),
         closedBuilder: (context, openContainer) => ListTile(
           onTap: openContainer,
-          leading: Checkbox(value: isDone, onChanged: (_) => onToggleDone()),
+          leading: GestureDetector(
+            onTap: onToggleDone,
+            child: Checkbox(value: isDone, onChanged: (_) => onToggleDone()),
+          ),
           title: Text(
             task.title,
             style: TextStyle(

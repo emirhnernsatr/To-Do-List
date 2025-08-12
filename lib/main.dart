@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<User?>(
       future: FirebaseAuth.instance.authStateChanges().first,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -31,14 +31,14 @@ class MyApp extends StatelessWidget {
           );
         }
 
-        final user = FirebaseAuth.instance.currentUser;
-        // final uid = user?.uid ?? '';
+        final user = snapshot.data;
 
         return MultiBlocProvider(
           providers: [
             BlocProvider(create: (_) => ThemeCubit()),
             BlocProvider(create: (context) => LoginCubit(AuthService())),
-            BlocProvider(create: (_) => HomeCubit()),
+            if (user != null)
+              BlocProvider(create: (_) => HomeCubit(user.uid)..listenToTasks()),
           ],
           child: BlocBuilder<ThemeCubit, ThemeState>(
             builder: (context, state) {

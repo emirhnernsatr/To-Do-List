@@ -40,6 +40,12 @@ class _TaskDetailView extends State<TaskDetailView> {
 
   void _saveChange() {
     final newTitle = _titleController.text.trim();
+    if (newTitle.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Görev başlığı boş olamaz')));
+      return;
+    }
     final newNote = _noteController.text.trim();
 
     final newDate = _selectedDate ?? DateTime.now();

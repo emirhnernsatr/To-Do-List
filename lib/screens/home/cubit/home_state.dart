@@ -12,6 +12,16 @@ class HomeLoaded extends HomeState {
 
   HomeLoaded({required this.tasks, List<TaskModel>? filteredTasks})
     : filteredTasks = filteredTasks ?? tasks;
+
+  HomeLoaded copyWith({
+    List<TaskModel>? tasks,
+    List<TaskModel>? filteredTasks,
+  }) {
+    return HomeLoaded(
+      tasks: tasks ?? this.tasks,
+      filteredTasks: filteredTasks ?? this.filteredTasks,
+    );
+  }
 }
 
 class HomeError extends HomeState {

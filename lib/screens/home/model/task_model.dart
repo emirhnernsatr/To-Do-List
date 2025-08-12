@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class TaskModel {
@@ -20,14 +21,24 @@ class TaskModel {
   });
 
   factory TaskModel.fromMap(Map<String, dynamic> map, String documentId) {
+    final ts = map['timestamp'] as Timestamp?;
+    final dateTs = map['date'] as Timestamp?;
+
     return TaskModel(
       id: documentId,
       title: map['title'] ?? '',
       note: map['note'],
       isCompleted: map['isCompleted'] ?? false,
-      date: map['date'] != null ? DateTime.tryParse(map['date']) : null,
-      time: map['time'] != null ? _parseTimeOfDay(map['time']) : null,
-      timestamp: map['timestamp'] ?? DateTime.now(),
+      date: dateTs?.toDate(),
+      time: map['time'] != null
+          ? (map['time'] is String
+                ? _parseTimeOfDay(map['time'])
+                : TimeOfDay(
+                    hour: map['time']['hour'] ?? 0,
+                    minute: map['time']['minute'] ?? 0,
+                  ))
+          : null,
+      timestamp: ts != null ? ts.toDate() : DateTime.now(),
     );
   }
 
@@ -36,9 +47,33 @@ class TaskModel {
       'title': title,
       'note': note,
       'isCompleted': isCompleted,
+      'date': date != null ? Timestamp.fromDate(date!) : null,
+      'time': time != null ? '${time!.hour}:${time!.minute}' : null,
+      'timestamp': Timestamp.fromDate(timestamp),
+    };
+  }
+
+  factory TaskModel.fromJson(Map<String, dynamic> json) {
+    return TaskModel(
+      id: json['id'],
+      title: json['title'],
+      note: json['note'],
+      isCompleted: json['isCompleted'],
+      date: json['date'] != null ? DateTime.tryParse(json['date']) : null,
+      time: json['time'] != null ? _parseTimeOfDay(json['time']) : null,
+      timestamp: DateTime.tryParse(json['timestamp']) ?? DateTime.now(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'note': note,
+      'isCompleted': isCompleted,
       'date': date?.toIso8601String(),
       'time': time != null ? '${time!.hour}:${time!.minute}' : null,
-      'timestamp': timestamp,
+      'timestamp': timestamp.toIso8601String(),
     };
   }
 
@@ -68,16 +103,4 @@ class TaskModel {
       timestamp: timestamp ?? this.timestamp,
     );
   }
-}
-
-class TaskItemModel {
-  final TaskModel taskItem;
-  final VoidCallback onToggleDone;
-  final VoidCallback onDelete;
-
-  const TaskItemModel({
-    required this.taskItem,
-    required this.onToggleDone,
-    required this.onDelete,
-  });
 }
