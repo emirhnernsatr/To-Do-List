@@ -90,6 +90,7 @@ class AppColors {
   static const Color white70 = Colors.white70;
   static const Color blueAccent = Colors.blueAccent;
   static const Color green = Colors.green;
+  static const Color greenAccent = Colors.greenAccent;
   static const Color blue = Colors.blue;
   static const Color grey = Colors.grey;
   static const Color primaryColor = Color(0xFF6A4DFF);

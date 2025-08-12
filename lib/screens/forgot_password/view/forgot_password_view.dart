@@ -15,47 +15,106 @@ class ForgotPasswordView extends StatefulWidget {
 }
 
 class _ForgotPasswordViewState extends State<ForgotPasswordView> {
-  final TextEditingController emailController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => ForgotPasswordCubit(ForgotPasswordService()),
-      child: Scaffold(
-        backgroundColor: AppColors.primaryColor,
-        body: BlocListener<ForgotPasswordCubit, ForgotPasswordState>(
-          listener: (context, state) {
-            if (state is ForgotPasswordSuccess) {
-              _showMessage(state.message);
-              context.read<ForgotPasswordCubit>().resetState();
-            } else if (state is ForgotPasswordFailure) {
-              _showMessage(state.error);
-            }
-          },
-          child: Center(
-            child: Padding(
-              padding: Paddings.all40,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AppText.titleForgotPasswordText,
+      child: _ForgotPasswordViewBody(),
+    );
+  }
+}
 
-                    sizedBoxH(40),
-                    _textFieldForgotEmail(),
+class _ForgotPasswordViewBody extends StatefulWidget {
+  @override
+  State<_ForgotPasswordViewBody> createState() =>
+      _ForgotPasswordViewBodyState();
+}
 
-                    sizedBoxH(30),
-                    _resetPasswordButton(),
+class _ForgotPasswordViewBodyState extends State<_ForgotPasswordViewBody> {
+  final TextEditingController emailController = TextEditingController();
 
-                    sizedBoxH(20),
-                    _returnLoginButton(context),
-                  ],
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.primaryColor,
+      body: Center(
+        child: Padding(
+          padding: Paddings.all40,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppText.titleForgotPasswordText,
+
+                sizedBoxH(40),
+                BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
+                  builder: (context, state) {
+                    String? errorText;
+                    String? infoText;
+
+                    if (state is ForgotPasswordFailure) {
+                      errorText = state.error;
+                    } else if (state is ForgotPasswordSuccess) {
+                      infoText = state.message;
+                    }
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _textFieldForgotEmail(),
+
+                        if (errorText != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Text(
+                              errorText,
+                              style: const TextStyle(
+                                color: Colors.redAccent,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        if (infoText != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Text(
+                              infoText,
+                              style: const TextStyle(
+                                color: AppColors.greenAccent,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  },
                 ),
-              ),
+
+                sizedBoxH(30),
+                _resetPasswordButton(),
+
+                sizedBoxH(20),
+                _returnLoginButton(context),
+              ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  TextField _textFieldForgotEmail() {
+    return TextField(
+      controller: emailController,
+      decoration: _customInputDecoration("Email"),
+      cursorColor: AppColors.white,
+      style: const TextStyle(color: AppColors.white),
+      keyboardType: TextInputType.emailAddress,
+      textInputAction: TextInputAction.done,
+      onSubmitted: (_) {
+        final model = ForgotPasswordModel(email: emailController.text.trim());
+        context.read<ForgotPasswordCubit>().resetPassword(model, context);
+      },
     );
   }
 
@@ -83,21 +142,6 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     );
   }
 
-  TextField _textFieldForgotEmail() {
-    return TextField(
-      controller: emailController,
-      decoration: _customInputDecoration("Email"),
-      cursorColor: AppColors.white,
-      style: const TextStyle(color: AppColors.white),
-      keyboardType: TextInputType.emailAddress,
-      textInputAction: TextInputAction.done,
-      onSubmitted: (_) {
-        final model = ForgotPasswordModel(email: emailController.text.trim());
-        context.read<ForgotPasswordCubit>().resetPassword(model, context);
-      },
-    );
-  }
-
   InputDecoration _customInputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
@@ -109,9 +153,5 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
         borderSide: BorderSide(color: AppColors.white),
       ),
     );
-  }
-
-  void _showMessage(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 }

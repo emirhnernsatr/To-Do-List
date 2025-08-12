@@ -14,7 +14,7 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
     BuildContext context,
   ) async {
     if (model.email.isEmpty) {
-      _showMessage("Lütfen e-posta adresinizi giriniz.", context);
+      emit(const ForgotPasswordFailure("Lütfen e-posta adresinizi giriniz."));
       return;
     }
 
@@ -35,8 +35,12 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
     }
   }
 
-  void _showMessage(String msg, BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  void setErrorMessage(String message) {
+    emit(ForgotPasswordFailure(message));
+
+    Future.delayed(const Duration(seconds: 3), () {
+      emit(const ForgotPasswordInitial());
+    });
   }
 
   void resetState() {
