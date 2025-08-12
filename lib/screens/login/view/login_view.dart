@@ -35,10 +35,10 @@ class _LoginScreenState extends State<LoginView> {
                 sizedBoxH(40),
                 _textFieldEmail(),
 
-                sizedBoxH(20),
+                sizedBoxH(30),
                 _textFieldLoginPassword(),
 
-                sizedBoxH(30),
+                sizedBoxH(20),
                 BlocBuilder<LoginCubit, LoginState>(
                   builder: (context, state) {
                     if (state is LoginError) {
@@ -150,6 +150,13 @@ class _LoginScreenState extends State<LoginView> {
     return InputDecoration(
       hintText: hintText,
       hintStyle: const TextStyle(color: AppColors.whitecolor),
+      filled: true,
+      fillColor: Colors.white24,
+      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(30),
+        borderSide: BorderSide.none,
+      ),
       enabledBorder: const UnderlineInputBorder(
         borderSide: BorderSide(color: AppColors.whitecolor),
       ),

@@ -143,15 +143,22 @@ class _ForgotPasswordViewBodyState extends State<_ForgotPasswordViewBody> {
     );
   }
 
-  InputDecoration _customInputDecoration(String hint) {
+  InputDecoration _customInputDecoration(String hintText) {
     return InputDecoration(
-      hintText: hint,
-      hintStyle: const TextStyle(color: AppColors.white),
+      hintText: hintText,
+      hintStyle: const TextStyle(color: AppColors.whitecolor),
+      filled: true,
+      fillColor: Colors.white24,
+      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(30),
+        borderSide: BorderSide.none,
+      ),
       enabledBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: AppColors.white),
+        borderSide: BorderSide(color: AppColors.whitecolor),
       ),
       focusedBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: AppColors.white),
+        borderSide: BorderSide(color: AppColors.whitecolor),
       ),
     );
   }
