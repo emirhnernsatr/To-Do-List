@@ -140,7 +140,7 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  Future<void> listenToTasks() async {
+  Future<void> listenToTasks(uid) async {
     if (uid.isEmpty) {
       emit(HomeError("Kullanıcı oturumu yok."));
       return;

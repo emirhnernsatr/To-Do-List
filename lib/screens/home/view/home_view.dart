@@ -36,7 +36,7 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
 
-    context.read<HomeCubit>();
+    context.read<HomeCubit>().listenToTasks(uid);
 
     _searchController.addListener(() {
       context.read<HomeCubit>().filterTasks(_searchController.text);

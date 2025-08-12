@@ -38,7 +38,9 @@ class MyApp extends StatelessWidget {
             BlocProvider(create: (_) => ThemeCubit()),
             BlocProvider(create: (context) => LoginCubit(AuthService())),
             if (user != null)
-              BlocProvider(create: (_) => HomeCubit(user.uid)..listenToTasks()),
+              BlocProvider(
+                create: (_) => HomeCubit(user.uid)..listenToTasks(user.uid),
+              ),
           ],
           child: BlocBuilder<ThemeCubit, ThemeState>(
             builder: (context, state) {

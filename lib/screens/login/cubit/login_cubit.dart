@@ -34,7 +34,7 @@ class LoginCubit extends Cubit<LoginState> {
           context,
           MaterialPageRoute(
             builder: (_) => BlocProvider(
-              create: (_) => HomeCubit(user.uid)..listenToTasks(),
+              create: (_) => HomeCubit(user.uid)..listenToTasks(user.uid),
               child: const HomeView(),
             ),
           ),
