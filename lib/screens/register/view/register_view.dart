@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:to_do_uygulamsi/screens/register/cubit/register_state.dart';
 import 'package:to_do_uygulamsi/screens/register/model/register_model.dart';
 import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
 import 'package:to_do_uygulamsi/widgets/task_item.dart';
@@ -41,7 +42,29 @@ class _RegisterViewState extends State<RegisterView> {
                 sizedBoxH(30),
                 _textFieldRegisterConfirmPassword(),
 
-                sizedBoxH(30),
+                sizedBoxH(20),
+
+                BlocBuilder<RegisterCubit, RegisterState>(
+                  builder: (context, state) {
+                    if (state is RegisterError) {
+                      return Text(
+                        state.error,
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    } else if (state is RegisterSuccess) {
+                      return Text(
+                        state.message,
+                        style: const TextStyle(color: Colors.green),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
+
+                sizedBoxH(20),
                 _registerButton(),
 
                 sizedBoxH(20),

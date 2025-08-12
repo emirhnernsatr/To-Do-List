@@ -10,10 +10,18 @@ class RegisterCubit extends Cubit<RegisterState> {
   RegisterCubit(this._authService) : super(RegisterInitial());
 
   void register(RegisterModel model, BuildContext context) async {
-    if (model.password != model.confirmPassword) {
-      _showMessage('Şifreler eşleşmiyor.', context);
+    if (model.email.isEmpty ||
+        model.password.isEmpty ||
+        model.confirmPassword.isEmpty) {
+      emit(RegisterError("Lütfen tüm alanları doldurun."));
       return;
     }
+
+    if (model.password != model.confirmPassword) {
+      emit(RegisterError("Şifreler eşleşmiyor."));
+      return;
+    }
+    emit(RegisterLoading());
 
     try {
       final user = await _authService.registerWithEmailAndPassword(
@@ -21,24 +29,24 @@ class RegisterCubit extends Cubit<RegisterState> {
         model.password,
       );
       if (user != null) {
-        // ignore: use_build_context_synchronously
-        _showMessage('Kayıt başarılı. Giriş yapabilirsiniz.', context);
-        // ignore: use_build_context_synchronously
+        emit(RegisterSuccess("Kayıt başarılı. Giriş yapabilirsiniz."));
+        await Future.delayed(const Duration(seconds: 1));
+        if (!context.mounted) return;
         Navigator.pop(context);
       } else {
-        // ignore: use_build_context_synchronously
-        _showMessage('Kayıt başarısız. Lütfen tekrar deneyin.', context);
+        emit(RegisterError("Kayıt başarısız. Lütfen tekrar deneyin."));
       }
     } catch (e) {
       final errorMessage = e.toString().replaceFirst('Exception: ', '');
-      // ignore: use_build_context_synchronously
-      _showMessage(errorMessage, context);
+      emit(RegisterError(errorMessage));
     }
   }
 
-  void _showMessage(String message, BuildContext context) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message)));
+  void setErrorMessage(String message) {
+    emit(RegisterError(message));
+
+    Future.delayed(const Duration(seconds: 3), () {
+      emit(RegisterInitial());
+    });
   }
 }

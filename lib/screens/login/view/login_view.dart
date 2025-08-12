@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:to_do_uygulamsi/core/service/auth_service.dart';
 import 'package:to_do_uygulamsi/screens/forgot_password/view/forgot_password_view.dart';
 import 'package:to_do_uygulamsi/screens/home/view/home_view.dart';
 import 'package:to_do_uygulamsi/screens/login/cubit/login_cubit.dart';
 import 'package:to_do_uygulamsi/screens/login/cubit/login_state.dart';
 import 'package:to_do_uygulamsi/screens/login/model/login_model.dart';
+import 'package:to_do_uygulamsi/screens/register/cubit/register_cubit.dart';
 import 'package:to_do_uygulamsi/screens/register/view/register_view.dart';
 import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
 import 'package:to_do_uygulamsi/widgets/task_item.dart';
@@ -87,7 +89,12 @@ class _LoginScreenState extends State<LoginView> {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => const RegisterView()),
+          MaterialPageRoute(
+            builder: (_) => BlocProvider(
+              create: (context) => RegisterCubit(AuthService()),
+              child: const RegisterView(),
+            ),
+          ),
         );
       },
       child: AppText.registerLinkText,
