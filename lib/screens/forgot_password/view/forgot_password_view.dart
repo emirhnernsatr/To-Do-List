@@ -59,7 +59,7 @@ class _ForgotPasswordViewBodyState extends State<_ForgotPasswordViewBody> {
                     }
 
                     return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         _textFieldForgotEmail(),
 
