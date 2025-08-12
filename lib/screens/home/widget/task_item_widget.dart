@@ -2,7 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do_uygulamsi/screens/home/model/task_model.dart';
 import 'package:to_do_uygulamsi/screens/home/view/task_detail_view.dart';
-import 'package:to_do_uygulamsi/theme/app_theme.dart';
+import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
 
 class TaskItemWidget extends StatelessWidget {
   final TaskModel task;

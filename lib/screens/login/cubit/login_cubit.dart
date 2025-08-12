@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/screens/login/model/login_model.dart';
 import 'package:to_do_uygulamsi/screens/login/cubit/login_state.dart';
-import 'package:to_do_uygulamsi/service/auth_service.dart';
+import 'package:to_do_uygulamsi/core/service/auth_service.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   final AuthService _authService;

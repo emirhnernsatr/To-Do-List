@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/screens/register/model/register_model.dart';
-import 'package:to_do_uygulamsi/theme/app_theme.dart';
+import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
 import 'package:to_do_uygulamsi/widgets/task_item.dart';
 import '../cubit/register_cubit.dart';
 import '../../login/view/login_view.dart';

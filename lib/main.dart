@@ -7,9 +7,9 @@ import 'package:to_do_uygulamsi/screens/home/cubit/home_cubit.dart';
 import 'package:to_do_uygulamsi/screens/home/view/home_view.dart';
 import 'package:to_do_uygulamsi/screens/login/cubit/login_cubit.dart';
 import 'package:to_do_uygulamsi/screens/login/view/login_view.dart';
-import 'package:to_do_uygulamsi/service/auth_service.dart';
-import 'package:to_do_uygulamsi/theme/app_theme.dart';
-import 'package:to_do_uygulamsi/theme/cubit/theme_cubit.dart';
+import 'package:to_do_uygulamsi/core/service/auth_service.dart';
+import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
+import 'package:to_do_uygulamsi/core/theme/cubit/theme_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/screens/register/cubit/register_state.dart';
 import 'package:to_do_uygulamsi/screens/register/model/register_model.dart';
-import 'package:to_do_uygulamsi/service/auth_service.dart';
+import 'package:to_do_uygulamsi/core/service/auth_service.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
   final AuthService _authService;

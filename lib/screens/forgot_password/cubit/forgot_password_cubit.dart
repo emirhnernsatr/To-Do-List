@@ -5,9 +5,9 @@ import '../model/forgot_password_model.dart';
 import 'forgot_password_state.dart';
 
 class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
-  final ForgotPasswordService _authService;
+  final ForgotPasswordService authService;
 
-  ForgotPasswordCubit(this._authService) : super(const ForgotPasswordInitial());
+  ForgotPasswordCubit(this.authService) : super(const ForgotPasswordInitial());
 
   Future<void> resetPassword(
     ForgotPasswordModel model,
@@ -21,18 +21,26 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
     emit(const ForgotPasswordLoading());
 
     try {
-      await _authService.sendPasswordResetEmail(model.email);
-      // ignore: use_build_context_synchronously
-      _showMessage("Şifre sıfırlama bağlantısı gönderildi.", context);
+      await authService.sendPasswordResetEmail(model.email);
+      if (!context.mounted) return;
+
+      emit(
+        const ForgotPasswordSuccess("Şifre sıfırlama bağlantısı gönderildi."),
+      );
     } catch (e) {
+      if (!context.mounted) return;
+
       final errorMessage = e.toString().replaceFirst('Exception: ', '');
-      // ignore: use_build_context_synchronously
       emit(ForgotPasswordFailure(errorMessage));
     }
   }
 
   void _showMessage(String msg, BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  }
+
+  void resetState() {
+    emit(const ForgotPasswordInitial());
   }
 }
 

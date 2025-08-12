@@ -6,7 +6,7 @@ import 'package:to_do_uygulamsi/screens/login/cubit/login_cubit.dart';
 import 'package:to_do_uygulamsi/screens/login/cubit/login_state.dart';
 import 'package:to_do_uygulamsi/screens/login/model/login_model.dart';
 import 'package:to_do_uygulamsi/screens/register/view/register_view.dart';
-import 'package:to_do_uygulamsi/theme/app_theme.dart';
+import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
 import 'package:to_do_uygulamsi/widgets/task_item.dart';
 
 class LoginView extends StatefulWidget {

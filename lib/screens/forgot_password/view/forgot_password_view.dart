@@ -4,7 +4,7 @@ import 'package:to_do_uygulamsi/screens/forgot_password/cubit/forgot_password_cu
 import 'package:to_do_uygulamsi/screens/forgot_password/cubit/forgot_password_state.dart';
 import 'package:to_do_uygulamsi/screens/forgot_password/model/forgot_password_model.dart';
 import 'package:to_do_uygulamsi/screens/login/view/login_view.dart';
-import 'package:to_do_uygulamsi/theme/app_theme.dart';
+import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
 import 'package:to_do_uygulamsi/widgets/task_item.dart';
 
 class ForgotPasswordView extends StatefulWidget {
@@ -19,34 +19,38 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.primaryColor,
-      body: BlocListener<ForgotPasswordCubit, ForgotPasswordState>(
-        listener: (context, state) {
-          if (state is ForgotPasswordSuccess) {
-            _showMessage(state.message);
-          } else if (state is ForgotPasswordFailure) {
-            _showMessage(state.error);
-          }
-        },
-        child: Center(
-          child: Padding(
-            padding: Paddings.all40,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AppText.titleForgotPasswordText,
+    return BlocProvider(
+      create: (_) => ForgotPasswordCubit(ForgotPasswordService()),
+      child: Scaffold(
+        backgroundColor: AppColors.primaryColor,
+        body: BlocListener<ForgotPasswordCubit, ForgotPasswordState>(
+          listener: (context, state) {
+            if (state is ForgotPasswordSuccess) {
+              _showMessage(state.message);
+              context.read<ForgotPasswordCubit>().resetState();
+            } else if (state is ForgotPasswordFailure) {
+              _showMessage(state.error);
+            }
+          },
+          child: Center(
+            child: Padding(
+              padding: Paddings.all40,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppText.titleForgotPasswordText,
 
-                  sizedBoxH(40),
-                  _textFieldForgotEmail(),
+                    sizedBoxH(40),
+                    _textFieldForgotEmail(),
 
-                  sizedBoxH(30),
-                  _resetPasswordButton(),
+                    sizedBoxH(30),
+                    _resetPasswordButton(),
 
-                  sizedBoxH(20),
-                  _returnLoginButton(context),
-                ],
+                    sizedBoxH(20),
+                    _returnLoginButton(context),
+                  ],
+                ),
               ),
             ),
           ),

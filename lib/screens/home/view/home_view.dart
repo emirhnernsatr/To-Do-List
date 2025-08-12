@@ -5,9 +5,9 @@ import 'package:to_do_uygulamsi/screens/home/cubit/home_cubit.dart';
 import 'package:to_do_uygulamsi/screens/home/cubit/home_state.dart';
 import 'package:to_do_uygulamsi/screens/home/widget/task_item.dart';
 import 'package:to_do_uygulamsi/screens/login/view/login_view.dart';
-import 'package:to_do_uygulamsi/service/auth_service.dart';
-import 'package:to_do_uygulamsi/theme/app_theme.dart';
-import 'package:to_do_uygulamsi/theme/cubit/theme_cubit.dart';
+import 'package:to_do_uygulamsi/core/service/auth_service.dart';
+import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
+import 'package:to_do_uygulamsi/core/theme/cubit/theme_cubit.dart';
 import 'package:to_do_uygulamsi/widgets/task_item.dart';
 
 class HomeView extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/screens/home/cubit/home_cubit.dart';
 import 'package:to_do_uygulamsi/screens/home/model/task_model.dart';
-import 'package:to_do_uygulamsi/theme/app_theme.dart';
+import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
 import 'package:to_do_uygulamsi/widgets/task_item.dart';
 
 class TaskDetailView extends StatefulWidget {

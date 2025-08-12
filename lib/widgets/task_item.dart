@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_uygulamsi/theme/app_theme.dart';
+import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
 
 Widget sizedBoxH(double height) => SizedBox(height: height);
 Widget sizedBoxW(double width) => SizedBox(width: width);
