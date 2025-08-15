@@ -57,7 +57,9 @@ class RegisterCubit extends Cubit<RegisterState> {
   void _emitWithAutoClear(RegisterState state) {
     emit(state);
     Future.delayed(const Duration(seconds: 3), () {
-      emit(RegisterInitial());
+      if (!isClosed) {
+        emit(RegisterInitial());
+      }
     });
   }
 }
