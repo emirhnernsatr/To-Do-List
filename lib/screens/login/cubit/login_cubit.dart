@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:to_do_uygulamsi/screens/home/cubit/home_cubit.dart';
-import 'package:to_do_uygulamsi/screens/home/view/home_view.dart';
 import 'package:to_do_uygulamsi/screens/login/model/login_model.dart';
 import 'package:to_do_uygulamsi/screens/login/cubit/login_state.dart';
 import 'package:to_do_uygulamsi/core/service/auth_service.dart';
@@ -30,15 +28,7 @@ class LoginCubit extends Cubit<LoginState> {
         await Future.delayed(const Duration(seconds: 1));
         if (!context.mounted) return;
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => BlocProvider(
-              create: (_) => HomeCubit(user.uid)..listenToTasks(user.uid),
-              child: const HomeView(),
-            ),
-          ),
-        );
+        emit(LoginRouteState(user.uid));
       } else {
         _emitWithAutoClear(const LoginError("Kullanıcı bulunamadı."));
       }

@@ -35,12 +35,9 @@ class MyApp extends StatelessWidget {
 
         return MultiBlocProvider(
           providers: [
+            BlocProvider(create: (_) => HomeCubit(user!.uid)),
             BlocProvider(create: (_) => ThemeCubit()),
             BlocProvider(create: (context) => LoginCubit(AuthService())),
-            if (user != null)
-              BlocProvider(
-                create: (_) => HomeCubit(user.uid)..listenToTasks(user.uid),
-              ),
           ],
           child: BlocBuilder<ThemeCubit, ThemeState>(
             builder: (context, state) {
@@ -49,7 +46,9 @@ class MyApp extends StatelessWidget {
                 theme: AppTheme.lightTheme,
                 darkTheme: AppTheme.darkTheme,
                 themeMode: state.themeMode,
-                home: user == null ? const LoginView() : const HomeView(),
+                home: user == null
+                    ? const LoginView()
+                    : HomeView(uid: user.uid),
               );
             },
           ),

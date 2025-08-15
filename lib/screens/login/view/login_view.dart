@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/core/service/auth_service.dart';
 import 'package:to_do_uygulamsi/screens/forgot_password/view/forgot_password_view.dart';
+import 'package:to_do_uygulamsi/screens/home/view/home_view.dart';
 import 'package:to_do_uygulamsi/screens/login/cubit/login_cubit.dart';
 import 'package:to_do_uygulamsi/screens/login/cubit/login_state.dart';
 import 'package:to_do_uygulamsi/screens/login/model/login_model.dart';
@@ -39,7 +40,7 @@ class _LoginScreenState extends State<LoginView> {
                 _textFieldLoginPassword(),
 
                 AppSpacing.h(20),
-                BlocBuilder<LoginCubit, LoginState>(
+                BlocConsumer<LoginCubit, LoginState>(
                   builder: (context, state) {
                     if (state is LoginError) {
                       return Text(
@@ -59,6 +60,16 @@ class _LoginScreenState extends State<LoginView> {
                       );
                     }
                     return const SizedBox.shrink();
+                  },
+                  listener: (BuildContext context, LoginState state) {
+                    if (state is LoginRouteState) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => HomeView(uid: state.uid),
+                        ),
+                      );
+                    }
                   },
                 ),
                 AppSpacing.h(20),
@@ -129,7 +140,7 @@ class _LoginScreenState extends State<LoginView> {
   TextField _textFieldEmail() {
     return TextField(
       controller: emailController,
-      decoration: customInputDecoration('Email'),
+      decoration: _customInputDecoration('Email'),
       cursorColor: AppColors.whitecolor,
       style: const TextStyle(color: AppColors.whitecolor),
       keyboardType: TextInputType.emailAddress,
@@ -139,14 +150,14 @@ class _LoginScreenState extends State<LoginView> {
   TextField _textFieldLoginPassword() {
     return TextField(
       controller: passwordController,
-      decoration: customInputDecoration('Sifre'),
+      decoration: _customInputDecoration('Sifre'),
       cursorColor: AppColors.whitecolor,
       obscureText: true,
       style: const TextStyle(color: AppColors.whitecolor),
     );
   }
 
-  InputDecoration customInputDecoration(String hintText) {
+  InputDecoration _customInputDecoration(String hintText) {
     return InputDecoration(
       hintText: hintText,
       hintStyle: const TextStyle(color: AppColors.whitecolor),

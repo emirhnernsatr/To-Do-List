@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/screens/home/cubit/home_cubit.dart';
+import 'package:to_do_uygulamsi/screens/home/cubit/home_state.dart';
 import 'package:to_do_uygulamsi/screens/home/widget/task_item.dart';
 import 'package:to_do_uygulamsi/screens/login/view/login_view.dart';
 import 'package:to_do_uygulamsi/core/service/auth_service.dart';
@@ -10,7 +11,8 @@ import 'package:to_do_uygulamsi/core/theme/cubit/theme_cubit.dart';
 import 'package:to_do_uygulamsi/core/constants/app_strings.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final String uid;
+  const HomeView({super.key, required this.uid});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -35,8 +37,6 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
 
-    context.read<HomeCubit>().listenToTasks(uid);
-
     _searchController.addListener(() {
       context.read<HomeCubit>().filterTasks(_searchController.text);
     });
@@ -54,44 +54,51 @@ class _HomeViewState extends State<HomeView> {
     // ignore: unrelated_type_equality_checks
     final isDarkMode = context.watch<ThemeCubit>().state == ThemeMode.dark;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: AppText.titleHomeText,
-        actions: [
-          IconButton(
-            icon: Icon(
-              isDarkMode ? Icons.dark_mode : Icons.light_mode,
-              color: AppColors.whitecolor,
+    return BlocProvider(
+      create: (context) => HomeCubit(widget.uid),
+      child: Scaffold(
+        appBar: AppBar(
+          title: AppText.titleHomeText,
+          actions: [
+            IconButton(
+              icon: Icon(
+                isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                color: AppColors.whitecolor,
+              ),
+              onPressed: () {
+                context.read<ThemeCubit>().toggleTheme();
+              },
             ),
-            onPressed: () {
-              context.read<ThemeCubit>().toggleTheme();
-            },
-          ),
-        ],
-        centerTitle: true,
-        leading: _exitIcon(),
-      ),
-
-      body: Padding(
-        padding: AppPadding.all(16),
-        child: Column(
-          children: [
-            _textFieldSearch(),
-            AppSpacing.h(16),
-
-            const Expanded(child: TaskListView()),
           ],
+          centerTitle: true,
+          leading: _exitIcon(),
         ),
+
+        body: Padding(
+          padding: AppPadding.all(16),
+          child: Column(
+            children: [
+              _textFieldSearch(),
+              AppSpacing.h(16),
+
+              const Expanded(child: TaskListView()),
+            ],
+          ),
+        ),
+        floatingActionButton: _addTaskDialogButton(context),
       ),
-      floatingActionButton: _addTaskDialogButton(context),
     );
   }
 
-  FloatingActionButton _addTaskDialogButton(BuildContext context) {
-    return FloatingActionButton(
-      backgroundColor: AppColors.primaryColor,
-      onPressed: () => _showAddTaskDialog(context),
-      child: const Icon(Icons.add, color: AppColors.white, size: 30),
+  Widget _addTaskDialogButton(BuildContext context) {
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        return FloatingActionButton(
+          backgroundColor: AppColors.primaryColor,
+          onPressed: () => _showAddTaskDialog(context),
+          child: const Icon(Icons.add, color: AppColors.white, size: 30),
+        );
+      },
     );
   }
 
@@ -136,11 +143,11 @@ class _HomeViewState extends State<HomeView> {
   }
 }
 
-void _showAddTaskDialog(BuildContext dialogContext) {
+void _showAddTaskDialog(BuildContext c) {
   final newTaskController = TextEditingController();
 
   showDialog(
-    context: dialogContext,
+    context: c,
     builder: (context) {
       return AlertDialog(
         title: AppText.addNewTaskText,
@@ -156,7 +163,7 @@ void _showAddTaskDialog(BuildContext dialogContext) {
               borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
             ),
           ),
-          onSubmitted: (_) => _submitTask(context, newTaskController),
+          onSubmitted: (_) => _submitTask(c, newTaskController),
         ),
         actions: [
           TextButton(
@@ -164,7 +171,7 @@ void _showAddTaskDialog(BuildContext dialogContext) {
             child: AppText.cancelText,
           ),
           ElevatedButton(
-            onPressed: () => _submitTask(context, newTaskController),
+            onPressed: () => _submitTask(c, newTaskController),
             child: AppText.addText,
           ),
         ],

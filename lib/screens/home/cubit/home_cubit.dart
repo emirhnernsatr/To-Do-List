@@ -7,7 +7,9 @@ import 'package:to_do_uygulamsi/screens/home/model/task_model.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   final String uid;
-  HomeCubit(this.uid) : super(HomeInitial());
+  HomeCubit(this.uid) : super(HomeInitial()) {
+    listenToTasks();
+  }
 
   final List<TaskModel> _tasks = [];
 
@@ -140,7 +142,7 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  Future<void> listenToTasks(uid) async {
+  Future<void> listenToTasks() async {
     if (uid.isEmpty) {
       emit(HomeError("Kullanıcı oturumu yok."));
       return;
