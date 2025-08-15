@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/screens/home/cubit/home_cubit.dart';
+import 'package:to_do_uygulamsi/screens/home/cubit/home_state.dart';
 import 'package:to_do_uygulamsi/screens/home/model/task_model.dart';
 import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
 import 'package:to_do_uygulamsi/core/constants/app_strings.dart';
@@ -40,12 +41,12 @@ class _TaskDetailView extends State<TaskDetailView> {
 
   void _saveChange() {
     final newTitle = _titleController.text.trim();
+
     if (newTitle.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Görev başlığı boş olamaz')));
+      context.read<HomeCubit>().validateTitle(newTitle);
       return;
     }
+
     final newNote = _noteController.text.trim();
 
     final newDate = _selectedDate ?? DateTime.now();
@@ -111,8 +112,35 @@ class _TaskDetailView extends State<TaskDetailView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _taskTitleTextField(isDark),
+            BlocBuilder<HomeCubit, HomeState>(
+              builder: (context, state) {
+                String? errorText;
 
+                if (state is HomeError) {
+                  errorText = state.message;
+                }
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    _taskTitleTextField(isDark),
+
+                    if (errorText != null)
+                      Padding(
+                        padding: AppPadding.only(top: 6),
+                        child: Text(
+                          errorText,
+                          style: const TextStyle(
+                            color: AppColors.redAccent,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              },
+            ),
+
+            // _taskTitleTextField(isDark),
             AppSpacing.h(16),
             _infoCard(isDark),
 

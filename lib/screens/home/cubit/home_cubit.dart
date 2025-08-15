@@ -194,4 +194,21 @@ class HomeCubit extends Cubit<HomeState> {
     _tasksSubscription?.cancel();
     return super.close();
   }
+
+  Future<void> validateTitle(String title) async {
+    if (title.trim().isEmpty) {
+      _emitWithAutoClear(HomeError('Görev başlığı boş olamaz'));
+    } else {
+      _emitWithAutoClear(HomeError(''));
+    }
+  }
+
+  void _emitWithAutoClear(HomeState state) {
+    emit(state);
+    Future.delayed(const Duration(seconds: 3), () {
+      if (!isClosed) {
+        emit(HomeInitial());
+      }
+    });
+  }
 }
