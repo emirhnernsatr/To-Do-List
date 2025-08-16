@@ -121,6 +121,7 @@ class _TaskDetailView extends State<TaskDetailView> {
                 }
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     _taskTitleTextField(isDark),
 

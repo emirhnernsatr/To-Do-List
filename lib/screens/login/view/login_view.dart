@@ -27,13 +27,30 @@ class _LoginScreenState extends State<LoginView> {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       body: Padding(
-        padding: AppPadding.all(40),
+        padding: AppPadding.all(30),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
               children: [
                 AppText.titleText,
-                AppSpacing.h(40),
+                AppSpacing.h(60),
+                const Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 15),
+                      child: Text(
+                        'Giriş Yap',
+                        style: TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                AppSpacing.h(15),
                 _textFieldEmail(),
 
                 AppSpacing.h(30),
@@ -98,9 +115,8 @@ class _LoginScreenState extends State<LoginView> {
       },
       child: Container(
         height: 50,
-        width: 150,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(60),
+          borderRadius: BorderRadius.circular(30),
           color: AppColors.green,
         ),
         child: Center(child: AppText.loginText),
@@ -140,7 +156,11 @@ class _LoginScreenState extends State<LoginView> {
   TextField _textFieldEmail() {
     return TextField(
       controller: emailController,
-      decoration: _customInputDecoration('Email'),
+
+      decoration: _customInputDecoration(
+        'Email',
+        const Icon(Icons.email, color: Colors.white),
+      ),
       cursorColor: AppColors.whitecolor,
       style: const TextStyle(color: AppColors.whitecolor),
       keyboardType: TextInputType.emailAddress,
@@ -150,29 +170,38 @@ class _LoginScreenState extends State<LoginView> {
   TextField _textFieldLoginPassword() {
     return TextField(
       controller: passwordController,
-      decoration: _customInputDecoration('Sifre'),
+      decoration: _customInputDecoration(
+        'Şifre',
+        const Icon(Icons.lock, color: Colors.white),
+      ),
       cursorColor: AppColors.whitecolor,
       obscureText: true,
       style: const TextStyle(color: AppColors.whitecolor),
     );
   }
 
-  InputDecoration _customInputDecoration(String hintText) {
+  InputDecoration _customInputDecoration(String hintText, dynamic prefixIcon) {
     return InputDecoration(
+      prefixIcon: prefixIcon,
       hintText: hintText,
       hintStyle: const TextStyle(color: AppColors.whitecolor),
       filled: true,
       fillColor: Colors.white24,
-      contentPadding: AppPadding.symmetric(vertical: 10, horizontal: 10),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(30),
-        borderSide: BorderSide.none,
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: const BorderSide(
+          color: Colors.white,
+          style: BorderStyle.solid,
+          width: 2,
+        ),
       ),
-      enabledBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: AppColors.whitecolor),
-      ),
-      focusedBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: AppColors.whitecolor),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: const BorderSide(
+          color: Colors.white,
+          style: BorderStyle.solid,
+          width: 2,
+        ),
       ),
     );
   }

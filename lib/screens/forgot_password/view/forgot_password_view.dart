@@ -56,6 +56,14 @@ class _ForgotPasswordViewBodyState extends State<_ForgotPasswordViewBody> {
                       errorText = state.error;
                     } else if (state is ForgotPasswordSuccess) {
                       infoText = state.message;
+
+                      Future.delayed(const Duration(seconds: 1), () {
+                        if (!context.mounted) return;
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => const LoginView()),
+                        );
+                      });
                     }
 
                     return Column(
@@ -107,7 +115,10 @@ class _ForgotPasswordViewBodyState extends State<_ForgotPasswordViewBody> {
   TextField _textFieldForgotEmail() {
     return TextField(
       controller: emailController,
-      decoration: _customInputDecoration("Email"),
+      decoration: _customInputDecoration(
+        "Email",
+        const Icon(Icons.email, color: AppColors.white),
+      ),
       cursorColor: AppColors.white,
       style: const TextStyle(color: AppColors.white),
       keyboardType: TextInputType.emailAddress,
@@ -143,22 +154,28 @@ class _ForgotPasswordViewBodyState extends State<_ForgotPasswordViewBody> {
     );
   }
 
-  InputDecoration _customInputDecoration(String hintText) {
+  InputDecoration _customInputDecoration(String hintText, dynamic prefixIcon) {
     return InputDecoration(
+      prefixIcon: prefixIcon,
       hintText: hintText,
       hintStyle: const TextStyle(color: AppColors.whitecolor),
       filled: true,
       fillColor: Colors.white24,
-      contentPadding: AppPadding.symmetric(vertical: 10, horizontal: 10),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(30),
-        borderSide: BorderSide.none,
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: const BorderSide(
+          color: Colors.white,
+          style: BorderStyle.solid,
+          width: 2,
+        ),
       ),
-      enabledBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: AppColors.whitecolor),
-      ),
-      focusedBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: AppColors.whitecolor),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: const BorderSide(
+          color: Colors.white,
+          style: BorderStyle.solid,
+          width: 2,
+        ),
       ),
     );
   }

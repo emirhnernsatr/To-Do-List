@@ -77,9 +77,9 @@ class AppTheme {
     textTheme: Typography.whiteMountainView,
     textSelectionTheme: TextSelectionThemeData(
       // ignore: deprecated_member_use
-      selectionColor: seedColor.withOpacity(0.4),
-      selectionHandleColor: seedColor,
-      cursorColor: seedColor,
+      selectionColor: AppColors.blue.withOpacity(0.4),
+      selectionHandleColor: AppColors.blue,
+      cursorColor: AppColors.blue,
     ),
   );
 }

@@ -26,14 +26,13 @@ class _RegisterViewState extends State<RegisterView> {
       backgroundColor: AppColors.primaryColor,
       body: Center(
         child: Padding(
-          padding: AppPadding.all(50),
+          padding: AppPadding.all(30),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                AppSpacing.h(50),
                 AppText.registerText,
 
-                AppSpacing.h(70),
+                AppSpacing.h(60),
                 _textFieldRegisterEmail(),
 
                 AppSpacing.h(30),
@@ -44,33 +43,46 @@ class _RegisterViewState extends State<RegisterView> {
 
                 AppSpacing.h(20),
 
-                BlocBuilder<RegisterCubit, RegisterState>(
-                  builder: (context, state) {
-                    if (state is RegisterError) {
-                      return Text(
-                        state.error,
-                        style: const TextStyle(
-                          color: AppColors.redAccent,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
-                    } else if (state is RegisterSuccess) {
-                      return Text(
-                        state.message,
-                        style: const TextStyle(
-                          color: AppColors.greenAccent,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
+                BlocListener<RegisterCubit, RegisterState>(
+                  listener: (context, state) {
+                    if (state is RegisterSuccess) {
+                      Future.delayed(const Duration(seconds: 1), () {
+                        if (!context.mounted) return;
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => const LoginView()),
+                        );
+                      });
                     }
-                    return const SizedBox.shrink();
                   },
+                  child: BlocBuilder<RegisterCubit, RegisterState>(
+                    builder: (context, state) {
+                      if (state is RegisterError) {
+                        return Text(
+                          state.error,
+                          style: const TextStyle(
+                            color: AppColors.redAccent,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      } else if (state is RegisterSuccess) {
+                        return Text(
+                          state.message,
+                          style: const TextStyle(
+                            color: AppColors.greenAccent,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
                 ),
 
                 AppSpacing.h(20),
                 _registerButton(),
 
-                AppSpacing.h(20),
+                AppSpacing.h(10),
                 _accountPromptButton(context),
               ],
             ),
@@ -93,8 +105,6 @@ class _RegisterViewState extends State<RegisterView> {
       },
       child: Container(
         height: 50,
-        width: 150,
-        margin: const EdgeInsets.symmetric(horizontal: 60),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
           color: AppColors.green,
@@ -119,7 +129,10 @@ class _RegisterViewState extends State<RegisterView> {
   TextField _textFieldRegisterEmail() {
     return TextField(
       controller: emailController,
-      decoration: customInputDecoration('Email'),
+      decoration: customInputDecoration(
+        'Email',
+        const Icon(Icons.email, color: AppColors.white),
+      ),
       style: const TextStyle(color: AppColors.white),
       cursorColor: AppColors.white,
     );
@@ -128,7 +141,10 @@ class _RegisterViewState extends State<RegisterView> {
   TextField _textFieldRegisterPassword() {
     return TextField(
       controller: passwordController,
-      decoration: customInputDecoration('Sifre'),
+      decoration: customInputDecoration(
+        'Sifre',
+        const Icon(Icons.lock, color: AppColors.white),
+      ),
       style: const TextStyle(color: AppColors.white),
       cursorColor: AppColors.white,
       obscureText: true,
@@ -138,29 +154,38 @@ class _RegisterViewState extends State<RegisterView> {
   TextField _textFieldRegisterConfirmPassword() {
     return TextField(
       controller: confirmPasswordController,
-      decoration: customInputDecoration('Sifre Onay'),
+      decoration: customInputDecoration(
+        'Sifre Onay',
+        const Icon(Icons.lock, color: AppColors.white),
+      ),
       style: const TextStyle(color: AppColors.white),
       cursorColor: AppColors.white,
       obscureText: true,
     );
   }
 
-  InputDecoration customInputDecoration(String hintText) {
+  InputDecoration customInputDecoration(String hintText, dynamic prefixIcon) {
     return InputDecoration(
+      prefixIcon: prefixIcon,
       hintText: hintText,
       hintStyle: const TextStyle(color: AppColors.whitecolor),
       filled: true,
       fillColor: Colors.white24,
-      contentPadding: AppPadding.symmetric(vertical: 10, horizontal: 10),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(30),
-        borderSide: BorderSide.none,
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: const BorderSide(
+          color: Colors.white,
+          style: BorderStyle.solid,
+          width: 2,
+        ),
       ),
-      enabledBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: AppColors.whitecolor),
-      ),
-      focusedBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: AppColors.whitecolor),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: const BorderSide(
+          color: Colors.white,
+          style: BorderStyle.solid,
+          width: 2,
+        ),
       ),
     );
   }

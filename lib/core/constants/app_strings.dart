@@ -64,7 +64,11 @@ class AppText {
 
   static Widget registerButtonText = const Text(
     'kayıt Ol',
-    style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
+    style: TextStyle(
+      color: AppColors.white,
+      fontWeight: FontWeight.bold,
+      fontSize: 17,
+    ),
   );
 
   static Widget forgotPasswordText = const Text(
@@ -73,8 +77,12 @@ class AppText {
   );
 
   static Widget loginText = const Text(
-    'Giriş Yap',
-    style: TextStyle(color: AppColors.whitecolor, fontWeight: FontWeight.bold),
+    'Giriş',
+    style: TextStyle(
+      color: AppColors.whitecolor,
+      fontWeight: FontWeight.bold,
+      fontSize: 17,
+    ),
   );
 
   static Widget registerLinkText = const Text(
