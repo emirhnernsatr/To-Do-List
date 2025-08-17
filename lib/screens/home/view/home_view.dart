@@ -23,6 +23,7 @@ class _HomeViewState extends State<HomeView> {
   final TextEditingController _searchController = TextEditingController();
   final uid = FirebaseAuth.instance.currentUser?.uid ?? "";
   final AuthService authService = AuthService();
+  late HomeCubit _homeCubit;
 
   void _logout() async {
     await authService.signOut();
@@ -36,9 +37,10 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
+    _homeCubit = HomeCubit(widget.uid);
 
     _searchController.addListener(() {
-      context.read<HomeCubit>().filterTasks(_searchController.text);
+      _homeCubit.filterTasks(_searchController.text);
     });
   }
 
@@ -54,8 +56,8 @@ class _HomeViewState extends State<HomeView> {
     // ignore: unrelated_type_equality_checks
     final isDarkMode = context.watch<ThemeCubit>().state == ThemeMode.dark;
 
-    return BlocProvider(
-      create: (context) => HomeCubit(widget.uid),
+    return BlocProvider.value(
+      value: _homeCubit,
       child: Scaffold(
         appBar: AppBar(
           title: AppText.titleHomeText,
@@ -125,7 +127,7 @@ class _HomeViewState extends State<HomeView> {
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(color: AppColors.primaryColor, width: 2),
         ),
-        border: OutlineInputBorder(
+        focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(color: AppColors.primaryColor, width: 2),
         ),

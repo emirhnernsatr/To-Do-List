@@ -189,19 +189,11 @@ class _LoginScreenState extends State<LoginView> {
       fillColor: Colors.white24,
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(20),
-        borderSide: const BorderSide(
-          color: Colors.white,
-          style: BorderStyle.solid,
-          width: 2,
-        ),
+        borderSide: const BorderSide(color: AppColors.white, width: 2),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(20),
-        borderSide: const BorderSide(
-          color: Colors.white,
-          style: BorderStyle.solid,
-          width: 2,
-        ),
+        borderSide: const BorderSide(color: AppColors.white, width: 2),
       ),
     );
   }

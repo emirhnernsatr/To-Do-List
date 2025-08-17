@@ -12,7 +12,6 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   final List<TaskModel> _tasks = [];
-
   StreamSubscription? _tasksSubscription;
 
   Future<void> addTask(String title) async {
@@ -51,17 +50,6 @@ class HomeCubit extends Cubit<HomeState> {
     final task = _tasks[index];
     final updatedIsCompleted = !task.isCompleted;
 
-    _tasks[index] = task.copyWith(isCompleted: updatedIsCompleted);
-    _tasks.sort(
-      (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
-    );
-
-    if (state is HomeLoaded) {
-      emit(
-        HomeLoaded(tasks: List.from(_tasks), filteredTasks: List.from(_tasks)),
-      );
-    }
-
     try {
       await FirebaseFirestore.instance
           .collection('users')
@@ -69,6 +57,20 @@ class HomeCubit extends Cubit<HomeState> {
           .collection('tasks')
           .doc(id)
           .update({'isCompleted': updatedIsCompleted});
+
+      _tasks[index] = task.copyWith(isCompleted: updatedIsCompleted);
+      _tasks.sort(
+        (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
+      );
+
+      if (state is HomeLoaded) {
+        emit(
+          HomeLoaded(
+            tasks: List.from(_tasks),
+            filteredTasks: List.from(_tasks),
+          ),
+        );
+      }
     } catch (e) {
       emit(HomeError(e.toString()));
     }
@@ -126,20 +128,23 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void filterTasks(String query) {
-    if (state is HomeLoaded) {
-      final allTasks = (state as HomeLoaded).tasks;
-      final filtered = query.isEmpty
-          ? allTasks
-          : allTasks
-                .where(
-                  (task) => task.title.toLowerCase().contains(
-                    query.toLowerCase().trim(),
-                  ),
-                )
-                .toList();
+    final current = state;
+    if (current is! HomeLoaded) return;
 
-      emit(HomeLoaded(tasks: allTasks, filteredTasks: filtered));
+    final all = current.tasks;
+    final q = query.trim();
+    if (q.isEmpty) {
+      emit(HomeLoaded(tasks: all, filteredTasks: all));
+      return;
     }
+
+    String norm(String s) =>
+        s.toLowerCase().replaceAll('İ', 'i').replaceAll('I', 'ı');
+
+    final nq = norm(q);
+    final filtered = all.where((t) => norm(t.title).contains(nq)).toList();
+
+    emit(HomeLoaded(tasks: all, filteredTasks: filtered));
   }
 
   Future<void> listenToTasks() async {
@@ -166,17 +171,14 @@ class HomeCubit extends Cubit<HomeState> {
               }).toList();
 
               tasks.sort((a, b) {
-                if (a.isCompleted && !b.isCompleted) {
-                  return 1;
-                }
-                if (!a.isCompleted && b.isCompleted) {
-                  return -1;
-                }
+                if (a.isCompleted && !b.isCompleted) return 1;
+                if (!a.isCompleted && b.isCompleted) return -1;
                 return a.title.toLowerCase().compareTo(b.title.toLowerCase());
               });
 
-              _tasks.clear();
-              _tasks.addAll(tasks);
+              _tasks
+                ..clear()
+                ..addAll(tasks);
 
               emit(HomeLoaded(tasks: tasks, filteredTasks: tasks));
             },
@@ -198,8 +200,6 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> validateTitle(String title) async {
     if (title.trim().isEmpty) {
       _emitWithAutoClear(HomeError('Görev başlığı boş olamaz'));
-    } else {
-      _emitWithAutoClear(HomeError(''));
     }
   }
 

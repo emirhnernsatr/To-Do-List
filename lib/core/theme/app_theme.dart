@@ -100,4 +100,5 @@ class AppColors {
   static const Color charlestonGreen = Color(0xFF2A2A2A);
   static const Color eerieblack = Color(0xFF1E1E1E);
   static const Color chineseblack = Color(0xFF121212);
+  static const Color white24 = Colors.white24;
 }

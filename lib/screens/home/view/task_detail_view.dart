@@ -175,97 +175,36 @@ class _TaskDetailView extends State<TaskDetailView> {
     );
   }
 
-  ElevatedButton _saveElevatedButtton() {
-    return ElevatedButton(
-      onPressed: _saveChange,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primaryColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      ),
-      child: AppText.saveText,
+  IconButton _arrowBackButton(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back, color: AppColors.white),
+      onPressed: () => Navigator.pop(context),
     );
   }
 
-  TextFormField _noteTextfield(bool isDark) {
-    return TextFormField(
-      controller: _noteController,
-      maxLines: 10,
-      decoration: InputDecoration(
-        labelText: 'Notlar',
-        labelStyle: TextStyle(
-          color: isDark ? AppColors.white : AppColors.primaryColor,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primaryColor),
-        ),
-        alignLabelWithHint: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primaryColor),
-        ),
-        filled: true,
-        fillColor: isDark ? AppColors.charlestonGreen : AppColors.white,
-      ),
-    );
-  }
-
-  TextFormField _timeTextfield(BuildContext context, bool isDark) {
-    return TextFormField(
-      readOnly: true,
-      onTap: _selectTime,
-      controller: TextEditingController(
-        text: _selectedTime != null ? _selectedTime!.format(context) : '',
-      ),
-      decoration: InputDecoration(
-        labelText: 'Saat',
-        labelStyle: TextStyle(
-          color: isDark ? AppColors.white : AppColors.primaryColor,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
-        prefixIcon: const Icon(
-          Icons.access_time,
-          color: AppColors.primaryColor,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primaryColor),
-        ),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        filled: true,
-        fillColor: isDark ? AppColors.charlestonGreen : AppColors.white,
-      ),
-    );
-  }
-
-  TextField _dateTextfield(bool isDark) {
+  TextField _taskTitleTextField(bool isDark) {
     return TextField(
-      readOnly: true,
-      onTap: _selectDate,
-      controller: TextEditingController(
-        text: _selectedDate != null
-            ? '${_selectedDate!.day.toString().padLeft(2, '0')}/${_selectedDate!.month.toString().padLeft(2, '0')}/${_selectedDate!.year}'
-            : '',
+      controller: _titleController,
+      style: TextStyle(
+        color: isDark ? AppColors.white : AppColors.black,
+        fontSize: 16,
       ),
+      autofocus: true,
       decoration: InputDecoration(
-        labelText: 'Tarih',
+        labelText: 'Görev Başlığı',
         labelStyle: TextStyle(
           color: isDark ? AppColors.white : AppColors.primaryColor,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
-        prefixIcon: const Icon(
-          Icons.calendar_today,
-          color: AppColors.primaryColor,
-        ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primaryColor),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: AppColors.primaryColor, width: 2),
         ),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: AppColors.primaryColor, width: 2),
+        ),
         filled: true,
         fillColor: isDark ? AppColors.charlestonGreen : AppColors.white,
       ),
@@ -281,7 +220,7 @@ class _TaskDetailView extends State<TaskDetailView> {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: const BorderSide(color: AppColors.primaryColor),
+        side: const BorderSide(color: AppColors.primaryColor, width: 2),
       ),
       color: isDark ? AppColors.charlestonGreen : AppColors.white,
       elevation: 3,
@@ -310,7 +249,7 @@ class _TaskDetailView extends State<TaskDetailView> {
       color: isDark ? AppColors.charlestonGreen : AppColors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: const BorderSide(color: AppColors.primaryColor),
+        side: const BorderSide(color: AppColors.primaryColor, width: 2),
       ),
       elevation: 3,
       child: Padding(
@@ -338,28 +277,31 @@ class _TaskDetailView extends State<TaskDetailView> {
     );
   }
 
-  TextField _taskTitleTextField(bool isDark) {
-    return TextField(
-      controller: _titleController,
-      style: TextStyle(
-        color: isDark ? AppColors.white : AppColors.black,
-        fontSize: 16,
+  TextFormField _timeTextfield(BuildContext context, bool isDark) {
+    return TextFormField(
+      readOnly: true,
+      onTap: _selectTime,
+      controller: TextEditingController(
+        text: _selectedTime != null ? _selectedTime!.format(context) : '',
       ),
-      autofocus: true,
       decoration: InputDecoration(
-        labelText: 'Görev Başlığı',
+        labelText: 'Saat',
         labelStyle: TextStyle(
           color: isDark ? AppColors.white : AppColors.primaryColor,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.primaryColor),
+        prefixIcon: const Icon(
+          Icons.access_time,
+          color: AppColors.primaryColor,
         ),
-        border: OutlineInputBorder(
-          borderSide: const BorderSide(color: AppColors.primaryColor),
-          borderRadius: BorderRadius.circular(8),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.primaryColor, width: 2),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.primaryColor, width: 2),
         ),
         filled: true,
         fillColor: isDark ? AppColors.charlestonGreen : AppColors.white,
@@ -367,10 +309,74 @@ class _TaskDetailView extends State<TaskDetailView> {
     );
   }
 
-  IconButton _arrowBackButton(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.arrow_back, color: AppColors.white),
-      onPressed: () => Navigator.pop(context),
+  TextField _dateTextfield(bool isDark) {
+    return TextField(
+      readOnly: true,
+      onTap: _selectDate,
+      controller: TextEditingController(
+        text: _selectedDate != null
+            ? '${_selectedDate!.day.toString().padLeft(2, '0')}/${_selectedDate!.month.toString().padLeft(2, '0')}/${_selectedDate!.year}'
+            : '',
+      ),
+      decoration: InputDecoration(
+        labelText: 'Tarih',
+        labelStyle: TextStyle(
+          color: isDark ? AppColors.white : AppColors.primaryColor,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+        prefixIcon: const Icon(
+          Icons.calendar_today,
+          color: AppColors.primaryColor,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.primaryColor, width: 2),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.primaryColor, width: 2),
+        ),
+        filled: true,
+        fillColor: isDark ? AppColors.charlestonGreen : AppColors.white,
+      ),
+    );
+  }
+
+  TextFormField _noteTextfield(bool isDark) {
+    return TextFormField(
+      controller: _noteController,
+      maxLines: 10,
+      decoration: InputDecoration(
+        labelText: 'Notlar',
+        labelStyle: TextStyle(
+          color: isDark ? AppColors.white : AppColors.primaryColor,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.primaryColor, width: 2),
+        ),
+        alignLabelWithHint: true,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.primaryColor, width: 2),
+        ),
+        filled: true,
+        fillColor: isDark ? AppColors.charlestonGreen : AppColors.white,
+      ),
+    );
+  }
+
+  ElevatedButton _saveElevatedButtton() {
+    return ElevatedButton(
+      onPressed: _saveChange,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.primaryColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      ),
+      child: AppText.saveText,
     );
   }
 }

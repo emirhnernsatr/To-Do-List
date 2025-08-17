@@ -24,7 +24,7 @@ class TaskItemWidget extends StatelessWidget {
 
     final Color backgroundColor = isDarkMode
         ? (isDone ? AppColors.charlestonGreen : AppColors.onyx)
-        : (isDone ? AppColors.white70 : AppColors.white);
+        : (isDone ? AppColors.white24 : AppColors.white);
 
     final Color textColor = isDarkMode ? AppColors.white : AppColors.black;
 
@@ -44,7 +44,14 @@ class TaskItemWidget extends StatelessWidget {
           onTap: openContainer,
           leading: GestureDetector(
             onTap: onToggleDone,
-            child: Checkbox(value: isDone, onChanged: (_) => onToggleDone()),
+            child: Transform.scale(
+              scale: 1.2,
+              child: Checkbox(
+                value: isDone,
+                onChanged: (_) => onToggleDone(),
+                shape: const CircleBorder(),
+              ),
+            ),
           ),
           title: Text(
             task.title,

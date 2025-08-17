@@ -39,7 +39,7 @@ class _ForgotPasswordViewBodyState extends State<_ForgotPasswordViewBody> {
       backgroundColor: AppColors.primaryColor,
       body: Center(
         child: Padding(
-          padding: AppPadding.all(40),
+          padding: AppPadding.all(30),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -163,19 +163,11 @@ class _ForgotPasswordViewBodyState extends State<_ForgotPasswordViewBody> {
       fillColor: Colors.white24,
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(20),
-        borderSide: const BorderSide(
-          color: Colors.white,
-          style: BorderStyle.solid,
-          width: 2,
-        ),
+        borderSide: const BorderSide(color: Colors.white, width: 2),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(20),
-        borderSide: const BorderSide(
-          color: Colors.white,
-          style: BorderStyle.solid,
-          width: 2,
-        ),
+        borderSide: const BorderSide(color: Colors.white, width: 2),
       ),
     );
   }
