@@ -42,6 +42,7 @@ class _LoginScreenState extends State<LoginView> {
                       child: Text(
                         'Giriş Yap',
                         style: TextStyle(
+                          color: AppColors.white,
                           fontSize: 19,
                           fontWeight: FontWeight.bold,
                         ),
