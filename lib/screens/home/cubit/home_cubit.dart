@@ -52,9 +52,7 @@ class HomeCubit extends Cubit<HomeState> {
         (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
       );
 
-      emit(
-        HomeLoaded(tasks: List.from(_tasks), filteredTasks: List.from(_tasks)),
-      );
+      emit(HomeTaskUpdated(tasks: List.from(_tasks)));
     } catch (e) {
       emit(HomeError(e.toString()));
     }
@@ -227,9 +225,7 @@ class HomeCubit extends Cubit<HomeState> {
 
       _tasks[index] = updatedTask;
 
-      emit(
-        HomeLoaded(tasks: List.from(_tasks), filteredTasks: List.from(_tasks)),
-      );
+      emit(HomeTaskUpdated(tasks: List.from(_tasks)));
     } catch (e) {
       emit(HomeError(e.toString()));
     }

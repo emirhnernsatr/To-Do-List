@@ -24,6 +24,11 @@ class HomeLoaded extends HomeState {
   }
 }
 
+class HomeTaskUpdated extends HomeState {
+  final List<TaskModel>? tasks;
+  HomeTaskUpdated({this.tasks});
+}
+
 class HomeError extends HomeState {
   final String message;
   HomeError(this.message);

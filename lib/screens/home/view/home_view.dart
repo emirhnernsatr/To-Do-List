@@ -185,7 +185,12 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
                     AppSpacing.h(16),
-                    BlocBuilder<HomeCubit, HomeState>(
+                    BlocConsumer<HomeCubit, HomeState>(
+                      listener: (context, state) {
+                        if (state is HomeTaskUpdated) {
+                          Navigator.pop(context);
+                        }
+                      },
                       builder: (context, state) {
                         String? errorText;
 
@@ -268,16 +273,12 @@ class _HomeViewState extends State<HomeView> {
                       width: double.infinity,
                       child: saveElevatedButtton(
                         onPressed: () {
-                          if (titleController.text.trim().isEmpty) return;
-
                           context.read<HomeCubit>().addTask(
                             title: titleController.text.trim(),
                             note: noteController.text.trim(),
                             date: selectedDate ?? DateTime.now(),
                             time: selectedTime ?? TimeOfDay.now(),
                           );
-
-                          Navigator.pop(context);
                         },
                       ),
                     ),

@@ -40,13 +40,13 @@ class _TaskDetailView extends State<TaskDetailView> {
     super.dispose();
   }
 
-  void _saveChange() {
+  Future<void> _saveChange() async {
     final newTitle = _titleController.text.trim();
     final newNote = _noteController.text.trim();
     final newDate = _selectedDate ?? DateTime.now();
     final newTime = _selectedTime ?? TimeOfDay.now();
 
-    context.read<HomeCubit>().newTaskChanges(
+    await context.read<HomeCubit>().newTaskChanges(
       id: widget.task.id,
       newTitle: newTitle,
       newNote: newNote,
@@ -99,7 +99,7 @@ class _TaskDetailView extends State<TaskDetailView> {
             children: [
               BlocListener<HomeCubit, HomeState>(
                 listener: (context, state) {
-                  if (state is HomeLoaded) {
+                  if (state is HomeTaskUpdated) {
                     Navigator.pop(context);
                   }
                 },
