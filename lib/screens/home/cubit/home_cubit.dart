@@ -46,6 +46,11 @@ class HomeCubit extends Cubit<HomeState> {
           .collection('tasks')
           .doc(newTask.id)
           .set(newTask.toMap());
+
+      _tasks.add(newTask);
+      _sortTasks();
+
+      emit(HomeTaskUpdated(tasks: List.from(_tasks)));
     } catch (e) {
       emit(HomeError(e.toString()));
     }
