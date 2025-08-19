@@ -158,9 +158,7 @@ class _HomeViewState extends State<HomeView> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (_) {
-        final isDark =
-            // ignore: unrelated_type_equality_checks
-            context.watch<ThemeCubit>().state == ThemeMode.dark;
+        final isDark = Theme.of(context).brightness == Brightness.dark;
         return Padding(
           padding: AppPadding.only(
             left: 16,
