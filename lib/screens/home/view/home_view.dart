@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/screens/home/cubit/home_cubit.dart';
 import 'package:to_do_uygulamsi/screens/home/cubit/home_state.dart';
+import 'package:to_do_uygulamsi/screens/home/widget/task_detail_widgets.dart';
 import 'package:to_do_uygulamsi/screens/home/widget/task_item.dart';
 import 'package:to_do_uygulamsi/screens/login/view/login_view.dart';
 import 'package:to_do_uygulamsi/core/service/auth_service.dart';
@@ -54,7 +55,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     // ignore: unrelated_type_equality_checks
-    final isDarkMode = context.watch<ThemeCubit>().state == ThemeMode.dark;
+    final isDark = context.watch<ThemeCubit>().state == ThemeMode.dark;
 
     return BlocProvider.value(
       value: _homeCubit,
@@ -64,7 +65,7 @@ class _HomeViewState extends State<HomeView> {
           actions: [
             IconButton(
               icon: Icon(
-                isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                isDark ? Icons.dark_mode : Icons.light_mode,
                 color: AppColors.whitecolor,
               ),
               onPressed: () {
@@ -97,7 +98,7 @@ class _HomeViewState extends State<HomeView> {
       builder: (context, state) {
         return FloatingActionButton(
           backgroundColor: AppColors.primaryColor,
-          onPressed: () => _showAddTaskDialog(context),
+          onPressed: () => _showAddTaskBottomSheet(context),
           child: const Icon(Icons.add, color: AppColors.white, size: 30),
         );
       },
@@ -143,49 +144,150 @@ class _HomeViewState extends State<HomeView> {
       tooltip: 'Çıkış Yap',
     );
   }
-}
 
-void _showAddTaskDialog(BuildContext c) {
-  final newTaskController = TextEditingController();
+  void _showAddTaskBottomSheet(BuildContext context) {
+    final titleController = TextEditingController();
+    final noteController = TextEditingController();
+    DateTime? selectedDate;
+    TimeOfDay? selectedTime;
 
-  showDialog(
-    context: c,
-    builder: (context) {
-      return AlertDialog(
-        title: AppText.addNewTaskText,
-        content: TextField(
-          controller: newTaskController,
-          autofocus: true,
-          decoration: const InputDecoration(
-            hintText: 'Görev adı',
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: AppColors.white),
-            ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
-            ),
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) {
+        final isDark =
+            // ignore: unrelated_type_equality_checks
+            context.watch<ThemeCubit>().state == ThemeMode.dark;
+        return Padding(
+          padding: AppPadding.only(
+            left: 16,
+            right: 16,
+            top: 16,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 16,
           ),
-          onSubmitted: (_) => _submitTask(c, newTaskController),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: AppText.cancelText,
-          ),
-          ElevatedButton(
-            onPressed: () => _submitTask(c, newTaskController),
-            child: AppText.addText,
-          ),
-        ],
-      );
-    },
-  );
-}
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text(
+                      'Görev Ekle',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    AppSpacing.h(16),
+                    BlocBuilder<HomeCubit, HomeState>(
+                      builder: (context, state) {
+                        String? errorText;
 
-void _submitTask(BuildContext context, TextEditingController controller) {
-  final text = controller.text.trim();
-  if (text.isNotEmpty) {
-    context.read<HomeCubit>().addTask(text);
-    Navigator.of(context).pop();
+                        if (state is HomeError) {
+                          errorText = state.message;
+                        }
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            taskTitleTextField(
+                              controller: titleController,
+                              isDark: isDark,
+                            ),
+
+                            if (errorText != null)
+                              Padding(
+                                padding: AppPadding.only(top: 6),
+                                child: Text(
+                                  errorText,
+                                  style: const TextStyle(
+                                    color: AppColors.redAccent,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    ),
+                    AppSpacing.h(16),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: dateTextfield(
+                            isDark: isDark,
+                            selectedDate: selectedDate,
+                            onTap: () async {
+                              final piced = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2020),
+                                lastDate: DateTime(2100),
+                              );
+                              if (piced != null) {
+                                setState(() => selectedDate = piced);
+                              }
+                            },
+                          ),
+                        ),
+                        AppSpacing.h(20),
+                        AppSpacing.w(8),
+                        Expanded(
+                          child: timeTextfield(
+                            context: context,
+                            isDark: isDark,
+                            selectedTime: selectedTime,
+                            onTap: () async {
+                              final picked = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.now(),
+                              );
+                              if (picked != null) {
+                                setState(() => selectedTime = picked);
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    AppSpacing.h(16),
+                    noteTextfield(
+                      controller: noteController,
+                      isDark: isDark,
+                      maxLine: 5,
+                    ),
+                    AppSpacing.h(20),
+                    SizedBox(
+                      width: double.infinity,
+                      child: saveElevatedButtton(
+                        onPressed: () {
+                          if (titleController.text.trim().isEmpty) return;
+
+                          context.read<HomeCubit>().addTask(
+                            title: titleController.text.trim(),
+                            note: noteController.text.trim(),
+                            date: selectedDate ?? DateTime.now(),
+                            time: selectedTime ?? TimeOfDay.now(),
+                          );
+
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 }

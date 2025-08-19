@@ -14,15 +14,28 @@ class HomeCubit extends Cubit<HomeState> {
   final List<TaskModel> _tasks = [];
   StreamSubscription? _tasksSubscription;
 
-  Future<void> addTask(String title) async {
+  Future<void> addTask({
+    required String title,
+    required String note,
+    required DateTime date,
+    required TimeOfDay time,
+  }) async {
     if (uid.isEmpty) {
-      emit(HomeError("Kullanıcı oturumu yok."));
+      _emitWithAutoClear(HomeError("Kullanıcı oturumu yok."));
+      return;
+    }
+    if (title.trim().isEmpty) {
+      _emitWithAutoClear(HomeError('Görev başlığı boş olamaz'));
       return;
     }
 
     final newTask = TaskModel(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       title: title,
+      note: note,
+      date: date,
+      time: time,
+      isCompleted: false,
       timestamp: DateTime.now(),
     );
 
@@ -33,6 +46,15 @@ class HomeCubit extends Cubit<HomeState> {
           .collection('tasks')
           .doc(newTask.id)
           .set(newTask.toMap());
+
+      _tasks.add(newTask);
+      _tasks.sort(
+        (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
+      );
+
+      emit(
+        HomeLoaded(tasks: List.from(_tasks), filteredTasks: List.from(_tasks)),
+      );
     } catch (e) {
       emit(HomeError(e.toString()));
     }
@@ -40,7 +62,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> toggleTask(String id) async {
     if (uid.isEmpty) {
-      emit(HomeError("Kullanıcı oturumu yok."));
+      _emitWithAutoClear(HomeError("Kullanıcı oturumu yok."));
       return;
     }
 
@@ -78,7 +100,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> deleteTask(String id) async {
     if (uid.isEmpty) {
-      emit(HomeError("Kullanıcı oturumu yok."));
+      _emitWithAutoClear(HomeError("Kullanıcı oturumu yok."));
       return;
     }
     try {
@@ -88,40 +110,6 @@ class HomeCubit extends Cubit<HomeState> {
           .collection('tasks')
           .doc(id)
           .delete();
-    } catch (e) {
-      emit(HomeError(e.toString()));
-    }
-  }
-
-  Future<void> editTask({
-    required String id,
-    String? newTitle,
-    String? newNote,
-    DateTime? newDate,
-    TimeOfDay? newTime,
-  }) async {
-    if (uid.isEmpty) {
-      emit(HomeError("Kullanıcı oturumu yok."));
-      return;
-    }
-    final index = _tasks.indexWhere((task) => task.id == id);
-    if (index == -1) return;
-
-    final task = _tasks[index];
-    final updatedTask = task.copyWith(
-      title: newTitle ?? task.title,
-      note: newNote ?? task.note,
-      date: newDate ?? task.date,
-      time: newTime ?? task.time,
-    );
-
-    try {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .collection('tasks')
-          .doc(id)
-          .update(updatedTask.toMap());
     } catch (e) {
       emit(HomeError(e.toString()));
     }
@@ -149,7 +137,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> listenToTasks() async {
     if (uid.isEmpty) {
-      emit(HomeError("Kullanıcı oturumu yok."));
+      _emitWithAutoClear(HomeError("Kullanıcı oturumu yok."));
       return;
     }
     emit(HomeLoading());
@@ -197,12 +185,6 @@ class HomeCubit extends Cubit<HomeState> {
     return super.close();
   }
 
-  Future<void> validateTitle(String title) async {
-    if (title.trim().isEmpty) {
-      _emitWithAutoClear(HomeError('Görev başlığı boş olamaz'));
-    }
-  }
-
   void _emitWithAutoClear(HomeState state) {
     emit(state);
     Future.delayed(const Duration(seconds: 3), () {
@@ -210,5 +192,46 @@ class HomeCubit extends Cubit<HomeState> {
         emit(HomeInitial());
       }
     });
+  }
+
+  Future<void> newTaskChanges({
+    required String id,
+    required String newTitle,
+    required String newNote,
+    required DateTime newDate,
+    required TimeOfDay newTime,
+  }) async {
+    if (newTitle.trim().isEmpty) {
+      _emitWithAutoClear(HomeError('Görev başlığı boş olamaz'));
+      return;
+    }
+
+    final index = _tasks.indexWhere((task) => task.id == id);
+    if (index == -1) return;
+
+    final task = _tasks[index];
+    final updatedTask = task.copyWith(
+      title: newTitle,
+      note: newNote,
+      date: newDate,
+      time: newTime,
+    );
+
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('tasks')
+          .doc(id)
+          .update(updatedTask.toMap());
+
+      _tasks[index] = updatedTask;
+
+      emit(
+        HomeLoaded(tasks: List.from(_tasks), filteredTasks: List.from(_tasks)),
+      );
+    } catch (e) {
+      emit(HomeError(e.toString()));
+    }
   }
 }
