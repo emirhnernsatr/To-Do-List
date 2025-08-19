@@ -46,13 +46,6 @@ class HomeCubit extends Cubit<HomeState> {
           .collection('tasks')
           .doc(newTask.id)
           .set(newTask.toMap());
-
-      _tasks.add(newTask);
-      _tasks.sort(
-        (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
-      );
-
-      emit(HomeTaskUpdated(tasks: List.from(_tasks)));
     } catch (e) {
       emit(HomeError(e.toString()));
     }
@@ -77,20 +70,6 @@ class HomeCubit extends Cubit<HomeState> {
           .collection('tasks')
           .doc(id)
           .update({'isCompleted': updatedIsCompleted});
-
-      _tasks[index] = task.copyWith(isCompleted: updatedIsCompleted);
-      _tasks.sort(
-        (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
-      );
-
-      if (state is HomeLoaded) {
-        emit(
-          HomeLoaded(
-            tasks: List.from(_tasks),
-            filteredTasks: List.from(_tasks),
-          ),
-        );
-      }
     } catch (e) {
       emit(HomeError(e.toString()));
     }
@@ -108,6 +87,13 @@ class HomeCubit extends Cubit<HomeState> {
           .collection('tasks')
           .doc(id)
           .delete();
+
+      _tasks.removeWhere((task) => task.id == id);
+      _sortTasks();
+
+      emit(
+        HomeLoaded(tasks: List.from(_tasks), filteredTasks: List.from(_tasks)),
+      );
     } catch (e) {
       emit(HomeError(e.toString()));
     }
@@ -166,6 +152,8 @@ class HomeCubit extends Cubit<HomeState> {
                 ..clear()
                 ..addAll(tasks);
 
+              _sortTasks();
+
               emit(HomeLoaded(tasks: tasks, filteredTasks: tasks));
             },
             onError: (error) {
@@ -175,21 +163,6 @@ class HomeCubit extends Cubit<HomeState> {
     } catch (e) {
       emit(HomeError(e.toString()));
     }
-  }
-
-  @override
-  Future<void> close() {
-    _tasksSubscription?.cancel();
-    return super.close();
-  }
-
-  void _emitWithAutoClear(HomeState state) {
-    emit(state);
-    Future.delayed(const Duration(seconds: 3), () {
-      if (!isClosed) {
-        emit(HomeInitial());
-      }
-    });
   }
 
   Future<void> newTaskChanges({
@@ -224,10 +197,34 @@ class HomeCubit extends Cubit<HomeState> {
           .update(updatedTask.toMap());
 
       _tasks[index] = updatedTask;
+      _sortTasks();
 
       emit(HomeTaskUpdated(tasks: List.from(_tasks)));
     } catch (e) {
       emit(HomeError(e.toString()));
     }
+  }
+
+  void _sortTasks() {
+    _tasks.sort((a, b) {
+      if (a.isCompleted && !b.isCompleted) return 1;
+      if (!a.isCompleted && b.isCompleted) return -1;
+      return a.title.toLowerCase().compareTo(b.title.toLowerCase());
+    });
+  }
+
+  @override
+  Future<void> close() {
+    _tasksSubscription?.cancel();
+    return super.close();
+  }
+
+  void _emitWithAutoClear(HomeState state) {
+    emit(state);
+    Future.delayed(const Duration(seconds: 3), () {
+      if (!isClosed) {
+        emit(HomeInitial());
+      }
+    });
   }
 }
