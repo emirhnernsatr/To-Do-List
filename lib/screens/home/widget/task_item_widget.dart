@@ -2,6 +2,7 @@
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:to_do_uygulamsi/core/constants/app_strings.dart';
 import 'package:to_do_uygulamsi/screens/home/model/task_model.dart';
 import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
@@ -150,25 +151,64 @@ class _TaskItemWidgetState extends State<TaskItemWidget>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            if (widget.task.date != null)
+                              Row(
+                                children: [
+                                  const Icon(Icons.calendar_today, size: 16),
+                                  AppSpacing.w(6),
+                                  Text(
+                                    DateFormat(
+                                      'dd.MM.yyyy',
+                                    ).format(widget.task.date!),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            AppSpacing.h(3),
                             if (widget.task.time != null)
                               Row(
                                 children: [
                                   const Icon(Icons.access_time, size: 16),
-                                  const SizedBox(width: 4),
-                                  Text(widget.task.time!.format(context)),
+                                  AppSpacing.w(6),
+
+                                  Text(
+                                    widget.task.time!.format(context),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                                 ],
                               ),
+                            AppSpacing.h(3),
                             if (widget.task.note != null &&
                                 widget.task.note!.isNotEmpty)
                               Padding(
                                 padding: const EdgeInsets.only(top: 4.0),
-                                child: Text(
-                                  widget.task.note!,
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    // ignore: deprecated_member_use
-                                    color: textColor.withOpacity(0.7),
-                                  ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(Icons.sticky_note_2, size: 16),
+                                    AppSpacing.w(6),
+                                    Expanded(
+                                      child: SizedBox(
+                                        child: SingleChildScrollView(
+                                          child: Text(
+                                            widget.task.note!,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                            softWrap: true,
+                                            overflow: TextOverflow.visible,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                           ],
