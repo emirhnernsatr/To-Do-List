@@ -30,51 +30,106 @@ class TaskItemWidget extends StatelessWidget {
 
     return Padding(
       padding: AppPadding.symmetric(horizontal: 8, vertical: 4),
-      child: OpenContainer(
-        transitionType: ContainerTransitionType.fadeThrough,
-        transitionDuration: const Duration(milliseconds: 500),
-        openColor: backgroundColor,
-        closedColor: backgroundColor,
-        closedElevation: 2,
-        closedShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        openBuilder: (context, _) => TaskDetailView(task: task),
-        closedBuilder: (context, openContainer) => ListTile(
-          onTap: openContainer,
-          leading: GestureDetector(
-            onTap: onToggleDone,
-            child: Transform.scale(
-              scale: 1.2,
-              child: Checkbox(
-                value: isDone,
-                onChanged: (_) => onToggleDone(),
-                shape: const CircleBorder(),
+      child: Card(
+        child: OpenContainer(
+          transitionType: ContainerTransitionType.fadeThrough,
+          transitionDuration: const Duration(milliseconds: 500),
+          openColor: backgroundColor,
+          closedColor: backgroundColor,
+          closedElevation: 2,
+          closedShape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          openBuilder: (context, _) => TaskDetailView(task: task),
+          closedBuilder: (context, openContainer) => ListTile(
+            onTap: openContainer,
+            leading: GestureDetector(
+              onTap: onToggleDone,
+              child: Transform.scale(
+                scale: 1.4,
+                child: Checkbox(
+                  value: isDone,
+                  onChanged: (_) => onToggleDone(),
+                  shape: const CircleBorder(),
+                ),
               ),
             ),
-          ),
-          title: Text(
-            task.title,
-            style: TextStyle(
-              color: textColor,
-              decoration: isDone ? TextDecoration.lineThrough : null,
-              // ignore: deprecated_member_use
-              decorationColor: textColor.withOpacity(0.7),
-              decorationThickness: isDone ? 2.0 : 1.0,
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  task.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: textColor,
+                    decoration: isDone ? TextDecoration.lineThrough : null,
+                    // ignore: deprecated_member_use
+                    decorationColor: textColor.withOpacity(0.7),
+                    decorationThickness: isDone ? 2.0 : 1.0,
+                  ),
+                ),
+
+                if (task.time != null)
+                  Row(
+                    children: [
+                      const Icon(Icons.access_time, size: 16),
+                      const SizedBox(width: 4),
+                      Text(task.time!.format(context)),
+                    ],
+                  ),
+
+                if (task.note != null && task.note!.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2.0),
+                    child: Text(
+                      task.note!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 13,
+                        // ignore: deprecated_member_use
+                        color: textColor.withOpacity(0.7),
+                      ),
+                    ),
+                  ),
+              ],
             ),
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.edit, color: AppColors.primaryColor),
-                onPressed: openContainer,
-              ),
-              IconButton(
-                icon: const Icon(Icons.delete, color: AppColors.redAccent),
-                onPressed: onDelete,
-              ),
-            ],
+
+            trailing: PopupMenuButton<String>(
+              icon: const Icon(Icons.more_vert),
+              onSelected: (value) {
+                if (value == 'edit') {
+                  openContainer();
+                } else if (value == 'delete') {
+                  onDelete();
+                }
+              },
+              itemBuilder: (BuildContext context) => [
+                const PopupMenuItem(
+                  value: 'edit',
+                  child: Row(
+                    children: [
+                      Icon(Icons.edit, color: AppColors.primaryColor),
+                      SizedBox(width: 8),
+                      Text("Düzenle"),
+                    ],
+                  ),
+                ),
+                const PopupMenuItem(
+                  value: 'delete',
+                  child: Row(
+                    children: [
+                      Icon(Icons.delete, size: 18, color: Colors.red),
+                      SizedBox(width: 8),
+                      Text("Sil"),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
