@@ -34,11 +34,6 @@ class _HomeViewState extends State<HomeView> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _taskController.dispose();
     super.dispose();
@@ -163,131 +158,138 @@ class _HomeViewState extends State<HomeView> {
       ),
       builder: (_) {
         final isDark = Theme.of(context).brightness == Brightness.dark;
-        return Padding(
-          padding: AppPadding.only(
-            left: 16,
-            right: 16,
-            top: 16,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-          ),
-          child: StatefulBuilder(
-            builder: (context, setState) {
-              return SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Text(
-                      'Görev Ekle',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                    AppSpacing.h(16),
-                    BlocConsumer<HomeCubit, HomeState>(
-                      listener: (context, state) {
-                        if (state is HomeTaskUpdated) {
-                          Navigator.pop(context);
-                        }
-                      },
-                      builder: (context, state) {
-                        String? errorText;
-
-                        if (state is HomeError) {
-                          errorText = state.message;
-                        }
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            taskTitleTextField(
-                              controller: titleController,
-                              isDark: isDark,
+        return BlocProvider(
+          create: (context) => HomeCubit(uid),
+          child: Padding(
+            padding: AppPadding.only(
+              left: 16,
+              right: 16,
+              top: 16,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+            ),
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return BlocBuilder<HomeCubit, HomeState>(
+                  builder: (context, state) {
+                    return SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const Text(
+                            'Görev Ekle',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primaryColor,
                             ),
+                          ),
+                          AppSpacing.h(16),
+                          BlocConsumer<HomeCubit, HomeState>(
+                            listener: (context, state) {
+                              if (state is HomeTaskUpdated) {
+                                Navigator.pop(context);
+                              }
+                            },
+                            builder: (context, state) {
+                              String? errorText;
 
-                            if (errorText != null)
-                              Padding(
-                                padding: AppPadding.only(top: 6),
-                                child: Text(
-                                  errorText,
-                                  style: const TextStyle(
-                                    color: AppColors.redAccent,
-                                    fontWeight: FontWeight.bold,
+                              if (state is HomeError) {
+                                errorText = state.message;
+                              }
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  taskTitleTextField(
+                                    controller: titleController,
+                                    isDark: isDark,
                                   ),
+
+                                  if (errorText != null)
+                                    Padding(
+                                      padding: AppPadding.only(top: 6),
+                                      child: Text(
+                                        errorText,
+                                        style: const TextStyle(
+                                          color: AppColors.redAccent,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              );
+                            },
+                          ),
+                          AppSpacing.h(16),
+
+                          Row(
+                            children: [
+                              Expanded(
+                                child: dateTextfield(
+                                  isDark: isDark,
+                                  selectedDate: selectedDate,
+                                  onTap: () async {
+                                    final piced = await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(2020),
+                                      lastDate: DateTime(2100),
+                                    );
+                                    if (piced != null) {
+                                      setState(() => selectedDate = piced);
+                                    }
+                                  },
                                 ),
                               ),
-                          ],
-                        );
-                      },
-                    ),
-                    AppSpacing.h(16),
-
-                    Row(
-                      children: [
-                        Expanded(
-                          child: dateTextfield(
-                            isDark: isDark,
-                            selectedDate: selectedDate,
-                            onTap: () async {
-                              final piced = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(2020),
-                                lastDate: DateTime(2100),
-                              );
-                              if (piced != null) {
-                                setState(() => selectedDate = piced);
-                              }
-                            },
+                              AppSpacing.h(20),
+                              AppSpacing.w(8),
+                              Expanded(
+                                child: timeTextfield(
+                                  context: context,
+                                  isDark: isDark,
+                                  selectedTime: selectedTime,
+                                  onTap: () async {
+                                    final picked = await showTimePicker(
+                                      context: context,
+                                      initialTime: TimeOfDay.now(),
+                                    );
+                                    if (picked != null) {
+                                      setState(() => selectedTime = picked);
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        AppSpacing.h(20),
-                        AppSpacing.w(8),
-                        Expanded(
-                          child: timeTextfield(
-                            context: context,
+                          AppSpacing.h(16),
+                          noteTextfield(
+                            controller: noteController,
                             isDark: isDark,
-                            selectedTime: selectedTime,
-                            onTap: () async {
-                              final picked = await showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay.now(),
-                              );
-                              if (picked != null) {
-                                setState(() => selectedTime = picked);
-                              }
-                            },
+                            maxLine: 5,
                           ),
-                        ),
-                      ],
-                    ),
-                    AppSpacing.h(16),
-                    noteTextfield(
-                      controller: noteController,
-                      isDark: isDark,
-                      maxLine: 5,
-                    ),
-                    AppSpacing.h(20),
-                    SizedBox(
-                      width: double.infinity,
-                      child: saveElevatedButtton(
-                        onPressed: () {
-                          context.read<HomeCubit>().addTask(
-                            title: titleController.text.trim(),
-                            note: noteController.text.trim(),
-                            date: selectedDate ?? DateTime.now(),
-                            time: selectedTime ?? TimeOfDay.now(),
-                          );
-                        },
+                          AppSpacing.h(20),
+                          SizedBox(
+                            width: double.infinity,
+                            child: saveElevatedButtton(
+                              onPressed: () {
+                                context.read<HomeCubit>().addTask(
+                                  title: titleController.text.trim(),
+                                  note: noteController.text.trim(),
+                                  date: selectedDate ?? DateTime.now(),
+                                  time: selectedTime ?? TimeOfDay.now(),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
+                    );
+                  },
+                );
+              },
+            ),
           ),
         );
       },

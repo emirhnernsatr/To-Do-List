@@ -118,13 +118,24 @@ class _TaskItemWidgetState extends State<TaskItemWidget>
                           ),
                           openBuilder: (context, _) =>
                               TaskDetailView(task: widget.task),
-                          closedBuilder: (context, openContainer) => const Row(
-                            children: [
-                              Icon(Icons.edit, color: AppColors.primaryColor),
-                              SizedBox(width: 8),
-                              Text("Düzenle"),
-                            ],
-                          ),
+                          closedBuilder: (context, openContainer) {
+                            return InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                                openContainer();
+                              },
+                              child: const Row(
+                                children: [
+                                  Icon(
+                                    Icons.edit,
+                                    color: AppColors.primaryColor,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text("Düzenle"),
+                                ],
+                              ),
+                            );
+                          },
                         ),
                       ),
                       const PopupMenuItem(

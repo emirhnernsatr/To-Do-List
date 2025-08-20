@@ -170,7 +170,8 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  Future<void> newTaskChanges({
+  Future<void> newTaskChanges(
+    value, {
     required String id,
     required String newTitle,
     required String newNote,
