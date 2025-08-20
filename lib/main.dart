@@ -3,11 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_uygulamsi/firebase_options.dart';
-import 'package:to_do_uygulamsi/screens/home/cubit/home_cubit.dart';
 import 'package:to_do_uygulamsi/screens/home/view/home_view.dart';
-import 'package:to_do_uygulamsi/screens/login/cubit/login_cubit.dart';
 import 'package:to_do_uygulamsi/screens/login/view/login_view.dart';
-import 'package:to_do_uygulamsi/core/service/auth_service.dart';
 import 'package:to_do_uygulamsi/core/theme/app_theme.dart';
 import 'package:to_do_uygulamsi/core/theme/cubit/theme_cubit.dart';
 
@@ -34,11 +31,7 @@ class MyApp extends StatelessWidget {
         final user = snapshot.data;
 
         return MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (_) => HomeCubit(user!.uid)),
-            BlocProvider(create: (_) => ThemeCubit()),
-            BlocProvider(create: (context) => LoginCubit(AuthService())),
-          ],
+          providers: [BlocProvider(create: (_) => ThemeCubit())],
           child: BlocBuilder<ThemeCubit, ThemeState>(
             builder: (context, state) {
               return MaterialApp(

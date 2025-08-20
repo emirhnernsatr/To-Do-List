@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:to_do_uygulamsi/core/service/auth_service.dart';
 import 'package:to_do_uygulamsi/screens/forgot_password/view/forgot_password_view.dart';
 import 'package:to_do_uygulamsi/screens/home/view/home_view.dart';
 import 'package:to_do_uygulamsi/screens/login/cubit/login_cubit.dart';
@@ -24,79 +23,82 @@ class _LoginScreenState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.primaryColor,
-      body: Padding(
-        padding: AppPadding.all(30),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                AppText.titleText,
-                AppSpacing.h(60),
-                const Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 15),
-                      child: Text(
-                        'Giriş Yap',
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: 19,
-                          fontWeight: FontWeight.bold,
+    return BlocProvider(
+      create: (context) => LoginCubit(),
+      child: Scaffold(
+        backgroundColor: AppColors.primaryColor,
+        body: Padding(
+          padding: AppPadding.all(30),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  AppText.titleText,
+                  AppSpacing.h(60),
+                  const Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 15),
+                        child: Text(
+                          'Giriş Yap',
+                          style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: 19,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
 
-                AppSpacing.h(15),
-                _textFieldEmail(),
+                  AppSpacing.h(15),
+                  _textFieldEmail(),
 
-                AppSpacing.h(30),
-                _textFieldLoginPassword(),
+                  AppSpacing.h(30),
+                  _textFieldLoginPassword(),
 
-                AppSpacing.h(20),
-                BlocConsumer<LoginCubit, LoginState>(
-                  builder: (context, state) {
-                    if (state is LoginError) {
-                      return Text(
-                        state.error,
-                        style: const TextStyle(
-                          color: AppColors.redAccent,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
-                    } else if (state is LoginSuccess) {
-                      return Text(
-                        state.message,
-                        style: const TextStyle(
-                          color: AppColors.greenAccent,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
-                    }
-                    return const SizedBox.shrink();
-                  },
-                  listener: (BuildContext context, LoginState state) {
-                    if (state is LoginRouteState) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => HomeView(uid: state.uid),
-                        ),
-                      );
-                    }
-                  },
-                ),
-                AppSpacing.h(20),
-                _homeButton(context),
+                  AppSpacing.h(20),
+                  BlocConsumer<LoginCubit, LoginState>(
+                    builder: (context, state) {
+                      if (state is LoginError) {
+                        return Text(
+                          state.error,
+                          style: const TextStyle(
+                            color: AppColors.redAccent,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      } else if (state is LoginSuccess) {
+                        return Text(
+                          state.message,
+                          style: const TextStyle(
+                            color: AppColors.greenAccent,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                    listener: (BuildContext context, LoginState state) {
+                      if (state is LoginRouteState) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => HomeView(uid: state.uid),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  AppSpacing.h(20),
+                  _homeButton(context),
 
-                AppSpacing.h(20),
-                _forgotPasswordButton(context),
-                _registerButton(context),
-              ],
+                  AppSpacing.h(20),
+                  _forgotPasswordButton(context),
+                  _registerButton(context),
+                ],
+              ),
             ),
           ),
         ),
@@ -104,35 +106,39 @@ class _LoginScreenState extends State<LoginView> {
     );
   }
 
-  TextButton _homeButton(BuildContext context) {
-    return TextButton(
-      onPressed: () {
-        final model = LoginModel(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim(),
-        );
+  Widget _homeButton(BuildContext context) {
+    return BlocBuilder<LoginCubit, LoginState>(
+      builder: (context, state) {
+        return TextButton(
+          onPressed: () {
+            final model = LoginModel(
+              email: emailController.text.trim(),
+              password: passwordController.text.trim(),
+            );
 
-        context.read<LoginCubit>().login(model, context);
+            context.read<LoginCubit>().login(model);
+          },
+          child: Container(
+            height: 50,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              color: AppColors.green,
+            ),
+            child: Center(child: AppText.loginText),
+          ),
+        );
       },
-      child: Container(
-        height: 50,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: AppColors.green,
-        ),
-        child: Center(child: AppText.loginText),
-      ),
     );
   }
 
-  TextButton _registerButton(BuildContext context) {
+  Widget _registerButton(BuildContext context) {
     return TextButton(
       onPressed: () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (_) => BlocProvider(
-              create: (context) => RegisterCubit(AuthService()),
+              create: (context) => RegisterCubit(),
               child: const RegisterView(),
             ),
           ),
@@ -142,7 +148,7 @@ class _LoginScreenState extends State<LoginView> {
     );
   }
 
-  TextButton _forgotPasswordButton(BuildContext context) {
+  Widget _forgotPasswordButton(BuildContext context) {
     return TextButton(
       onPressed: () {
         Navigator.push(
@@ -154,7 +160,7 @@ class _LoginScreenState extends State<LoginView> {
     );
   }
 
-  TextField _textFieldEmail() {
+  Widget _textFieldEmail() {
     return TextField(
       controller: emailController,
 
@@ -168,7 +174,7 @@ class _LoginScreenState extends State<LoginView> {
     );
   }
 
-  TextField _textFieldLoginPassword() {
+  Widget _textFieldLoginPassword() {
     return TextField(
       controller: passwordController,
       decoration: _customInputDecoration(

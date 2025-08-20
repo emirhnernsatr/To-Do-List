@@ -5,9 +5,9 @@ import 'package:to_do_uygulamsi/screens/register/model/register_model.dart';
 import 'package:to_do_uygulamsi/core/service/auth_service.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
-  final AuthService _authService;
+  final AuthService _authService = AuthService();
 
-  RegisterCubit(this._authService) : super(RegisterInitial());
+  RegisterCubit() : super(RegisterInitial());
 
   void register(RegisterModel model, BuildContext context) async {
     if (model.email.isEmpty ||

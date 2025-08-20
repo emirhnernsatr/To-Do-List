@@ -21,10 +21,8 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final TextEditingController _taskController = TextEditingController();
-  final TextEditingController _searchController = TextEditingController();
   final uid = FirebaseAuth.instance.currentUser?.uid ?? "";
   final AuthService authService = AuthService();
-  late HomeCubit _homeCubit;
 
   void _logout() async {
     await authService.signOut();
@@ -38,17 +36,11 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    _homeCubit = HomeCubit(widget.uid);
-
-    _searchController.addListener(() {
-      _homeCubit.filterTasks(_searchController.text);
-    });
   }
 
   @override
   void dispose() {
     _taskController.dispose();
-    _searchController.dispose();
     super.dispose();
   }
 
@@ -57,8 +49,8 @@ class _HomeViewState extends State<HomeView> {
     // ignore: unrelated_type_equality_checks
     final isDark = context.watch<ThemeCubit>().state == ThemeMode.dark;
 
-    return BlocProvider.value(
-      value: _homeCubit,
+    return BlocProvider(
+      create: (BuildContext context) => HomeCubit(uid),
       child: Scaffold(
         appBar: AppBar(
           title: AppText.titleHomeText,
@@ -105,34 +97,46 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  TextField _textFieldSearch() {
-    return TextField(
-      controller: _searchController,
-      style: const TextStyle(fontSize: 16),
-      decoration: InputDecoration(
-        prefixIcon: const Icon(
-          Icons.search,
-          color: AppColors.primaryColor,
-          size: 30,
-        ),
-        hintText: 'Ara',
-        hintStyle: const TextStyle(
-          color: AppColors.primaryColor,
-          fontWeight: FontWeight.bold,
-        ),
-        labelStyle: const TextStyle(
-          color: AppColors.primaryColor,
-          fontWeight: FontWeight.bold,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: AppColors.primaryColor, width: 2),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: AppColors.primaryColor, width: 2),
-        ),
-      ),
+  Widget _textFieldSearch() {
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        return TextField(
+          onChanged: (value) {
+            context.read<HomeCubit>().filterTasks(value);
+          },
+          style: const TextStyle(fontSize: 16),
+          decoration: InputDecoration(
+            prefixIcon: const Icon(
+              Icons.search,
+              color: AppColors.primaryColor,
+              size: 30,
+            ),
+            hintText: 'Ara',
+            hintStyle: const TextStyle(
+              color: AppColors.primaryColor,
+              fontWeight: FontWeight.bold,
+            ),
+            labelStyle: const TextStyle(
+              color: AppColors.primaryColor,
+              fontWeight: FontWeight.bold,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                color: AppColors.primaryColor,
+                width: 2,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                color: AppColors.primaryColor,
+                width: 2,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 

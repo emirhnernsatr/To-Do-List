@@ -112,7 +112,7 @@ class _ForgotPasswordViewBodyState extends State<_ForgotPasswordViewBody> {
     );
   }
 
-  TextField _textFieldForgotEmail() {
+  Widget _textFieldForgotEmail() {
     return TextField(
       controller: emailController,
       decoration: _customInputDecoration(
@@ -130,7 +130,7 @@ class _ForgotPasswordViewBodyState extends State<_ForgotPasswordViewBody> {
     );
   }
 
-  ElevatedButton _resetPasswordButton() {
+  Widget _resetPasswordButton() {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.white,
@@ -144,7 +144,7 @@ class _ForgotPasswordViewBodyState extends State<_ForgotPasswordViewBody> {
     );
   }
 
-  TextButton _returnLoginButton(BuildContext context) {
+  Widget _returnLoginButton(BuildContext context) {
     return TextButton(
       onPressed: () => Navigator.pushReplacement(
         context,

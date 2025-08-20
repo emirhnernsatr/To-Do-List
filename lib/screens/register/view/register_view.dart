@@ -92,7 +92,7 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  TextButton _registerButton() {
+  Widget _registerButton() {
     return TextButton(
       onPressed: () {
         final model = RegisterModel(
@@ -114,7 +114,7 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  TextButton _accountPromptButton(BuildContext context) {
+  Widget _accountPromptButton(BuildContext context) {
     return TextButton(
       onPressed: () {
         Navigator.pushReplacement(
@@ -126,7 +126,7 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  TextField _textFieldRegisterEmail() {
+  Widget _textFieldRegisterEmail() {
     return TextField(
       controller: emailController,
       decoration: customInputDecoration(
@@ -138,7 +138,7 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  TextField _textFieldRegisterPassword() {
+  Widget _textFieldRegisterPassword() {
     return TextField(
       controller: passwordController,
       decoration: customInputDecoration(
@@ -151,7 +151,7 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  TextField _textFieldRegisterConfirmPassword() {
+  Widget _textFieldRegisterConfirmPassword() {
     return TextField(
       controller: confirmPasswordController,
       decoration: customInputDecoration(
